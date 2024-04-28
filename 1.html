@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English-Chinese Vocabulary Game</title>
+<style>
+    /* Add your CSS styles here */
+</style>
+</head>
+<body>
+<div id="game-container">
+    <h1>English-Chinese Vocabulary Game</h1>
+    <div id="question-container">
+        <p id="question">Question:</p>
+        <ul id="choices">
+            <!-- Choices will be dynamically populated here -->
+        </ul>
+        <button onclick="checkAnswer()">Submit Answer</button>
+    </div>
+    <div id="result-container">
+        <p id="result"></p>
+        <p id="score">Score: <span id="score-value">0</span></p>
+    </div>
+</div>
+
+<script>
+    // Define your English-Chinese word pairs here
+    const wordPairs = [
+        { english: "cave", chinese: "山洞" },
+        // Add more word pairs here
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    // Function to load a new question
+    function loadQuestion() {
+        const currentQuestion = wordPairs[currentQuestionIndex];
+        const choices = document.getElementById('choices');
+        choices.innerHTML = '';
+
+        // Shuffle choices
+        const shuffledChoices = shuffleChoices(currentQuestion.chinese, 6);
+        
+        shuffledChoices.forEach(choice => {
+            const li = document.createElement('li');
+            li.textContent = choice;
+            li.onclick = function() {
+                checkAnswer(choice);
+            };
+            choices.appendChild(li);
+        });
+
+        document.getElementById('question').textContent = `Question: ${currentQuestion.english}`;
+    }
+
+    // Function to shuffle the choices
+    function shuffleChoices(correctAnswer, numChoices) {
+        const choices = [correctAnswer];
+        while (choices.length < numChoices) {
+            const randomIndex = Math.floor(Math.random() * wordPairs.length);
+            const randomChoice = wordPairs[randomIndex].chinese;
+            if (!choices.includes(randomChoice)) {
+                choices.push(randomChoice);
+            }
+        }
+        return shuffleArray(choices);
+    }
+
+    // Function to shuffle an array
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // Function to check the answer
+    function checkAnswer(selectedChoice) {
+        const currentQuestion = wordPairs[currentQuestionIndex];
+        const correctChoice = currentQuestion.chinese;
+        if (selectedChoice === correctChoice) {
+            score += 20;
+            document.getElementById('result').textContent = 'Correct!';
+        } else {
+            document.getElementById('result').textContent = 'Incorrect!';
+        }
+
+        document.getElementById('score-value').textContent = score;
+        
+        // Move to the next question or end the game
+        currentQuestionIndex++;
+        if (currentQuestionIndex < wordPairs.length) {
+            setTimeout(loadQuestion, 1000); // Load next question after 1 second
+        } else {
+            document.getElementById('question-container').style.display = 'none';
+            document.getElementById('result').textContent = `Game Over! Your final score is ${score}.`;
+        }
+    }
+
+    // Initialize the game
+    loadQuestion();
+</script>
+</body>
+</html>
