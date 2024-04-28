@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English-Chinese Vocabulary Game</title>
+<style>
+    /* Add your CSS styles here */
+</style>
+</head>
+<body>
+<div id="game-container">
+    <h1>English-Chinese Vocabulary Game</h1>
+    <div id="question-container">
+        <p id="question">Question:</p>
+        <ul id="choices">
+            <!-- Choices will be dynamically populated here -->
+        </ul>
+        <p id="timer">Time left: <span id="time-left">20</span> seconds</p>
+        <button onclick="checkAnswer()">Submit Answer</button>
+    </div>
+    <div id="result-container">
+        <p id="result"></p>
+        <p id="score">Score: <span id="score-value">0</span></p>
+    </div>
+</div>
+
+<script>
+    // Define word sets for different levels
+    const easyWords = ["apple", "beach", "book", /* Add more easy words */];
+    const mediumEasyWords = ["river", "tree", "dog", /* Add more medium-easy words */];
+    const mediumDifficultWords = ["mountain", "fire", "road", /* Add more medium-difficult words */];
+    const difficultWords = ["volcano", "earthquake", "hurricane", /* Add more difficult words */];
+    
+    const wordSets = [easyWords, mediumEasyWords, mediumDifficultWords, difficultWords];
+    const numQuestionsPerLevel = 25;
+    const timeLimit = 20; // in seconds
+
+    let currentLevel = 0;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+
+    // Function to load a new question
+    function loadQuestion() {
+        const currentWordSet = wordSets[currentLevel];
+        const currentWord = currentWordSet[currentQuestionIndex];
+        const choices = document.getElementById('choices');
+        choices.innerHTML = '';
+
+        // Shuffle choices
+        const shuffledChoices = shuffleChoices(currentWord, 6);
+        
+        shuffledChoices.forEach(choice => {
+            const li = document.createElement('li');
+            li.textContent = choice;
+            li.onclick = function() {
+                checkAnswer(choice);
+            };
+            choices.appendChild(li);
+        });
+
+        document.getElementById('question').textContent = `Question: ${currentWord}`;
+        
+        // Reset timer
+        clearInterval(timer);
+        document.getElementById('time-left').textContent = timeLimit;
+        timer = setInterval(updateTimer, 1000);
+    }
+
+    // Function to update the timer
+    function updateTimer() {
+        const timeLeftElement = document.getElementById('time-left');
+        let timeLeft = parseInt(timeLeftElement.textContent);
+        timeLeft--;
+        if (timeLeft < 0) {
+            timeLeft = 0;
+            clearInterval(timer);
+            checkAnswer(); // Time's up, check answer automatically
+        }
+        timeLeftElement.textContent = timeLeft;
+    }
+
+    // Function to shuffle the choices
+    function shuffleChoices(correctAnswer, numChoices) {
+        const choices = [correctAnswer];
+        while (choices.length < numChoices) {
+            const randomIndex = Math.floor(Math.random() * easyWords.length); // Assuming all word sets have the same length
+            const randomChoice = easyWords[randomIndex];
+            if (!choices.includes(randomChoice)) {
+                choices.push(randomChoice);
+            }
+        }
+        return shuffleArray(choices);
+    }
+
+    // Function to shuffle an array
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // Function to check the answer
+    function checkAnswer(selectedChoice) {
+        const currentWordSet = wordSets[currentLevel];
+        const currentWord = currentWordSet[currentQuestionIndex];
+        clearInterval(timer);
+
+        const correctChoice = currentWord;
+        const timeLeft = parseInt(document.getElementById('time-left').textContent);
+        if (selectedChoice === correctChoice) {
+            score += timeLeft;
+            document.getElementById('result').textContent = `Correct! Earned ${timeLeft} points`;
+        } else {
+            document.getElementById('result').textContent = 'Incorrect! Earned 0 points';
+        }
+
+        document.getElementById('score-value').textContent = score;
+        
+        // Move to the next question or end the game
+        currentQuestionIndex++;
+        if (currentQuestionIndex < numQuestionsPerLevel) {
+            setTimeout(loadQuestion, 1000); // Load next question after 1 second
+        } else {
+            currentLevel++;
+            if (currentLevel < wordSets.length) {
+                currentQuestionIndex = 0;
+                setTimeout(loadQuestion, 1000); // Load next level after 1 second
+            } else {
+                document.getElementById('question-container').style.display = 'none';
+                document.getElementById('result').textContent = `Game Over! Your final score is ${score}.`;
+            }
+        }
+    }
+
+    // Initialize the game
+    loadQuestion();
+</script>
+</body>
+</html>
