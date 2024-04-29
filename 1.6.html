@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+    
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #startBtn, #nextBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="score">Score: 0</div>
+    <button id="startBtn">Start Game</button>
+    <button id="nextBtn" style="display: none;">Next</button>
+  </div>
+
+  <script>
+    const words = {
+      easy: [
+        { word: "rain", options: ["风", "人物", "城市", "雷", "雨", "雪"], correct: 4 },
+        { word: "sun", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 0 },
+        { word: "moon", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 1 },
+        // Add more words and options for easy difficulty
+      ],
+      medium: [
+        { word: "computer", options: ["电脑", "手机", "钢笔", "书", "椅子", "桌子"], correct: 0 },
+        { word: "guitar", options: ["吉他", "钢琴", "小提琴", "笛子", "鼓", "管乐器"], correct: 0 },
+        // Add more words and options for medium difficulty
+      ],
+      hard: [
+        { word: "university", options: ["大学", "学校", "图书馆", "医院", "餐厅", "商店"], correct: 0 },
+        { word: "hospital", options: ["医院", "学校", "图书馆", "餐厅", "商店", "电影院"], correct: 0 },
+        // Add more words and options for hard difficulty
+      ],
+      expert: [
+        { word: "philosophy", options: ["哲学", "心理学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        { word: "psychology", options: ["心理学", "哲学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        // Add more words and options for expert difficulty
+      ]
+    };
+
+    let currentWordIndex;
+    let score = 0;
+    let correctCount = 0;
+    let totalQuestions = 0;
+    let timer;
+    let currentQuestionIndex = 0;
+
+    const startBtn = document.getElementById('startBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+
+    startBtn.addEventListener('click', startGame);
+    nextBtn.addEventListener('click', askQuestion);
+
+    function startGame() {
+      score = 0;
+      correctCount = 0;
+      totalQuestions = 0;
+      scoreDiv.textContent = 'Score: 0';
+      resultDiv.textContent = '';
+      startBtn.style.display = 'none';
+      nextBtn.style.display = 'block';
+      currentQuestionIndex = 0;
+      askQuestion();
+    }
+
+    function askQuestion() {
+      if (currentQuestionIndex < 60) {
+        const difficulty = getDifficulty();
+        const questionData = words[difficulty][currentQuestionIndex % 15];
+        currentWordIndex = questionData.correct;
+        const currentWord = questionData.word;
+        questionDiv.textContent = currentWord;
+
+        // Generate options
+        optionsDiv.innerHTML = '';
+        for (let i = 0; i < questionData.options.length; i++) {
+          const option = document.createElement('div');
+          option.className = 'option';
+          option.textContent = questionData.options[i];
+          option.addEventListener('click', () => checkAnswer(i));
+          optionsDiv.appendChild(option);
+        }
+
+        // Clear result
+        resultDiv.textContent = '';
+
+        // Disable Next button
+        nextBtn.disabled = true;
+      } else {
+        resultDiv.textContent = 'Game Over! Your final score is: ' + score;
+        nextBtn.style.display = 'none';
+      }
+    }
+
+    function checkAnswer(selectedOption) {
+      totalQuestions++;
+      if (selectedOption === currentWordIndex) {
+        score += 20;
+        correctCount++;
+        scoreDiv.textContent = 'Score: ' + score;
+        resultDiv.textContent = 'Correct!';
+      } else {
+        resultDiv.textContent = 'Incorrect!';
+      }
+      highlightCorrectOption(currentWordIndex);
+      nextBtn.disabled = false;
+      currentQuestionIndex++;
+    }
+
+    function highlightCorrectOption(correctIndex) {
+      const options = document.querySelectorAll('.option');
+      options[correctIndex].classList.add('correct');
+    }
+
+    function getDifficulty() {
+      if (currentQuestionIndex < 15) {
+        return 'easy';
+      } else if (currentQuestionIndex < 30) {
+        return 'medium';
+      } else if (currentQuestionIndex < 45) {
+        return 'hard';
+      } else {
+        return 'expert';
+      }
+    }
+  </script>
+</body>
+</html>

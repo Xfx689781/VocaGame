@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="score"></div>
+    <button id="startBtn">Start Game</button>
+  </div>
+
+  <script>
+    const words = {
+      easy: [
+        { word: "rain", options: ["风", "人物", "城市", "雷", "雨", "雪"] },
+        { word: "sun", options: ["太阳", "月亮", "星星", "花", "树", "草"] },
+        // Add more words and options for easy difficulty
+      ],
+      medium: [
+        { word: "computer", options: ["电脑", "手机", "钢笔", "书", "椅子", "桌子"] },
+        { word: "guitar", options: ["吉他", "钢琴", "小提琴", "笛子", "鼓", "管乐器"] },
+        // Add more words and options for medium difficulty
+      ],
+      hard: [
+        { word: "university", options: ["大学", "学校", "图书馆", "医院", "餐厅", "商店"] },
+        { word: "hospital", options: ["医院", "学校", "图书馆", "餐厅", "商店", "电影院"] },
+        // Add more words and options for hard difficulty
+      ],
+      expert: [
+        { word: "philosophy", options: ["哲学", "心理学", "生物学", "化学", "物理学", "数学"] },
+        { word: "psychology", options: ["心理学", "哲学", "生物学", "化学", "物理学", "数学"] },
+        // Add more words and options for expert difficulty
+      ]
+    };
+
+    let currentWordIndex;
+    let score = 0;
+    let correctCount = 0;
+    let totalQuestions = 0;
+    let timer;
+    let currentQuestionIndex = 0;
+
+    const startBtn = document.getElementById('startBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const scoreDiv = document.getElementById('score');
+    const resultDiv = document.getElementById('result');
+
+    startBtn.addEventListener('click', startGame);
+
+    function startGame() {
+      score = 0;
+      correctCount = 0;
+      totalQuestions = 0;
+      scoreDiv.textContent = 'Score: 0';
+      resultDiv.textContent = '';
+      startBtn.disabled = true;
+      currentQuestionIndex = 0;
+      askQuestion();
+    }
+
+    function askQuestion() {
+      const difficulty = getDifficulty();
+      const questionData = words[difficulty][currentQuestionIndex];
+      currentWordIndex = questionData.options.indexOf(questionData.word);
+      const currentWord = questionData.word;
+      questionDiv.textContent = currentWord;
+
+      // Generate options
+      optionsDiv.innerHTML = '';
+      const options = questionData.options;
+      for (let i = 0; i < options.length; i++) {
+        const option = document.createElement('div');
+        option.className = 'option';
+        option.textContent = options[i];
+        option.addEventListener('click', () => checkAnswer(options[i]));
+        optionsDiv.appendChild(option);
+      }
+
+      // Start timer
+      timer = setTimeout(() => checkAnswer(''), 20000);
+    }
+
+    function checkAnswer(selectedOption) {
+      clearTimeout(timer);
+      totalQuestions++;
+      const currentWord = words[getDifficulty()][currentQuestionIndex].word;
+      if (selectedOption === currentWord) {
+        score += 20;
+        correctCount++;
+        scoreDiv.textContent = 'Score: ' + score;
+        resultDiv.textContent = 'Correct!';
+      } else {
+        resultDiv.textContent = 'Incorrect!';
+      }
+      startBtn.disabled = false;
+      currentQuestionIndex++;
+      if (currentQuestionIndex < 15 || (currentQuestionIndex >= 15 && currentQuestionIndex < 30) || (currentQuestionIndex >= 30 && currentQuestionIndex < 45) || (currentQuestionIndex >= 45 && currentQuestionIndex < 60)) {
+        askQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const accuracy = (correctCount / totalQuestions) * 100;
+      resultDiv.textContent = 'Game Over! Accuracy: ' + accuracy.toFixed(2) + '%';
+    }
+
+    function getDifficulty() {
+      if (currentQuestionIndex < 15) {
+        return 'easy';
+      } else if (currentQuestionIndex >= 15 && currentQuestionIndex < 30) {
+        return 'medium';
+      } else if (currentQuestionIndex >= 30 && currentQuestionIndex < 45) {
+        return 'hard';
+      } else {
+        return 'expert';
+      }
+    }
+  </script>
+</body>
+</html>
