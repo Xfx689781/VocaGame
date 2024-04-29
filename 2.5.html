@@ -81,8 +81,9 @@
     <div id="question"></div>
     <div id="options"></div>
     <div id="result"></div>
-    <div id="score">Score: 0</div>
-    <div id="timer">Time left: 20s</div>
+    <div id="correct">Correct:</div>
+    <div id="score">Score:</div>
+    <div id="timer">Time left:</div>
     <button id="startBtn">Start Game</button>
     <button id="nextBtn" style="display: none;">Next</button>
   </div>
@@ -162,6 +163,7 @@
     let currentQuestionIndex = 0;
     let currentDifficulty = 'easy';
     let shuffledWords = [];
+ 
 
     const startBtn = document.getElementById('startBtn');
     const nextBtn = document.getElementById('nextBtn');
@@ -169,6 +171,7 @@
     const optionsDiv = document.getElementById('options');
     const resultDiv = document.getElementById('result');
     const scoreDiv = document.getElementById('score');
+    const correctDiv = document.getElementById('correct');
     const timerDiv = document.getElementById('timer');
     const questionNumberDiv = document.getElementById('questionNumber');
 
@@ -189,7 +192,7 @@
       shuffledWords = shuffle(words[currentDifficulty].slice()); // Shuffle the easy words
       askQuestion();
     }
-
+    
     function askQuestion() {
       if (totalQuestions < 60) {
         getDifficulty();
@@ -229,13 +232,19 @@
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
         score += timeLeft;
         correctCount++;
+        correctDiv.textContent = 'Correct: ' + correctCount +"/60";
         scoreDiv.textContent = 'Score: ' + (score/(0.2*totalQuestions)).toFixed(0);
         resultDiv.textContent = 'Correct!';
       } else {
         resultDiv.textContent = 'Incorrect!';
         score += 0;
       }
+      if (selectedOption == currentWordIndex){
       highlightCorrectOption(currentWordIndex);
+      }
+      if (selectedOption != currentWordIndex){
+      highlightIncorrectOption(selectedOption);
+      }
       nextBtn.disabled = false;
       currentQuestionIndex++;
     }
@@ -243,6 +252,11 @@
     function highlightCorrectOption(correctIndex) {
       const options = document.querySelectorAll('.option');
       options[correctIndex].classList.add('correct');
+    }
+
+    function highlightIncorrectOption(correctIndex) {
+      const options = document.querySelectorAll('.option');
+      options[correctIndex].classList.add('incorrect');
     }
 
     function shuffle(array) {
