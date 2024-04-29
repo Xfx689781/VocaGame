@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    #questionNumber {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+    
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="questionNumber"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="score">Score: 0</div>
+    <div id="timer">Time left: 20s</div>
+    <button id="startBtn">Start Game</button>
+    <button id="nextBtn" style="display: none;">Next</button>
+  </div>
+
+  <script>
+       const words = {
+      easy: [
+        { word: "rain", options: ["风", "人物", "城市", "雷", "雨", "雪"], correct: 4 },
+        { word: "sun", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 0 },
+        { word: "moon", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 1 },
+        { word: "tree", options: ["汽车", "飞机", "轮船", "自行车", "树", "花"], correct: 4 },
+        { word: "flower", options: ["笔", "纸", "书", "花", "树", "草"], correct: 3 },
+        { word: "bird", options: ["鱼", "狗", "猫", "鸟", "老鼠", "兔子"], correct: 3 },
+        { word: "dog", options: ["狗", "猫", "鸟", "兔子", "老鼠", "鱼"], correct: 0 },
+        { word: "cat", options: ["猫", "狗", "鸟", "鱼", "老鼠", "兔子"], correct: 0 },
+        { word: "house", options: ["房子", "车子", "树", "花", "草", "水"], correct: 0 },
+        { word: "car", options: ["房子", "车子", "树", "花", "草", "水"], correct: 1 },
+        { word: "book", options: ["房子", "车子", "树", "花", "书", "草"], correct: 4 },
+        { word: "pen", options: ["笔", "纸", "书", "花", "树", "草"], correct: 0 },
+        { word: "school", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 0 },
+        { word: "apple", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 0 },
+        { word: "orange", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 2 },
+        { word: "banana", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 1 },
+        { word: "table", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 0 },
+        { word: "chair", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 1 },
+        { word: "bed", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 4 },
+        { word: "cup", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 0 },
+        { word: "plate", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 2 },
+        { word: "spoon", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 3 },
+        { word: "clock", options: ["电视", "电话", "手机", "电脑", "相机", "时钟"], correct: 5 },
+        { word: "shoes", options: ["帽子", "衣服", "裤子", "鞋子", "袜子", "围巾"], correct: 3 },
+        { word: "hat", options: ["帽子", "衣服", "裤子", "鞋子", "袜子", "围巾"], correct: 0 },
+        { word: "computer", options: ["电脑", "手机", "钢笔", "书", "椅子", "桌子"], correct: 0 },
+        { word: "guitar", options: ["吉他", "钢琴", "小提琴", "笛子", "鼓", "管乐器"], correct: 0 },
+        { word: "picture", options: ["电视", "电话", "相机", "电脑", "时钟", "录音机"], correct: 2 },
+        { word: "television", options: ["电视", "电话", "相机", "电脑", "时钟", "录音机"], correct: 0 },
+        { word: "phone", options: ["电视", "电话", "相机", "电脑", "时钟", "录音机"], correct: 1 },
+        { word: "chair", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 1 },
+        { word: "bed", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 4 },
+        { word: "desk", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 2 },  
+        { word: "book", options: ["书", "手机", "电脑", "电视", "相机", "录音机"], correct: 0 },
+        { word: "pen", options: ["笔", "纸", "书", "花", "树", "草"], correct: 0 },
+        { word: "pencil", options: ["笔", "纸", "书", "花", "树", "草"], correct: 0 },
+        { word: "ruler", options: ["尺子", "圆规", "三角板", "直尺", "游标卡尺", "天平"], correct: 0 },
+        { word: "eraser", options: ["橡皮擦", "削笔刀", "铅笔", "毛笔", "钢笔", "油画棒"], correct: 0 },
+        { word: "notebook", options: ["笔记本", "文具盒", "书包", "作业本", "课本", "书"], correct: 0 },
+        { word: "backpack", options: ["书包", "文具盒", "笔记本", "作业本", "课本", "书"], correct: 0 },
+        { word: "homework", options: ["作业", "书包", "文具盒", "笔记本", "课本", "书"], correct: 0 },
+        { word: "school", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 0 },
+        { word: "hospital", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 1 },
+        { word: "library", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 2 },
+        { word: "university", options: ["大学", "学校", "图书馆", "医院", "餐厅", "商店"], correct: 0 },
+        { word: "hospital", options: ["医院", "学校", "图书馆", "餐厅", "商店", "电影院"], correct: 0 },
+    ],
+      medium: [
+       
+        { word: "couch", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 3 },
+       
+      ],
+      hard: [
+      { word: "philosophy", options: ["哲学", "心理学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        // Add more words and options for hard difficulty
+      ],
+      expert: [
+       
+        { word: "psychology", options: ["心理学", "哲学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        // Add more words and options for expert difficulty
+      ]
+    };
+
+
+    let currentWordIndex;
+    let score = 0;
+    let correctCount = 0;
+    let totalQuestions = 0;
+    let timer;
+    let currentQuestionIndex = 0;
+    let currentDifficulty = 'easy';
+    let shuffledWords = [];
+
+    const startBtn = document.getElementById('startBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+    const timerDiv = document.getElementById('timer');
+    const questionNumberDiv = document.getElementById('questionNumber');
+
+    startBtn.addEventListener('click', startGame);
+    nextBtn.addEventListener('click', askQuestion);
+
+    function startGame() {
+      score = 0;
+      correctCount = 0;
+      totalQuestions = 0;
+      //scoreDiv.textContent = 'Score: 0';
+      resultDiv.textContent = '';
+      //timerDiv.textContent = 'Time left: 20s';
+      startBtn.style.display = 'none';
+      nextBtn.style.display = 'block';
+      currentQuestionIndex = 0;
+      currentDifficulty = 'easy';
+      shuffledWords = shuffle(words[currentDifficulty].slice()); // Shuffle the easy words
+      askQuestion();
+    }
+
+    function askQuestion() {
+      if (totalQuestions < 60) {
+        getDifficulty();
+        const questionData = shuffledWords[currentQuestionIndex];
+        currentWordIndex = questionData.correct;
+        const currentWord = questionData.word;
+        questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
+        questionDiv.textContent = currentWord;
+
+
+        // Generate options
+        optionsDiv.innerHTML = '';
+        for (let i = 0; i < questionData.options.length; i++) {
+          const option = document.createElement('div');
+          option.className = 'option';
+          option.textContent = questionData.options[i];
+          option.addEventListener('click', () => checkAnswer(i));
+          optionsDiv.appendChild(option);
+        }
+
+        // Clear result
+        resultDiv.textContent = '';
+
+        // Start timer
+        startTimer();
+      } else {
+        resultDiv.textContent = 'Your final score is: ' + score/(0.2*60).toFixed(0);
+        nextBtn.style.display = 'none';
+      }
+    }
+    
+
+    function checkAnswer(selectedOption) {
+      totalQuestions++;
+      clearTimeout(timer);
+      if (selectedOption === currentWordIndex) {
+        const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
+        score += timeLeft;
+        correctCount++;
+        scoreDiv.textContent = 'Score: ' + (score/(0.2*totalQuestions)).toFixed(0);
+        resultDiv.textContent = 'Correct!';
+      } else {
+        resultDiv.textContent = 'Incorrect!';
+        score += 0;
+      }
+      highlightCorrectOption(currentWordIndex);
+      nextBtn.disabled = false;
+      currentQuestionIndex++;
+    }
+
+    function highlightCorrectOption(correctIndex) {
+      const options = document.querySelectorAll('.option');
+      options[correctIndex].classList.add('correct');
+    }
+
+    function shuffle(array) {
+      let currentIndex = array.length, temporaryValue, randomIndex;
+      while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    }
+
+    function getDifficulty() {
+  if (currentQuestionIndex === 15) {
+    currentDifficulty = 'medium';
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+    currentQuestionIndex = 0; // Reset currentQuestionIndex for the new difficulty
+  } else if (currentQuestionIndex === 30) {
+    currentDifficulty = 'hard';
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+    currentQuestionIndex = 0; // Reset currentQuestionIndex for the new difficulty
+  } else if (currentQuestionIndex === 45) {
+    currentDifficulty = 'expert';
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+    currentQuestionIndex = 0; // Reset currentQuestionIndex for the new difficulty
+  }
+}
+
+    function startTimer() {
+      let timeLeft = 20;
+      timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+        if (timeLeft === 0) {
+          clearTimeout(timer);
+          checkAnswer(-1); // Timeout
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
