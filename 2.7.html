@@ -647,7 +647,7 @@
     
   const options = document.querySelectorAll('.option');
   options.forEach(option => option.removeEventListener('click', handleOptionClick));
-  shuffle();
+  
 
   } else {
     resultDiv.textContent = 'Incorrect!';
@@ -657,7 +657,7 @@
   options.forEach(option => option.removeEventListener('click', handleOptionClick));
   const shuffledOptions = shuffle(questionData.options.slice());
     correctOptionIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
-   shuffle()
+ 
   }
   if (selectedOption != currentWordIndex){
       highlightIncorrectOption(selectedOption);
