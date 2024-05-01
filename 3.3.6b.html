@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    #questionNumber {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+    
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #correct {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="questionNumber"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="correct">Correct:</div>
+    <div id="score">Score:</div>
+    <div id="timer">Time left:</div>
+    <button id="nextBtn" style="display: none;">Next</button>
+  </div>
+
+  <script>
+    const words = {
+        hard: [
+      { "word": "radical", "options": ["激进", "温和", "辐射", "保守", "革命", "传统"], "correct": 0 },
+      { "word": "kernel", "options": ["核心", "节点", "皮划艇", "钉子", "外壳", "扁担"], "correct": 0 },
+      { "word": "accommodate", "options": ["容纳", "排除", "拒绝", "替换", "驱逐", "不合适"], "correct": 0 },
+      { "word": "affection", "options": ["感情", "恨", "不喜欢", "厌恶", "反感", "敌意"], "correct": 0 },
+      { "word": "agenda", "options": ["日程", "随机", "自发", "未计划", "无组织", "混乱"], "correct": 0 },
+        { word: "philosophy", options: ["哲学", "心理学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        // Add more hard words and options
+      ],
+      expert: [
+        { word: "psychology", options: ["心理学", "哲学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        // Add more expert words and options
+      ]
+      // Add medium, hard, and expert words and options
+    };
+
+    let currentWordIndex;
+    let score = 0;
+    let correctCount = 0;
+    let totalQuestions = 0;
+    let timer;
+    let currentQuestionIndex = 0;
+    let currentDifficulty = 'hard';
+    let shuffledWords = [];
+
+    const nextBtn = document.getElementById('nextBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+    const correctDiv = document.getElementById('correct');
+    const timerDiv = document.getElementById('timer');
+    const questionNumberDiv = document.getElementById('questionNumber');
+
+    nextBtn.addEventListener('click', askQuestion);
+
+    window.onload = startGame;
+
+    function startGame() {
+      score = 0;
+      correctCount = 0;
+      totalQuestions = 0;
+      resultDiv.textContent = '';
+      nextBtn.style.display = 'block';
+      currentQuestionIndex = 0;
+      currentDifficulty = 'easy';
+      shuffledWords = shuffle(words[currentDifficulty].slice());
+      askQuestion();
+    }
+
+    function askQuestion() {
+      if (currentQuestionIndex < 30) {
+        const questionData = shuffledWords[currentQuestionIndex];
+        currentWordIndex = questionData.correct;
+        const currentWord = questionData.word;
+        questionNumberDiv.textContent = `Question ${currentQuestionIndex + 1}`;
+        questionDiv.textContent = currentWord;
+
+        const shuffledOptions = shuffle(questionData.options.slice());
+        correctOptionIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
+
+        optionsDiv.innerHTML = '';
+        for (let i = 0; i < shuffledOptions.length; i++) {
+          const option = document.createElement('div');
+          option.className = 'option';
+          option.textContent = shuffledOptions[i];
+          option.addEventListener('click', () => checkAnswer(i === correctOptionIndex));
+          optionsDiv.appendChild(option);
+        }
+
+        currentQuestionIndex++;
+      } else {
+        // Game over, show score or move to the next set of questions
+      }
+    }
+
+    function checkAnswer(isCorrect) {
+      totalQuestions++;
+      if (isCorrect) {
+        score++;
+        correctCount++;
+        resultDiv.textContent = 'Correct!';
+      } else {
+        resultDiv.textContent = 'Incorrect!';
+      }
+      updateScore();
+    }
+
+    function updateScore() {
+      scoreDiv.textContent = `Score: ${score}/${totalQuestions}`;
+      correctDiv.textContent = `Correct: ${correctCount}/${totalQuestions}`;
+    }
+
+    function shuffle(array) {
+      let currentIndex = array.length;
+      let randomIndex;
+
+      while (currentIndex != 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+
+      return array;
+    }
+ 
+  </script>
+</body>
+</html>

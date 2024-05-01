@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    #questionNumber {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+    
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #correct {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="questionNumber"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="correct">Correct:</div>
+    <div id="score">Score:</div>
+    <div id="timer">Time left:</div>
+    <button id="startBtn">Start Game</button>
+    <button id="nextBtn" style="display: none;">Next</button>
+  </div>
+
+  <script>
+    const words = {
+      easy: [
+      { word: "rain", options: ["风", "人物", "城市", "雷", "雨", "雪"], correct: 4 },
+        { word: "sun", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 0 },
+        { word: "moon", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 1 },
+        { word: "tree", options: ["汽车", "飞机", "轮船", "自行车", "树", "花"], correct: 4 },
+        { word: "flower", options: ["笔", "纸", "书", "花", "树", "草"], correct: 3 },
+        { word: "bird", options: ["鱼", "狗", "猫", "鸟", "老鼠", "兔子"], correct: 3 },
+        { word: "dog", options: ["狗", "猫", "鸟", "兔子", "老鼠", "鱼"], correct: 0 },
+        { word: "cat", options: ["猫", "狗", "鸟", "鱼", "老鼠", "兔子"], correct: 0 },
+        { word: "house", options: ["房子", "车子", "树", "花", "草", "水"], correct: 0 },
+        { word: "car", options: ["房子", "车子", "树", "花", "草", "水"], correct: 1 },
+        { word: "book", options: ["房子", "车子", "树", "花", "书", "草"], correct: 4 },
+        { word: "pen", options: ["笔", "纸", "书", "花", "树", "草"], correct: 0 },
+        { word: "school", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 0 },
+        { word: "apple", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 0 },
+        { word: "orange", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 2 },
+        { word: "banana", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 1 },
+        { word: "table", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 0 },
+        { word: "chair", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 1 },
+        { word: "bed", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 4 },
+        { word: "cup", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 0 },
+        { word: "plate", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 2 },
+        { word: "spoon", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 3 },
+        { word: "clock", options: ["电视", "电话", "手机", "电脑", "相机", "时钟"], correct: 5 },
+        { word: "shoes", options: ["帽子", "衣服", "裤子", "鞋子", "袜子", "围巾"], correct: 3 },
+        { word: "hat", options: ["帽子", "衣服", "裤子", "鞋子", "袜子", "围巾"], correct: 0 },
+        { word: "computer", options: ["电脑", "手机", "钢笔", "书", "椅子", "桌子"], correct: 0 },
+        { word: "guitar", options: ["吉他", "钢琴", "小提琴", "笛子", "鼓", "管乐器"], correct: 0 },
+       ],
+      medium: [
+     
+      { "word": "windmill", "options": ["风车", "模仿", "磨坊", "鼓风机", "拉链", "粮仓"], "correct": 0 },
+      { "word": "irony", "options": ["讽刺", "粒子", "铁", "离子", "分子", "原子"], "correct": 0 },
+      { "word": "iron", "options": ["铁", "粒子", "伊朗", "离子", "讽刺", "原子"], "correct": 0 },
+      { "word": "ion", "options": ["离子", "粒子", "伊朗", "铁", "讽刺", "原子"], "correct": 0 },
+      { "word": "iran", "options": ["伊朗", "粒子", "离子", "铁", "讽刺", "原子"], "correct": 0 },
+      { "word": "abandon", "options": ["遗弃", "保留", "丢失", "找到", "持有", "丰富"], "correct": 0 },
+  { "word": "abundant", "options": ["丰富", "密集", "稀少", "有限", "遗弃", "稀疏"], "correct": 0 },
+  { "word": "abstract", "options": ["抽象的", "具体的", "可触摸的", "真实的", "完整的", "实际的"], "correct": 0 },
+  { "word": "academic", "options": ["学术的", "非学术的", "实用的", "理论的", "智力的", "教育的"], "correct": 0 },
+  { "word": "access", "options": ["接入", "障碍", "限制", "限制", "排除", "抑制"], "correct": 0 },
+  { "word": "acquire", "options": ["获得", "失去", "给予", "处置", "放弃", "投降"], "correct": 0 },
+  { "word": "afford", "options": ["购买", "出售", "支付", "获得", "拥有", "自己的"], "correct": 0 },
+  { "word": "addict", "options": ["沉迷", "清醒", "戒断", "清洁", "恢复", "治愈"], "correct": 0 },
+  { "word": "advance", "options": ["进步", "退步", "撤退", "下降", "向后", "缩小"], "correct": 0 },
+  { "word": "agency", "options": ["机构", "个人", "部门", "实体", "公司", "团体"], "correct": 0 },
+  { "word": "aid", "options": ["帮助", "扶持", "阻碍", "合并", "瞄准", "经验"], "correct": 0 },
+  { "word": "align", "options": ["调整", "活跃", "无序", "混乱", "困惑", "稚嫩"], "correct": 0 },
+  { "word": "balance", "options": ["平衡", "稳定", "混乱", "整齐", "无序", "失衡"], "correct": 0 },
+  { "word": "beauty", "options": ["美丽", "丑陋", "平淡", "帅", "平凡", "丑陋"], "correct": 0 },
+  { "word": "belief", "options": ["信仰", "怀疑", "怀疑", "信徒", "无神论者", "不可知论"], "correct": 0 },
+  { "word": "bless", "options": ["祝福", "诅咒", "文明", "开花", "花朵", "灾祸"], "correct": 0 },
+  { "word": "blush", "options": ["脸红", "苍白", "山谷", "悬崖", "吹嘘", "果实"], "correct": 0 },
+  { "word": "bold", "options": ["大胆", "胆小", "害羞", "光头", "保守", "谨慎"], "correct": 0 },
+  { "word": "bounce", "options": ["反弹", "反光", "太高", "减缓", "下降", "跌落"], "correct": 0 },
+  { "word": "brief", "options": ["简短", "冗长", "扩展", "压缩", "境界", "扶持"], "correct": 0 },
+  { "word": "bright", "options": ["明亮", "黑暗", "愚钝", "明暗", "敏感", "模糊"], "correct": 0 },
+  { "word": "bother", "options": ["打扰", "兄弟", "麻烦", "箱子", "小巷", "安慰"], "correct": 0 },
+    { "word": "bury", "options": ["掩埋", "挖掘", "考古", "军事", "海岬", "藏匿"], "correct": 0 },
+    { "word": "comment", "options": ["评论", "意义", "意见", "自由", "凯旋", "荧幕"], "correct": 0 },
+    { "word": "command", "options": ["命令", "零食", "成绩", "建议", "评论", "领导"], "correct": 0 },
+       // Add more medium words and options
+      ],
+      hard: [
+      { "word": "radical", "options": ["激进", "温和", "辐射", "保守", "革命", "传统"], "correct": 0 },
+      { "word": "kernel", "options": ["核心", "节点", "皮划艇", "钉子", "外壳", "扁担"], "correct": 0 },
+      { "word": "accommodate", "options": ["容纳", "排除", "拒绝", "替换", "驱逐", "不合适"], "correct": 0 },
+      { "word": "affection", "options": ["感情", "恨", "不喜欢", "厌恶", "反感", "敌意"], "correct": 0 },
+      { "word": "agenda", "options": ["日程", "随机", "自发", "未计划", "无组织", "混乱"], "correct": 0 },
+        { word: "philosophy", options: ["哲学", "心理学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        // Add more hard words and options
+      ],
+      expert: [
+        { word: "psychology", options: ["心理学", "哲学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        // Add more expert words and options
+      ]
+    
+    };
+
+    let currentWordIndex;
+    let score = 0;
+    let correctCount = 0;
+    let totalQuestions = 0;
+    let timer;
+    let currentQuestionIndex = 0;
+    let currentDifficulty = 'easy';
+    let shuffledWords = [];
+
+    const startBtn = document.getElementById('startBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+    const correctDiv = document.getElementById('correct');
+    const timerDiv = document.getElementById('timer');
+    const questionNumberDiv = document.getElementById('questionNumber');
+
+    startBtn.addEventListener('click', startGame);
+    nextBtn.addEventListener('click', askQuestion);
+
+    function startGame() {
+      score = 0;
+      correctCount = 0;
+      totalQuestions = 0;
+      resultDiv.textContent = '';
+      startBtn.style.display = 'none';
+      nextBtn.style.display = 'block';
+      currentQuestionIndex = 0;
+      currentDifficulty = 'easy';
+      shuffledWords = shuffle(words[currentDifficulty].slice());
+      askQuestion();
+    }
+
+    function checkAnswer(isCorrectOption) {
+  totalQuestions++;
+  clearTimeout(timer);
+
+  if (isCorrectOption) {
+    const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
+    score += timeLeft;
+    correctCount++;
+    correctDiv.textContent = 'Correct: ' + correctCount + "/60";
+    scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
+    resultDiv.textContent = 'Correct!';
+  } else {
+    resultDiv.textContent = 'Incorrect!';
+    score += 0;
+  }
+
+  // Disable all options after a choice is made
+  const options = document.querySelectorAll('.option');
+  options.forEach(option => {
+    option.removeEventListener('click', handleOptionClick);
+    option.style.cursor = 'default';
+  });
+
+  nextBtn.disabled = false;
+  currentQuestionIndex++;
+  if (totalQuestions === 30) {
+        // Redirect to 3.html after question 30
+        window.location.href = '3.3.html';
+      }
+}
+
+function handleOptionClick(event) {
+    const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
+    const isCorrectOption = optionIndex === correctOptionIndex;
+    checkAnswer(isCorrectOption);
+  
+    // Disable all options
+    const options = document.querySelectorAll('.option');
+    options.forEach(option => {
+      option.removeEventListener('click', handleOptionClick);
+      option.style.pointerEvents = 'none';
+    });
+  
+    // Enable next button
+    nextBtn.style.display = 'block';
+  }
+  function getDifficulty() {
+  if (currentQuestionIndex === 15 || currentQuestionIndex === 30 || currentQuestionIndex === 45) {
+    if (currentQuestionIndex === 15) {
+      currentDifficulty = 'medium';
+    } else if (currentQuestionIndex === 30) {
+      currentDifficulty = 'hard';
+    } else if (currentQuestionIndex === 45) {
+      currentDifficulty = 'expert';
+    }
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+  }
+}
+function askQuestion() {
+    getDifficulty();
+    if (totalQuestions < 60) {
+    const questionData = shuffledWords[currentQuestionIndex];
+    currentWordIndex = questionData.correct;
+    const currentWord = questionData.word;
+    questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
+    questionDiv.textContent = currentWord;
+
+    const shuffledOptions = shuffle(questionData.options.slice());
+    correctOptionIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
+
+    optionsDiv.innerHTML = '';
+    for (let i = 0; i < shuffledOptions.length; i++) {
+      const option = document.createElement('div');
+      option.className = 'option';
+      option.textContent = shuffledOptions[i];
+      option.addEventListener('click', handleOptionClick);
+      optionsDiv.appendChild(option);
+    }
+
+    resultDiv.textContent = '';
+    startTimer();
+}else {
+    resultDiv.textContent = 'Your final score is: ' + score / (0.2 * 60).toFixed(0);
+    nextBtn.style.display = 'none';
+  }
+
+}
+    function highlightCorrectOption(correctIndex) {
+      const options = document.querySelectorAll('.option');
+      options[correctIndex].classList.add('correct');
+    }
+
+    function highlightIncorrectOption(correctIndex) {
+      const options = document.querySelectorAll('.option');
+      options[correctIndex].classList.add('incorrect');
+    }
+
+    function shuffle(array) {
+      let currentIndex = array.length, temporaryValue, randomIndex;
+      while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    }
+ 
+    function getDifficulty() {
+  if (currentQuestionIndex === 15) {
+    currentDifficulty = 'medium';
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+  } else if (currentQuestionIndex === 30) {
+    currentDifficulty = 'hard';
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+  } else if (currentQuestionIndex === 45) {
+    currentDifficulty = 'expert';
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+  }
+}
+
+    function startTimer() {
+      let timeLeft = 20;
+      timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+        if (timeLeft === 0) {
+          clearTimeout(timer);
+          checkAnswer(false); // Timeout, passing false as the answer is incorrect
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

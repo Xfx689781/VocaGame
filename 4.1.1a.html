@@ -752,7 +752,6 @@
     { "word": "quote", "options": ["引用", "反驳", "回复", "应答", "重复", "否认"], "correct": 0 },
     { "word": "quill", "options": ["羽毛", "鳞片", "刺", "陈皮", "鹌鹑蛋", "五棱柱"], "correct": 0 },
     { "word": "quirk", "options": ["怪癖", "驱赶", "智障", "传统", "勤劳", "崩塌"], "correct": 0 },
-    { "word": "radical", "options": ["激进", "温和", "辐射", "保守", "革命", "传统"], "correct": 0 },
     { "word": "random", "options": ["随意", "系统", "平均数", "有序", "孙悟空", "贾宝玉"], "correct": 0 },
     { "word": "range", "options": ["范围", "限制", "林黛玉", "边界", "唐僧", "卢俊义"], "correct": 0 },
     { "word": "rank", "options": ["位置", "宋江", "等级", "李逵", "武松", "贵族"], "correct": 0 },
@@ -793,20 +792,7 @@
     { "word": "yacht", "options": ["游艇", "陆地", "压差", "高压气流", "电离辐射", "雅典"], "correct": 0 },
     { "word": "zombie", "options": ["僵尸", "移动", "平面", "煮熟", "竹荪", "香港"], "correct": 0 }
     // Add more medium words and options
-      ],
-      hard: [
-      { "word": "kernel", "options": ["核心", "节点", "皮划艇", "钉子", "外壳", "扁担"], "correct": 0 },
-      { "word": "accommodate", "options": ["容纳", "排除", "拒绝", "替换", "驱逐", "不合适"], "correct": 0 },
-      { "word": "affection", "options": ["感情", "恨", "不喜欢", "厌恶", "反感", "敌意"], "correct": 0 },
-      { "word": "agenda", "options": ["日程", "随机", "自发", "未计划", "无组织", "混乱"], "correct": 0 },
-        { word: "philosophy", options: ["哲学", "心理学", "生物学", "化学", "物理学", "数学"], correct: 0 },
-        // Add more hard words and options
-      ],
-      expert: [
-        { word: "psychology", options: ["心理学", "哲学", "生物学", "化学", "物理学", "数学"], correct: 0 },
-        // Add more expert words and options
       ]
-    
     };
 
     let currentWordIndex;
@@ -848,6 +834,8 @@
   totalQuestions++;
   clearTimeout(timer);
 
+  localStorage.setItem('score', score);
+localStorage.setItem('correctCount', correctCount);
   if (isCorrectOption) {
     const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
     score += timeLeft;
@@ -869,6 +857,14 @@
 
   nextBtn.disabled = false;
   currentQuestionIndex++;
+  if (totalQuestions === 30) {
+        // Redirect to 3.html after question 30
+        nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', score);
+localStorage.setItem('correctCount', correctCount);
+      window.location.href = '3.3.4b.html';
+    });
+      }
 }
 
 function handleOptionClick(event) {
@@ -886,10 +882,21 @@ function handleOptionClick(event) {
     // Enable next button
     nextBtn.style.display = 'block';
   }
-
+  function getDifficulty() {
+  if (currentQuestionIndex === 15 || currentQuestionIndex === 30 || currentQuestionIndex === 45) {
+    if (currentQuestionIndex === 15) {
+      currentDifficulty = 'medium';
+    } //else if (currentQuestionIndex === 30) {
+      //currentDifficulty = 'hard';
+    //} else if (currentQuestionIndex === 45) {
+      //currentDifficulty = 'expert';
+    //}
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+  }
+}
 function askQuestion() {
-  if (totalQuestions < 60) {
     getDifficulty();
+    if (totalQuestions < 60) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;
     const currentWord = questionData.word;
@@ -910,12 +917,12 @@ function askQuestion() {
 
     resultDiv.textContent = '';
     startTimer();
-  } else {
+}else {
     resultDiv.textContent = 'Your final score is: ' + score / (0.2 * 60).toFixed(0);
     nextBtn.style.display = 'none';
   }
-}
 
+}
     function highlightCorrectOption(correctIndex) {
       const options = document.querySelectorAll('.option');
       options[correctIndex].classList.add('correct');
@@ -937,22 +944,19 @@ function askQuestion() {
       }
       return array;
     }
-
+ 
     function getDifficulty() {
-      if (currentQuestionIndex === 15) {
-        currentDifficulty = 'medium';
-        shuffledWords = shuffle(words[currentDifficulty].slice());
-        currentQuestionIndex = 0;
-      } else if (currentQuestionIndex === 15) {
-        currentDifficulty = 'hard';
-        shuffledWords = shuffle(words[currentDifficulty].slice());
-        currentQuestionIndex = 0;
-      } else if (currentQuestionIndex === 15) {
-        currentDifficulty = 'expert';
-        shuffledWords = shuffle(words[currentDifficulty].slice());
-        currentQuestionIndex = 0;
-      }
-    }
+  if (currentQuestionIndex === 15) {
+    currentDifficulty = 'medium';
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+  } //else if (currentQuestionIndex === 30) {
+    //currentDifficulty = 'hard';
+   // shuffledWords = shuffle(words[currentDifficulty].slice());
+ // } else if (currentQuestionIndex === 45) {
+    //currentDifficulty = 'expert';
+    //shuffledWords = shuffle(words[currentDifficulty].slice());
+  //}
+}
 
     function startTimer() {
       let timeLeft = 20;

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #questionNumber {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #correct {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="questionNumber"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="correct">Correct:</div>
+    <div id="score">Score:</div>
+    <div id="timer">Time left:</div>
+    <button id="nextBtn" style="display: none;">Next</button>
+  </div>
+
+  <script>
+    const words = {
+        hard: [
+      { "word": "radical", "options": ["激进", "温和", "辐射", "保守", "革命", "传统"], "correct": 0 },
+      { "word": "kernel", "options": ["核心", "节点", "皮划艇", "钉子", "外壳", "扁担"], "correct": 0 },
+      { "word": "accommodate", "options": ["容纳", "排除", "拒绝", "替换", "驱逐", "不合适"], "correct": 0 },
+      { "word": "affection", "options": ["感情", "恨", "不喜欢", "厌恶", "反感", "敌意"], "correct": 0 },
+      { "word": "agenda", "options": ["日程", "随机", "自发", "未计划", "无组织", "混乱"], "correct": 0 },
+        { word: "philosophy", options: ["哲学", "心理学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        { "word": "radical", "options": ["激进", "温和", "辐射", "保守", "革命", "传统"], "correct": 0 },
+      { "word": "kernel", "options": ["核心", "节点", "皮划艇", "钉子", "外壳", "扁担"], "correct": 0 },
+      { "word": "accommodate", "options": ["容纳", "排除", "拒绝", "替换", "驱逐", "不合适"], "correct": 0 },
+      { "word": "affection", "options": ["感情", "恨", "不喜欢", "厌恶", "反感", "敌意"], "correct": 0 },
+      { "word": "agenda", "options": ["日程", "随机", "自发", "未计划", "无组织", "混乱"], "correct": 0 },
+        { word: "philosophy", options: ["哲学", "心理学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        { "word": "radical", "options": ["激进", "温和", "辐射", "保守", "革命", "传统"], "correct": 0 },
+      { "word": "kernel", "options": ["核心", "节点", "皮划艇", "钉子", "外壳", "扁担"], "correct": 0 },
+      { "word": "accommodate", "options": ["容纳", "排除", "拒绝", "替换", "驱逐", "不合适"], "correct": 0 },
+      { "word": "affection", "options": ["感情", "恨", "不喜欢", "厌恶", "反感", "敌意"], "correct": 0 },
+      { "word": "agenda", "options": ["日程", "随机", "自发", "未计划", "无组织", "混乱"], "correct": 0 },
+        { word: "philosophy", options: ["哲学", "心理学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        // Add more hard words and options
+      ],
+      expert: [
+        { word: "psychology", options: ["心理学", "哲学", "生物学", "化学", "物理学", "数学"], correct: 0 },
+        // Add more expert words and options
+      ]
+      // Define medium, hard, and expert words similarly
+    };
+
+    //let currentWordIndex;
+    //let score = 0;
+    //let correctCount = 0;
+    //let totalQuestions = 0;
+    //let timer;
+    //let currentQuestionIndex = 0;
+    //let currentDifficulty = 'easy';
+    //let shuffledWords = [];
+
+    const nextBtn = document.getElementById('nextBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+    const correctDiv = document.getElementById('correct');
+    const timerDiv = document.getElementById('timer');
+    const questionNumberDiv = document.getElementById('questionNumber');
+
+    nextBtn.addEventListener('click', askQuestion);
+
+    function startGame() {
+      //score = 0;
+      //correctCount = 0;
+      score = parseInt(localStorage.getItem('score')) || 0;
+      correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
+      totalQuestions = 30;
+      resultDiv.textContent = '';
+      nextBtn.style.display = 'block';
+      currentQuestionIndex = 0;
+      currentDifficulty = 'hard';
+      shuffledWords = shuffle(words[currentDifficulty].slice());
+      askQuestion();
+    }
+
+    function checkAnswer(isCorrectOption) {
+      totalQuestions++;
+      clearTimeout(timer);
+
+      if (isCorrectOption) {
+        const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
+        score += timeLeft;
+        correctCount++;
+        correctDiv.textContent = 'Correct: ' + correctCount + "/60";
+        scoreDiv.textContent = 'Score: ' +  (score / (0.2 * totalQuestions)).toFixed(0);;
+        resultDiv.textContent = 'Correct!';
+      } else {
+        resultDiv.textContent = 'Incorrect!';
+      }
+
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.pointerEvents = 'none';
+      });
+
+      nextBtn.disabled = false;
+      currentQuestionIndex++;
+
+      if (totalQuestions === 60) {
+        resultDiv.textContent = 'Your final score is: ' + score;
+        nextBtn.style.display = 'none';
+      }
+      if (totalQuestions === 45) {
+        // Redirect to 3.html after question 30
+        nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', score);
+localStorage.setItem('correctCount', correctCount);
+      window.location.href = '3.3.4c.html';
+    });
+      }
+    }
+
+    function handleOptionClick(event) {
+      const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
+      const isCorrectOption = optionIndex === currentWordIndex;
+      checkAnswer(isCorrectOption);
+
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.cursor = 'default';
+      });
+
+      nextBtn.style.display = 'block';
+    }
+
+    function askQuestion() {
+      if (totalQuestions < 60) {
+        const questionData = shuffledWords[currentQuestionIndex];
+        currentWordIndex = questionData.correct;
+        const currentWord = questionData.word;
+        questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
+        questionDiv.textContent = currentWord;
+
+        const shuffledOptions = shuffle(questionData.options.slice());
+        currentWordIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
+
+        optionsDiv.innerHTML = '';
+        for (let i = 0; i < shuffledOptions.length; i++) {
+          const option = document.createElement('div');
+          option.className = 'option';
+          option.textContent = shuffledOptions[i];
+          option.addEventListener('click', handleOptionClick);
+          optionsDiv.appendChild(option);
+        }
+
+        resultDiv.textContent = '';
+        startTimer();
+      }
+    }
+
+    function startTimer() {
+      let timeLeft = 20;
+      timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+        if (timeLeft === 0) {
+          clearTimeout(timer);
+          checkAnswer(false); // Timeout, passing false as the answer is incorrect
+        }
+      }, 1000);
+    }
+
+    function shuffle(array) {
+      let currentIndex = array.length, temporaryValue, randomIndex;
+      while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    }
+  
+    startGame();
+  </script>
+</body>
+</html>

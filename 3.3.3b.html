@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    #questionNumber {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+    
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #correct {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="questionNumber"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="correct">Correct:</div>
+    <div id="score">Score:</div>
+    <div id="timer">Time left:</div>
+    <button id="nextBtn" style="display: none;">Next</button>
+  </div>
+
+  <script>
+    const words = {
+      hard: [
+        { word: "helicopter", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 0 },
+        { word: "rocket", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 2 },
+        { word: "airplane", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 1 },
+        { word: "bicycle", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 4 },
+        { word: "ship", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 5 },
+        { word: "car", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 3 }
+      ],
+      expert: [
+        { word: "submarine", options: ["潜水艇", "飞机", "火箭", "汽车", "自行车", "船"], correct: 0 },
+        { word: "train", options: ["潜水艇", "飞机", "火箭", "火车", "自行车", "船"], correct: 3 },
+        { word: "motorcycle", options: ["潜水艇", "飞机", "火箭", "汽车", "摩托车", "船"], correct: 4 },
+        { word: "bus", options: ["潜水艇", "飞机", "公共汽车", "汽车", "自行车", "船"], correct: 2 },
+        { word: "plane", options: ["潜水艇", "飞机", "公共汽车", "汽车", "自行车", "船"], correct: 1 },
+        { word: "rocket", options: ["潜水艇", "飞机", "火箭", "汽车", "自行车", "船"], correct: 2 }
+      ]
+    };
+
+    let currentWordIndex;
+    //let score = 0;
+    //let correctCount = 0;
+    //let totalQuestions = 0;
+    let timer;
+    let currentQuestionIndex = 0;
+    let currentDifficulty = 'easy';
+    let shuffledWords = [];
+
+    const startBtn = document.getElementById('startBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+    const correctDiv = document.getElementById('correct');
+    const timerDiv = document.getElementById('timer');
+    const questionNumberDiv = document.getElementById('questionNumber');
+
+    startBtn.addEventListener('click', startGame);
+    nextBtn.addEventListener('click', askQuestion);
+
+    function startGame() {
+        score = parseInt(localStorage.getItem('score')) || 0;
+  correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
+  totalQuestions = 30; // Start from question 31
+      resultDiv.textContent = '';
+      startBtn.style.display = 'none';
+      nextBtn.style.display = 'block';
+      currentQuestionIndex = 0;
+      currentDifficulty = 'hard';
+      shuffledWords = shuffle(words[currentDifficulty].slice());
+      askQuestion();
+    }
+
+    function checkAnswer(isCorrectOption) {
+  totalQuestions++;
+  clearTimeout(timer);
+
+  localStorage.setItem('score', score);
+localStorage.setItem('correctCount', correctCount);
+  if (isCorrectOption) {
+    const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
+    score += timeLeft;
+    correctCount++;
+    correctDiv.textContent = 'Correct: ' + correctCount + "/60";
+    scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
+    resultDiv.textContent = 'Correct!';
+  } else {
+    resultDiv.textContent = 'Incorrect!';
+    score += 0;
+  }
+
+  // Disable all options after a choice is made
+  const options = document.querySelectorAll('.option');
+  options.forEach(option => {
+    option.removeEventListener('click', handleOptionClick);
+    option.style.cursor = 'default';
+  });
+
+  nextBtn.disabled = false;
+  currentQuestionIndex++;
+  if (totalQuestions === 30) {
+        // Redirect to 3.html after question 30
+        window.location.href = '3.3.3b.html';
+      }
+}
+
+function handleOptionClick(event) {
+    const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
+    const isCorrectOption = optionIndex === correctOptionIndex;
+    checkAnswer(isCorrectOption);
+  
+    // Disable all options
+    const options = document.querySelectorAll('.option');
+    options.forEach(option => {
+      option.removeEventListener('click', handleOptionClick);
+      option.style.pointerEvents = 'none';
+    });
+  
+    // Enable next button
+    nextBtn.style.display = 'block';
+  }
+  function getDifficulty() {
+  if (currentQuestionIndex === 15 || currentQuestionIndex === 30 || currentQuestionIndex === 45) {
+    if (currentQuestionIndex === 15) {
+      currentDifficulty = 'expert';
+    } 
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+  }
+}
+function askQuestion() {
+    getDifficulty();
+    if (totalQuestions < 60) {
+    const questionData = shuffledWords[currentQuestionIndex];
+    currentWordIndex = questionData.correct;
+    const currentWord = questionData.word;
+    questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
+    questionDiv.textContent = currentWord;
+
+    const shuffledOptions = shuffle(questionData.options.slice());
+    correctOptionIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
+
+    optionsDiv.innerHTML = '';
+    for (let i = 0; i < shuffledOptions.length; i++) {
+      const option = document.createElement('div');
+      option.className = 'option';
+      option.textContent = shuffledOptions[i];
+      option.addEventListener('click', handleOptionClick);
+      optionsDiv.appendChild(option);
+    }
+
+    resultDiv.textContent = '';
+    startTimer();
+}else {
+    resultDiv.textContent = 'Your final score is: ' + score / (0.2 * 60).toFixed(0);
+    nextBtn.style.display = 'none';
+  }
+
+}
+    function highlightCorrectOption(correctIndex) {
+      const options = document.querySelectorAll('.option');
+      options[correctIndex].classList.add('correct');
+    }
+
+    function highlightIncorrectOption(correctIndex) {
+      const options = document.querySelectorAll('.option');
+      options[correctIndex].classList.add('incorrect');
+    }
+
+    function shuffle(array) {
+      let currentIndex = array.length, temporaryValue, randomIndex;
+      while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    }
+ 
+    function getDifficulty() {
+  if (currentQuestionIndex === 15) {
+    currentDifficulty = 'medium';
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+  } else if (currentQuestionIndex === 30) {
+    currentDifficulty = 'hard';
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+  } else if (currentQuestionIndex === 45) {
+    currentDifficulty = 'expert';
+    shuffledWords = shuffle(words[currentDifficulty].slice());
+  }
+}
+
+    function startTimer() {
+      let timeLeft = 20;
+      timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+        if (timeLeft === 0) {
+          clearTimeout(timer);
+          checkAnswer(false); // Timeout, passing false as the answer is incorrect
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
+  

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    #questionNumber {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+    
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #correct {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="questionNumber"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="correct">Correct:</div>
+    <div id="score">Score:</div>
+    <div id="timer">Time left:</div>
+    <button id="nextBtn" style="display: none;">Next</button>
+  </div>
+
+  <script>
+  const words = {
+      easy: [
+      { word: "rain", options: ["风", "人物", "城市", "雷", "雨", "雪"], correct: 4 },
+        { word: "sun", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 0 },
+        { word: "moon", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 1 },
+        { word: "tree", options: ["汽车", "飞机", "轮船", "自行车", "树", "花"], correct: 4 },
+        { word: "flower", options: ["笔", "纸", "书", "花", "树", "草"], correct: 3 },
+        { word: "bird", options: ["鱼", "狗", "猫", "鸟", "老鼠", "兔子"], correct: 3 },
+        { word: "dog", options: ["狗", "猫", "鸟", "兔子", "老鼠", "鱼"], correct: 0 },
+        { word: "cat", options: ["猫", "狗", "鸟", "鱼", "老鼠", "兔子"], correct: 0 },
+        { word: "house", options: ["房子", "车子", "树", "花", "草", "水"], correct: 0 },
+        { word: "car", options: ["房子", "车子", "树", "花", "草", "水"], correct: 1 },
+        { word: "book", options: ["房子", "车子", "树", "花", "书", "草"], correct: 4 },
+        { word: "pen", options: ["笔", "纸", "书", "花", "树", "草"], correct: 0 },
+        { word: "school", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 0 },
+        { word: "apple", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 0 },
+        { word: "orange", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 2 },
+        { word: "banana", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 1 },
+        { word: "table", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 0 },
+        { word: "chair", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 1 },
+        { word: "bed", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 4 },
+        { word: "cup", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 0 },
+        { word: "plate", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 2 },
+        { word: "spoon", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 3 },
+        { word: "clock", options: ["电视", "电话", "手机", "电脑", "相机", "钟表"], correct: 5 },
+        { word: "cat", options: ["猫", "狗", "鸟", "鱼", "老鼠", "兔子"], correct: 0 },
+        { word: "house", options: ["房子", "车子", "树", "花", "草", "水"], correct: 0 },
+        { word: "car", options: ["房子", "车子", "树", "花", "草", "水"], correct: 1 },
+        { word: "book", options: ["房子", "车子", "树", "花", "书", "草"], correct: 4 },
+        { word: "pen", options: ["笔", "纸", "书", "花", "树", "草"], correct: 0 },
+        { word: "school", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 0 },
+        { word: "apple", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 0 },
+        { word: "orange", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 2 },
+        { word: "banana", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 1 },
+        { word: "table", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 0 },
+        { word: "chair", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 1 },
+        { word: "bed", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 4 },
+        { word: "cup", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 0 },
+        { word: "plate", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 2 },
+        { word: "spoon", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 3 },
+        { word: "clock", options: ["电视", "电话", "手机", "电脑", "相机", "钟表"], correct: 5 }
+      ],
+      medium: [
+        { word: "computer", options: ["电视", "电话", "手机", "电脑", "相机", "钟表"], correct: 3 },
+        { word: "camera", options: ["电视", "电话", "手机", "电脑", "相机", "钟表"], correct: 4 },
+        { word: "television", options: ["电视", "电话", "手机", "电脑", "相机", "钟表"], correct: 0 },
+        { word: "telephone", options: ["电视", "电话", "手机", "电脑", "相机", "钟表"], correct: 1 },
+        { word: "phone", options: ["电视", "电话", "手机", "电脑", "相机", "钟表"], correct: 2 },
+        { word: "watch", options: ["电视", "电话", "手机", "电脑", "相机", "钟表"], correct: 5 }
+      ],
+      hard: [
+        { word: "helicopter", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 0 },
+        { word: "rocket", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 2 },
+        { word: "airplane", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 1 },
+        { word: "bicycle", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 4 },
+        { word: "ship", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 5 },
+        { word: "car", options: ["直升机", "飞机", "火箭", "汽车", "自行车", "船"], correct: 3 }
+      ],
+      expert: [
+        { word: "submarine", options: ["潜水艇", "飞机", "火箭", "汽车", "自行车", "船"], correct: 0 },
+        { word: "train", options: ["潜水艇", "飞机", "火箭", "火车", "自行车", "船"], correct: 3 },
+        { word: "motorcycle", options: ["潜水艇", "飞机", "火箭", "汽车", "摩托车", "船"], correct: 4 },
+        { word: "bus", options: ["潜水艇", "飞机", "公共汽车", "汽车", "自行车", "船"], correct: 2 },
+        { word: "plane", options: ["潜水艇", "飞机", "公共汽车", "汽车", "自行车", "船"], correct: 1 },
+        { word: "rocket", options: ["潜水艇", "飞机", "火箭", "汽车", "自行车", "船"], correct: 2 }
+      ]
+    };
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    function startGame() {
+      currentQuestionIndex = 0;
+      score = 0;
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const questionNumber = currentQuestionIndex + 1;
+      const question = words.easy[currentQuestionIndex].word;
+      const options = words.easy[currentQuestionIndex].options;
+      
+      document.getElementById('questionNumber').innerText = `Question ${questionNumber}`;
+      document.getElementById('question').innerText = question;
+      
+      const optionsElement = document.getElementById('options');
+      optionsElement.innerHTML = '';
+      
+      options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.classList.add('option');
+        optionElement.innerText = option;
+        optionElement.onclick = () => checkAnswer(index);
+        optionsElement.appendChild(optionElement);
+      });
+    }
+
+    function checkAnswer(index) {
+      const correctIndex = words.easy[currentQuestionIndex].correct;
+      const selectedOption = document.getElementsByClassName('option')[index];
+      
+      if (index === correctIndex) {
+        selectedOption.classList.add('correct');
+        score++;
+      } else {
+        selectedOption.classList.add('incorrect');
+      }
+
+      document.getElementById('result').innerText = index === correctIndex ? 'Correct!' : 'Incorrect!';
+      document.getElementById('score').innerText = `Score: ${score}`;
+      
+      document.getElementsByClassName('option')[correctIndex].classList.add('correct');
+      
+      currentQuestionIndex++;
+      if (currentQuestionIndex < 15) {
+        document.getElementById('nextBtn').style.display = 'block';
+      } else {
+        document.getElementById('nextBtn').style.display = 'none';
+        currentQuestionIndex = 0;
+      }
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      showQuestion();
+      document.getElementById('result').innerText = '';
+      document.getElementById('score').innerText = `Score: ${score}`;
+      document.getElementById('nextBtn').style.display = 'none';
+    });
+  
+    startGame();
+  </script>
+</body>
+</html>
