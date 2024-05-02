@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #questionNumber {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #correct {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="questionNumber"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="correct">Correct:</div>
+    <div id="score">Score:</div>
+    <div id="timer">Time left:</div>
+    <button id="nextBtn" style="display: none;">Next</button>
+  </div>
+
+  <script>
+    const words = {
+      expert: [
+       //8个选项
+
+       { word: "psychology", options: ["心理学", "哲学", "生理学", "地质学", "古生物学", "地质学", "核物理学"], correct: 0 },
+      { "word": "radical", "options": ["激进", "温和", "辐射", "保守", "革命", "传统","中心"], "correct": 0 },
+      { "word": "kernel", "options": ["核心", "节点", "皮划艇", "钉子", "外壳", "扁担","据点"], "correct": 0 },
+      { "word": "accommodate", "options": ["容纳", "排除", "拒绝", "替换", "驱逐", "合适", "潜行"], "correct": 0 },
+      { "word": "accommodation", "options": ["住宿", "宽容", "拒绝", "替换", "驱逐", "合适", "潜行"], "correct": 0 },
+      { "word": "affection", "options": ["感情", "感染","影响", "喜欢", "厌恶", "排斥", "包容"], "correct": 0 },
+      { "word": "agenda", "options": ["日程", "随机", "铭记","机构", "计划", "跟随", "混乱"], "correct": 0 },
+      { word: "philosophy", options: ["哲学", "心理学", "生理学", "地质学", "古生物学", "地质学", "核物理学"], correct: 0 },
+    
+       
+        // Add more hard words and options
+        { "word": "abasement", "options": ["屈辱", "下沉", "地下室", "自卑", "棒球场", "下跪","慰藉"], "correct": 0 },
+    { "word": "abide", "options": ["承受", "遵守", "观察", "支持", "继续", "犹豫","谋杀"], "correct": 1 },
+    { "word": "abolishment", "options": ["创办", "废除", "激怒", "改良", "革命", "统治","古塔"], "correct": 1 },
+    { "word": "abolition", "options": ["建设", "保留", "打败", "推翻", "发现", "统治","继承"], "correct": 3 },
+    { "word": "aboriginal", "options": ["疾病", "古老", "原始", "野蛮", "异常", "成熟","仿造"], "correct": 2 },
+    { "word": "aboroundiginal", "options": ["疾病", "疼痛", "热情", "兴奋", "绝望", "充满","下滑"], "correct": 5 },
+    { "word": "abound", "options": ["缺乏", "丰富", "冷淡", "连接", "捆绑", "罕见","普通"], "correct": 1 },
+    { "word": "abridge", "options": ["勾结", "编辑", "加强", "伸展", "桥段", "减少","剑鞘"], "correct": 5 },
+    { "word": "abrogate", "options": ["维护", "取消", "保留", "疑问", "实行", "促进","抵押"], "correct": 1 },
+    { "word": "abrogation", "options": ["利用", "转移", "废除", "剥夺", "改进", "保留","吞咽"], "correct": 2 },
+    { "word": "abrupt", "options": ["柔和", "清晰", "迅速", "缓慢", "明显", "微观","宏大"], "correct": 2 },
+    { "word": "absolve", "options": ["追究", "原谅", "揭露", "控告", "解决", "恐慌","进化"], "correct": 1 },
+    { "word": "acceleration", "options": ["停止", "油门", "加速", "延迟", "前进", "稳定","狂热"], "correct": 2 },
+    { "word": "accordion", "options": ["小提琴", "手风琴", "短笛", "管风琴", "尤克里里", "竖琴", "古筝"], "correct": 1 },
+    { "word": "acerbic", "options": ["清淡", "温和", "辛辣", "苦涩", "柔和", "酸性", "癫狂"], "correct": 3 },
+    { "word": "acoustic", "options": ["声音的", "静态的", "光学的", "电子的", "机械的", "化学的", "有机的"], "correct": 0 },
+    { "word": "acoustics", "options": ["音色", "音乐", "音质", "音响", "嗓音", "人声", "声乐"], "correct": 3 },
+    { "word": "acrid", "options": ["鲜美的", "清新的", "刺鼻的", "香甜的", "酸性的", "苦涩的", "钙化的"], "correct": 2 },
+    { "word": "actinide", "options": ["金属", "气体", "液体", "锕系元素", "海波晶体", "电磁感应", "核反应堆"], "correct": 3 },
+    { "word": "acumen", "options": ["敏锐", "迟钝", "愚蠢", "狡猾", "诚实", "谨慎", "粗糙"], "correct": 0 },
+    { "word": "addition", "options": ["增加", "减少", "翻转", "除法", "扩展", "变质", "腐烂"], "correct": 0 },
+    { "word": "adequate", "options": ["不足", "充足", "无用", "整齐", "需求", "排列", "组合"], "correct": 1 },
+    { "word": "adhere", "options": ["离开", "抵制", "粘着", "违背", "投降", "抗议", "遗传"], "correct": 2 },
+    { "word": "adjacent", "options": ["相同", "不同", "远离", "相邻", "分离", "孤立", "斜边"], "correct": 3 },
+    { "word": "adorn", "options": ["掩护", "装饰", "摆脱", "遮盖", "抹黑", "嫁妆", "假装"], "correct": 1 },
+    { "word": "advocate", "options": ["植物油", "支持", "质疑", "牛油果", "抗拒", "主张", "油性的"], "correct": 5 },
+    { "word": "affluence", "options": ["贫困", "富裕", "财务", "影响", "流畅", "繁荣", "感情"], "correct": 5 },
+    { "word": "aggregate", "options": ["分离", "聚集", "主张", "排除", "传染", "减弱", "加强"], "correct": 1 },
+    { "word": "agile", "options": ["迟钝", "敏捷", "缓慢", "固执", "停顿", "轻松", "攻击"], "correct": 1 },
+    { "word": "alchemist", "options": ["炼金术士", "化学家", "矿工", "生理学家", "药理学家", "美食家", "生化学家"], "correct": 0 },
+    { "word": "alcohol", "options": ["葡萄酒", "酒精", "果汁", "牛奶", "可乐", "饮料", "绒毛"], "correct": 1 },
+    { "word": "algebra", "options": ["几何", "代数", "微积分", "离散数学", "代数几何", "数论", "组合数学"], "correct": 1 },
+    { "word": "algorithm", "options": ["代数", "大语言模型", "算法", "数组", "数列", "机器学习", "神经网络"], "correct": 2 },
+    { "word": "aliphatic", "options": ["脂肪的", "酸性的", "碳水的", "蛋白的", "糖类的", "硬质的", "柔软的"], "correct": 0 },
+    { "word": "allegory", "options": ["寓言", "等位基因", "传记", "隐性性状", "散文", "讽刺", "隐喻"], "correct": 0 },
+    { "word": "allele", "options": ["等位基因", "常染色体", "性染色体", "染色质", "核酸", "显性基因", "隐性基因"], "correct": 0 },
+    { "word": "alleviate", "options": ["增加", "减轻", "恶化", "剧烈", "阻碍", "联合", "强调"], "correct": 1 },
+    { "word": "alliance", "options": ["同盟", "敌人", "伙伴", "对手", "竞争", "合作", "防御"], "correct": 5 },
+    { "word": "alliteration", "options": ["押韵", "对偶", "头韵", "反复", "韵脚", "首字母", "过滤器"], "correct": 5 },
+    { "word": "allure", "options": ["诱惑", "威胁", "吓唬", "鼓励", "警告", "恐吓", "邪教"], "correct": 0 },
+    { "word": "ambient", "options": ["环境的", "动态的", "静态的", "富足的", "嘈杂的", "沉闷的", "周围的"], "correct": 0 },
+    { "word": "ambivalent", "options": ["矛盾的", "坚定的", "雄心勃勃的", "明确的", "热情的", "冷冰冰的", "人情味的"], "correct": 0 },
+    { "word": "amendment", "options": ["继续", "停止", "废除", "修正", "重审", "扩大", "建议"], "correct": 3 },
+    { "word": "amide", "options": ["醚", "酮", "醇", "胺", "醛", "羧", "羟"], "correct": 3 },
+    { "word": "amine", "options": ["胺", "酮", "醇", "醛", "羧", "醚", "羟"], "correct": 0 },
+    { "word": "amphibian", "options": ["两栖动物", "哺乳动物", "环节动物", "爬行动物", "软体动物", "节肢动物", "腔肠动物"], "correct": 0 },
+    { "word": "amplifier", "options": ["放大器", "变阻器", "转换器", "对撞机", "加速器", "变压器", "变声器"], "correct": 0 },
+    { "word": "anaphora", "options": ["回指", "独白", "对话", "夸张", "对比", "反问", "隐喻"], "correct": 0 },
+    { "word": "anatomy", "options": ["生理学", "解剖学", "病理学", "心理学", "生态学", "微生物学", "药理学"], "correct": 1 },
+    { "word": "anchovy", "options": ["沙丁鱼", "匙吻鲟", "尖吻鲈", "黑线鳕", "鹦鹉鱼", "凤尾鱼", "腔棘鱼"], "correct": 5 },
+    { "word": "annexation", "options": ["分离", "拆除", "结合", "加入", "侵略", "损坏", "占领"], "correct": 3 },
+    { "word": "antagonist", "options": ["同胞", "对立", "反派", "战友", "同盟", "支持者", "主人公"], "correct": 2 },
+    { "word": "anthropology", "options": ["考古学", "地质学", "人类学", "古生物学", "心理学", "生理学", "考古学"], "correct": 2 },
+    { "word": "antibody", "options": ["抗生素", "细菌", "抗原", "抗体", "病毒", "细胞", "病原体"], "correct": 3 },
+    { "word": "archaeology", "options": ["考古学", "地质学", "人类学", "古生物学", "生态学", "病理学", "哲学"], "correct": 0 },
+    { "word": "archetype", "options": ["原型", "复制品", "模型", "起源", "标准", "范例", "建筑"], "correct": 0 },
+    { "word": "arithmetic", "options": ["代数", "几何", "算术", "代数几何", "高等代数", "离散数学", "组合数学"], "correct": 2 },
+    { "word": "armistice", "options": ["和平", "宽恕", "谈判", "停战", "逼迫", "战争", "轰炸"], "correct": 3 },
+    { "word": "aromatic", "options": ["清淡的", "无聊的", "辛辣的", "香的", "酸的", "苦的", "甜的"], "correct": 3 },
+    { "word": "arrangement", "options": ["混乱", "调整", "安排", "计划", "数列", "处理", "界定"], "correct": 2 },
+    { "word": "ascend", "options": ["降落", "升起", "腐烂", "坠落", "命运", "等待", "发送"], "correct": 1 },
+    { "word": "aspire", "options": ["渴望", "蔑视", "获得", "厌恶", "羡慕", "嫉妒", "灵感"], "correct": 0 },
+    { "word": "assail", "options": ["攻击", "抵抗", "支持", "鉴定", "辩护", "谴责", "押送"], "correct": 0 },
+    { "word": "assemblage", "options": ["集合", "分散", "扩大", "浓缩", "堆积", "合奏", "合唱"], "correct": 0 },
+    { "word": "assemble", "options": ["分解", "解构", "拆卸", "合唱", "装配", "鉴定", "合奏"], "correct": 4 },
+    { "word": "associative", "options": ["相互关联的", "凭空想象的", "相似的", "对立的", "互相排斥的", "天马行空的", "畏首畏尾的"], "correct": 0 },
+    { "word": "assonance", "options": ["头韵", "节奏", "谐曲振", "偏振", "谐音", "押韵", "共振"], "correct": 5 },
+    { "word": "astronomy", "options": ["占星术", "天文学", "地理学", "地质学", "宇宙学", "航天学", "航空学"], "correct": 1 },
+    { "word": "astrophysics", "options": ["天文学", "宇宙学", "航天学", "占星术", "理论物理学", "量子物理学", "核物理学"], "correct": 0 },
+    { "word": "atrocity", "options": ["游行", "暴力", "战争", "反抗", "犯罪", "对立", "侮辱"], "correct": 0 },
+    { "word": "attain", "options": ["达到", "逃避", "放弃", "获取", "失去", "迷路", "屈服"], "correct": 0 },
+    { "word": "authentic", "options": ["真实", "吹捧", "模糊", "权力", "明确", "诈骗", "权威"], "correct": 0 },
+    { "word": "authenticate", "options": ["确认", "否认", "辩解", "反驳", "批评", "指责", "威胁", "明确"], "correct": 0 },
+    { "word": "authoritative", "options": ["权威的", "理想的", "严格的", "宽松的", "苛刻的", "温和的", "威胁的"], "correct": 0 },
+    { "word": "autobiography", "options": ["自传", "传记", "小说", "脑生物学", "自动的", "生物学", "白传"], "correct": 0 },
+    { "word": "avail", "options": ["利用", "浪费", "损失", "破坏", "放弃", "进攻", "防守"], "correct": 0 },
+    { "word": "avert", "options": ["引导", "吸管", "转移", "方向", "避免", "分离", "破碎"], "correct": 0},
+
+
+//start there
+         { "word": "backstroke", "options": ["蝶泳", "自由泳", "仰泳", "蛙泳", "混合泳", "蝶泳", "蛙泳"], "correct": 0 },
+    { "word": "bagpipes", "options": ["提琴", "长笛", "吉他", "风琴", "手风琴", "竖琴", "风琴"], "correct": 5 },
+    { "word": "ballad", "options": ["戏剧", "歌剧", "抒情", "叙事", "曲调", "旋律", "歌谣"], "correct": 6 },
+    { "word": "baritone", "options": ["女高音", "男中音", "男高音", "女低音", "男低音", "中音", "男中音"], "correct": 1 },
+    { "word": "baroque", "options": ["古典", "巴洛克", "文艺复兴", "后现代", "现代", "罗马式", "哥特式"], "correct": 1 },
+    { "word": "bask", "options": ["躲避", "逃避", "享受", "沉溺", "迷恋", "沐浴", "洗浴"], "correct": 5 },
+    { "word": "bereave", "options": ["丰富", "失去", "得到", "赠与", "拥有", "追求", "陪伴"], "correct": 1 },
+    { "word": "bestow", "options": ["拒绝", "抵制", "批评", "赞美", "赠予", "奉献", "贡献"], "correct": 4 },
+    { "word": "betrayal", "options": ["背叛", "信任", "忠诚", "守信", "支持", "合作", "诚实"], "correct": 0 },
+    { "word": "beverage", "options": ["蔬菜", "肉类", "水果", "饮料", "主食", "甜点", "点心"], "correct": 3 },
+    { "word": "bewail", "options": ["庆祝", "哀叹", "庆幸", "祈祷", "哀悼", "抗议", "赞扬"], "correct": 1 },
+    { "word": "bewildered", "options": ["欢喜", "迷惑", "狂喜", "疲倦", "疑惑", "震惊", "感激"], "correct": 4 },
+    { "word": "bewitch", "options": ["解除", "诱惑", "惑乱", "吸引", "斥责", "镇压", "降服"], "correct": 1 },
+    { "word": "biathlon", "options": ["两项全能", "冬季两项", "跳高", "跳远", "赛跑", "田径", "游泳"], "correct": 1 },
+    { "word": "bilk", "options": ["诈骗", "欺骗", "误导", "防止", "制止", "保护", "保卫"], "correct": 0 },
+    { "word": "biodegradable", "options": ["可降解", "不可降解", "生物降解", "化学降解", "生化降解", "人工降解", "自然降解"], "correct": 0 },
+    { "word": "biomolecule", "options": ["有机分子", "无机分子", "生物分子", "化学分子", "无生物分子", "生命分子", "细胞分子"], "correct": 2 },
+    { "word": "blues", "options": ["蓝色", "悲伤", "忧郁", "蓝调", "节奏布鲁斯", "摇滚", "布鲁斯"], "correct": 6 },
+    { "word": "bolster", "options": ["疲软", "支持", "打击", "削弱", "衰退", "堕落", "支撑"], "correct": 1 },
+    { "word": "bongo", "options": ["大鼓", "小鼓", "钹", "锣", "手鼓", "非洲鼓", "座鼓"], "correct": 5 },
+    { "word": "botany", "options": ["动物学", "植物学", "生物学", "地质学", "天文学", "物理学", "化学"], "correct": 1 },
+    { "word": "bouldering", "options": ["悬崖攀岩", "岩壁攀岩", "冰川攀登", "岩石攀爬", "山峰攀登", "山脉攀登", "攀岩"], "correct": 6 },
+    { "word": "bountiful", "options": ["富饶", "贫瘠", "肥沃", "稀少", "丰富", "丰盛", "充裕"], "correct": 0 },
+    { "word": "breakthrough", "options": ["突破", "阻碍", "障碍", "困境", "问题", "挑战", "困难"], "correct": 0 },
+    { "word": "breaststroke", "options": ["自由泳", "仰泳", "蛙泳", "蝶泳", "混合泳", "仰泳", "蛙泳"], "correct": 5 },
+    { "word": "bribe", "options": ["贿赂", "收买", "行贿", "贪污", "受贿", "贪婪", "金钱"], "correct": 0 },
+    { "word": "brisk", "options": ["慢悠悠", "迅速", "快速", "轻松", "散漫", "慢", "慢吞吞"], "correct": 1 },
+    { "word": "bullion", "options": ["金条", "银条", "铜条", "贵金属", "珠宝", "黄金", "白银"], "correct": 0 },
+    { "word": "burdensome", "options": ["轻松", "容易", "简单", "繁重", "艰难", "麻烦", "困难"], "correct": 3 },
+    { "word": "burglar", "options": ["窃贼", "强盗", "盗贼", "小偷", "罪犯", "歹徒", "犯罪分子"], "correct": 0 },
+    { "word": "burrito", "options": ["三明治", "玉米饼", "卷饼", "炸饼", "饼", "煎饼", "披萨"], "correct": 2 },
+    { "word": "butchery", "options": ["宰杀", "杀戮", "虐杀", "大屠杀", "杀戒", "宰割", "残杀"], "correct": 0 },
+    { "word": "butt", "options": ["头", "尾", "身体", "躯干", "尾部", "臀部", "脑袋"], "correct": 5 },
+    { "word": "bygone", "options": ["过去", "现在", "未来", "时代", "年代", "历史", "时期"], "correct": 0 },
+    { "word": "bypass", "options": ["避开", "绕过", "穿过", "通过", "抵达", "抵达", "走到"], "correct": 0 },
+    { "word": "cabinet", "options": ["橱柜", "书柜", "抽屉", "桌子", "椅子", "床", "橱窗"], "correct": 0 },
+    { "word": "cajole", "options": ["劝说", "说服", "恳求", "哀求", "请求", "诱导", "胁迫"], "correct": 0 },
+    { "word": "calculus", "options": ["微积分", "代数", "几何", "数学", "物理", "化学", "生物"], "correct": 0 },
+    { "word": "calligraphy", "options": ["书法", "绘画", "摄影", "雕塑", "织布", "篆刻", "版画"], "correct": 0 },
+    { "word": "canary", "options": ["乌鸦", "鹦鹉", "鸽子", "鸭子", "鸡", "鹅", "金丝雀"], "correct": 6 },
+    { "word": "cansure", "options": ["赞美", "称赞", "批评", "责备", "指责", "抨击", "谴责"], "correct": 1 },
+    { "word": "canvass", "options": ["游说", "传单", "海报", "广告", "招贴", "宣传", "拉票"], "correct": 0 },
+    { "word": "capita", "options": ["总额", "平均", "人均", "个人", "每人", "总数", "每人的"], "correct": 2 },
+    { "word": "caption", "options": ["图片", "标题", "文字", "题词", "注释", "解释", "说明"], "correct": 1 },
+    { "word": "captivate", "options": ["吸引", "拒绝", "排斥", "迷惑", "困扰", "厌恶", "引诱"], "correct": 0 },
+    { "word": "captive", "options": ["自由", "幸福", "囚徒", "俘虏", "受虐", "受苦", "受难"], "correct": 2 },
+    { "word": "caravan", "options": ["车队", "车辆", "车厢", "马车", "马车队", "商队", "旅行队"], "correct": 0 },
+    { "word": "carbohydrate", "options": ["蛋白质", "碳水化合物", "脂肪", "纤维素", "淀粉", "糖", "矿物质"], "correct": 1 },
+    { "word": "cardinal", "options": ["主教", "枢机主教", "红衣主教", "红衣主教", "基教主教", "主教", "枢机主教"], "correct": 0 },
+    { "word": "carol", "options": ["赞美诗", "赞美歌", "圣歌", "颂歌", "颂扬", "歌颂", "讴歌"], "correct": 1 },
+    { "word": "cartography", "options": ["地理学", "地质学", "地图制作", "地理制图", "地球科学", "地球物理学", "地理学家"], "correct": 2 },
+    { "word": "cascade", "options": ["瀑布", "河流", "溪流", "山涧", "瀑布群", "山脉", "江河"], "correct": 0 },
+    { "word": "catalytic", "options": ["催化", "加速", "阻碍", "减缓", "催化剂", "反应", "氧化还原"], "correct": 0 },
+    { "word": "caustic", "options": ["腐蚀性", "毒性", "刺激性", "灼热", "腐蚀剂", "腐蚀", "腐蚀液"], "correct": 0 },
+    { "word": "ceramics", "options": ["陶瓷", "瓷器", "陶器", "砖", "瓦", "砂器", "陶工"], "correct": 0 },
+    { "word": "chasten", "options": ["赞扬", "表扬", "批评", "责备", "惩罚", "惩戒", "警告"], "correct": 3 },
+    { "word": "chirality", "options": ["对称性", "不对称性", "手性", "立体化学", "对称", "不对称", "立体"], "correct": 2 },
+    { "word": "chorus", "options": ["合唱团", "合唱", "独唱", "重唱", "歌唱", "歌曲", "歌声"], "correct": 0 },
+    { "word": "chromatics", "options": ["色彩", "光谱", "色谱", "颜色", "光色", "色度", "彩色"], "correct": 6 },
+    { "word": "chromosome", "options": ["染色体", "细胞", "基因", "遗传", "核糖体", "核糖体", "细胞核"], "correct": 0 },
+    { "word": "circumference", "options": ["周长", "直径", "半径", "圆周", "长度", "面积", "体积"], "correct": 0 },
+    { "word": "circumvent", "options": ["回避", "避免", "规避", "躲避", "规避", "迂回", "绕过"], "correct": 0 },
+    { "word": "civilization", "options": ["文明", "野蛮", "原始", "古代", "现代", "未来", "文明化"], "correct": 0 },
+    { "word": "clamor", "options": ["安静", "嘈杂", "吵闹", "喧哗", "喧嚣", "喧扰", "喧噪"], "correct": 3 },
+    { "word": "clarinet", "options": ["小提琴", "中提琴", "大提琴", "低音提琴", "黑管", "黑管", "横笛"], "correct": 4 },
+    { "word": "classicism", "options": ["古典主义", "浪漫主义", "现代主义", "后现代主义", "文艺复兴", "现代化", "后现代化"], "correct": 0 },
+    { "word": "clergy", "options": ["神职人员", "教士", "牧师", "神父", "传教士", "主教", "神职"], "correct": 0 },
+    { "word": "cloying", "options": ["感人", "动人", "感动", "甜蜜", "甜美", "腻人", "令人厌烦"], "correct": 6 },
+    { "word": "coddle", "options": ["溺爱", "宠爱", "娇惯", "纵容", "迁就", "照顾", "关心"], "correct": 0 },
+    { "word": "coefficient", "options": ["系数", "常数", "变量", "参数", "函数", "数值", "量"], "correct": 0 },
+    { "word": "coerce", "options": ["劝说", "说服", "恳求", "哀求", "请求", "强迫", "迫使"], "correct": 5 },
+    { "word": "cogent", "options": ["无力", "不力", "强有力", "有力", "不强", "无效", "不有效"], "correct": 2 },
+    { "word": "coherent", "options": ["一致", "不一致", "连贯", "不连贯", "明晰", "模糊", "清晰"], "correct": 0 },
+    { "word": "coincide", "options": ["一致", "不一致", "相符", "不相符", "重叠", "不重叠", "巧合"], "correct": 0 },
+    { "word": "collage", "options": ["拼贴", "绘画", "摄影", "雕塑", "织布", "篆刻", "版画"], "correct": 0 },
+    { "word": "colonialism", "options": ["殖民主义", "帝国主义", "资本主义", "社会主义", "封建主义", "军国主义", "霸权主义"], "correct": 0 },
+    { "word": "comical", "options": ["滑稽", "搞笑", "有趣", "好笑", "可笑", "诙谐", "幽默"], "correct": 0 },
+    { "word": "commend", "options": ["赞扬", "表扬", "推荐", "夸奖", "赞美", "称赞", "推崇"], "correct": 0 },
+    { "word": "commensalism", "options": ["共生", "共存", "竞争", "合作", "依存", "依附", "依赖"], "correct": 0 },
+    { "word": "commutative", "options": ["交换", "不交换", "转变", "非交换", "相互", "不相互", "互换"], "correct": 0 },
+    { "word": "complicated", "options": ["简单", "复杂", "困难", "易懂", "简洁", "深奥", "繁杂"], "correct": 1 },
+    { "word": "composite", "options": ["单一", "复合", "混合", "简单", "单纯", "复杂", "原始"], "correct": 1 },
+    { "word": "composition", "options": ["作品", "乐曲", "文章", "作文", "写作", "创作", "写作"], "correct": 0 },
+
+
+         { "word": "comprehensive", "options": ["普遍", "普及", "综合", "专业", "详尽", "完全", "全面"], "correct": 6 },
+    { "word": "compromise", "options": ["折中", "妥协", "调解", "和解", "让步", "协商", "折衷"], "correct": 1 },
+    { "word": "concave", "options": ["凸面", "平面", "曲面", "弯曲", "凹面", "平直", "凹陷"], "correct": 4 },
+    { "word": "concede", "options": ["否认", "拒绝", "让步", "放弃", "抵制", "反对", "争取"], "correct": 2 },
+    { "word": "conceive", "options": ["设想", "构想", "想象", "怀孕", "怀有", "产生", "构思"], "correct": 6 },
+    { "word": "conceptual", "options": ["具象", "抽象", "实际", "虚构", "现实", "概念", "事实"], "correct": 5 },
+    { "word": "concerto", "options": ["交响乐", "协奏曲", "组曲", "独奏曲", "音乐会", "合奏", "管弦乐"], "correct": 1 },
+    { "word": "concur", "options": ["反对", "异议", "同意", "赞同", "一致", "争议", "对立"], "correct": 3 },
+    { "word": "condemn", "options": ["表扬", "称赞", "肯定", "赞美", "谴责", "责备", "批评"], "correct": 4 },
+    { "word": "condone", "options": ["允许", "批准", "原谅", "宽恕", "纵容", "放纵", "支持"], "correct": 2 },
+    { "word": "conducive", "options": ["有利", "不利", "有益", "无益", "有害", "不利于", "有助于"], "correct": 6 },
+    { "word": "confer", "options": ["授予", "颁发", "赋予", "授予", "交流", "商讨", "讨论"], "correct": 0 },
+    { "word": "conflate", "options": ["混淆", "合并", "整合", "融合", "混合", "融合", "结合"], "correct": 3 },
+    { "word": "conform", "options": ["一致", "不一致", "符合", "违反", "顺从", "逆从", "遵守"], "correct": 2 },
+    { "word": "confront", "options": ["面对", "避开", "逃避", "回避", "正视", "对抗", "对峙"], "correct": 0 },
+    { "word": "confucius", "options": ["孔子", "孟子", "老子", "庄子", "荀子", "孔子的", "孔子是"], "correct": 0 },
+    { "word": "conga", "options": ["探戈", "恰恰", "探戈舞", "莎莎", "萨尔萨", "康加", "康加舞"], "correct": 5 },
+    { "word": "connotation", "options": ["外延", "内涵", "含义", "意义", "词义", "概念", "涵义"], "correct": 1 },
+    { "word": "conquest", "options": ["征服", "征服者", "战胜", "胜利", "征服地", "掠夺", "控制"], "correct": 0 },
+    { "word": "consequent", "options": ["结果", "原因", "起因", "导致", "随之而来", "随之产生", "因果"], "correct": 4 },
+    { "word": "consonance", "options": ["和音", "音调", "和声", "协调", "一致", "和谐", "融洽"], "correct": 0 },
+    { "word": "constellation", "options": ["星座", "星系", "星球", "星际", "星云", "星光", "星星"], "correct": 0 },
+    { "word": "constitute", "options": ["构成", "形成", "组成", "组织", "构造", "包括", "组合"], "correct": 0 },
+    { "word": "contemplate", "options": ["沉思", "思考", "观察", "仔细考虑", "仰望", "凝视", "注视"], "correct": 0 },
+    { "word": "contemporary", "options": ["当代", "现代", "古代", "近代", "时代", "同代", "同时"], "correct": 0 },
+    { "word": "contradict", "options": ["相符", "不相符", "一致", "不一致", "否认", "反驳", "反对"], "correct": 6 },
+    { "word": "contrast", "options": ["对比", "比较", "相似", "相同", "不同", "相反", "区别"], "correct": 0 },
+    { "word": "contrieve", "options": ["创造", "发明", "设计", "计划", "构思", "发明者", "创造者"], "correct": 3 },
+    { "word": "converge", "options": ["分歧", "汇聚", "聚合", "集中", "集合", "交汇", "交会"], "correct": 1 },
+    { "word": "convex", "options": ["凹陷", "凹的", "凸出", "凸面", "凸起", "凹槽", "凸轮"], "correct": 2 },
+    { "word": "convey", "options": ["表达", "传达", "传递", "传送", "运输", "转达", "运送"], "correct": 0 },
+    { "word": "convoluted", "options": ["简单", "复杂", "曲折", "直接", "难懂", "扭曲", "卷曲"], "correct": 5 },
+    { "word": "convolution", "options": ["卷积", "乱七八糟", "混乱", "混杂", "扭曲", "曲折", "困扰"], "correct": 0 },
+    { "word": "coordinate", "options": ["协调", "统一", "一致", "配合", "配套", "平行", "配合"], "correct": 0 },
+    { "word": "correlate", "options": ["相关", "无关", "关联", "联系", "比较", "相似", "相同"], "correct": 2 },
+    { "word": "corroborate", "options": ["证实", "确认", "支持", "证明", "证据", "证明", "证实"], "correct": 0 },
+    { "word": "cosmology", "options": ["宇宙", "宇宙学", "天文学", "天体物理学", "星系", "星际", "宇宙起源"], "correct": 1 },
+    { "word": "coterie", "options": ["圈子", "团体", "社会", "阶层", "群体", "集团", "小圈子"], "correct": 6 },
+    { "word": "courtesy", "options": ["礼貌", "礼节", "礼仪", "尊重", "恭敬", "客气", "彬彬有礼"], "correct": 0 },
+    { "word": "covalent", "options": ["共价", "离子", "极性", "键", "化学键", "共价键", "离子键"], "correct": 0 },
+    { "word": "crag", "options": ["峭壁", "山峰", "岩石", "石头", "石块", "悬崖", "山岩"], "correct": 0 },
+    { "word": "criterion", "options": ["标准", "准则", "规范", "规则", "尺度", "尺子", "准绳"], "correct": 0 },
+    { "word": "critique", "options": ["评论", "批评", "评价", "评议", "评判", "鉴定", "评析"], "correct": 0 },
+    { "word": "crucial", "options": ["重要", "关键", "至关重要", "紧要", "关键性", "极其重要", "危急"], "correct": 1 },
+    { "word": "cubism", "options": ["立体主义", "抽象主义", "现实主义", "表现主义", "印象主义", "画派", "艺术流派"], "correct": 0 },
+    { "word": "cumulative", "options": ["累积", "逐步", "递增", "递减", "积累", "增加", "渐进"], "correct": 0 },
+    { "word": "cymbals", "options": ["钹", "锣", "铙钹", "铃鼓", "铜锣", "竹锣", "铜钹"], "correct": 0 },
+
+
+     
+
+    { "word": "dawdle", "options": ["懒散", "拖延", "闲逛", "游荡", "漫步", "闲逛", "漫游"], "correct": 0 },
+    { "word": "debase", "options": ["贬值", "贬低", "贬损", "降低", "堕落", "腐化", "堕品"], "correct": 1 },
+    { "word": "decathlon", "options": ["马拉松", "十项全能", "田径", "长跑", "运动会", "竞赛", "比赛"], "correct": 1 },
+    { "word": "decimal", "options": ["小数", "整数", "百分数", "分数", "数字", "位数", "十进制"], "correct": 0 },
+    { "word": "declaim", "options": ["朗诵", "演讲", "演说", "宣讲", "背诵", "大声说", "颂词"], "correct": 0 },
+    { "word": "decompose", "options": ["分解", "分化", "分裂", "分解", "降解", "腐烂", "腐败"], "correct": 0 },
+    { "word": "decry", "options": ["谴责", "抨击", "批评", "斥责", "指责", "责备", "痛斥"], "correct": 0 },
+    { "word": "defame", "options": ["诽谤", "中伤", "毁谤", "败坏", "抹黑", "损害", "玷污"], "correct": 0 },
+    { "word": "defer", "options": ["推迟", "延期", "顺从", "听从", "服从", "遵从", "屈从"], "correct": 0 },
+    { "word": "defiant", "options": ["挑衅", "蔑视", "反抗", "抗拒", "挑战", "藐视", "倔强"], "correct": 0 },
+    { "word": "deficiency", "options": ["缺乏", "不足", "缺陷", "短缺", "欠缺", "缺失", "匮乏"], "correct": 0 },
+    { "word": "deficit", "options": ["赤字", "亏损", "逆差", "不足", "缺陷", "亏空", "缺乏"], "correct": 0 },
+    { "word": "definitive", "options": ["明确", "确定", "最终", "决定性", "最后", "定案", "权威"], "correct": 0 },
+    { "word": "deflation", "options": ["通货紧缩", "膨胀", "降低", "紧缩", "萎缩", "缩小", "放缓"], "correct": 0 },
+    { "word": "defy", "options": ["挑战", "蔑视", "违抗", "抵抗", "对抗", "反抗", "不服从"], "correct": 0 },
+    { "word": "deign", "options": ["屈尊", "俯就", "垂怜", "施舍", "宠爱", "卑贱", "卑微"], "correct": 0 },
+    { "word": "deity", "options": ["神", "神明", "神灵", "神祇", "神祗", "天神", "上帝"], "correct": 0 },
+    { "word": "delcredere", "options": ["不当承兑", "逾期不付", "拖欠", "不还", "拖延", "不支付", "违约"], "correct": 0 },
+    { "word": "delineate", "options": ["描绘", "描述", "勾画", "画出", "画", "勾勒", "勾画"], "correct": 0 },
+    { "word": "delude", "options": ["欺骗", "哄骗", "蒙蔽", "骗局", "诈骗", "欺诈", "骗人"], "correct": 0 },
+    { "word": "democracy", "options": ["民主", "专制", "独裁", "集权", "威权", "民主主义", "民主政治"], "correct": 0 },
+    { "word": "demonstrate", "options": ["展示", "表明", "证明", "证实", "证明", "演示", "展现"], "correct": 0 },
+    { "word": "denigrate", "options": ["诋毁", "贬低", "诽谤", "抹黑", "中伤", "玷污", "败坏"], "correct": 0 },
+    { "word": "denote", "options": ["表示", "意味", "标志", "象征", "代表", "暗示", "预示"], "correct": 0 },
+    { "word": "denouement", "options": ["结局", "结尾", "结果", "结局", "结论", "解决", "结尾"], "correct": 0 },
+    { "word": "denounce", "options": ["谴责", "指责", "指控", "批评", "抨击", "斥责", "责备"], "correct": 0 },
+    { "word": "depict", "options": ["描绘", "描述", "展示", "表现", "刻画", "展现", "描画"], "correct": 0 },
+    { "word": "deplore", "options": ["悲叹", "哀悼", "痛惜", "遗憾", "悲伤", "哀愁", "痛心"], "correct": 0 },
+    { "word": "deposit", "options": ["存款", "押金", "存放", "储蓄", "沉淀", "存储", "存放"], "correct": 0 },
+    { "word": "depression", "options": ["抑郁", "萧条", "沮丧", "忧郁", "低落", "消沉", "抑郁症"], "correct": 0 },
+    { "word": "deputy", "options": ["副手", "助手", "代表", "代理", "副职", "副本", "副总"], "correct": 0 },
+    { "word": "derivation", "options": ["派生", "来源", "衍生", "起源", "导出", "发展", "演化"], "correct": 0 },
+    { "word": "derivative", "options": ["衍生", "派生", "源自", "起源于", "导出", "演变", "发展"], "correct": 0 },
+    { "word": "derive", "options": ["得出", "获得", "源于", "来自", "衍生", "演绎", "推导"], "correct": 0 },
+    { "word": "derrick", "options": ["起重机", "井架", "吊车", "龙门架", "升降机", "架子", "平台"], "correct": 0 },
+    { "word": "descent", "options": ["下降", "血统", "后裔", "起源", "出身", "祖籍", "渊源"], "correct": 0 },
+    { "word": "desist", "options": ["停止", "中止", "放弃", "终止", "戒掉", "戒除", "戒断"], "correct": 0 },
+    { "word": "deter", "options": ["阻止", "阻挠", "制止", "威慑", "挫败", "遏制", "吓阻"], "correct": 0 },
+    { "word": "detest", "options": ["憎恶", "厌恶", "嫌弃", "讨厌", "反感", "憎恨", "厌烦"], "correct": 0 },
+    { "word": "detour", "options": ["绕道", "迂回", "兜圈子", "弯路", "绕行", "曲折", "抄近路"], "correct": 0 },
+    { "word": "detrimental", "options": ["有害", "不利", "损害", "有损", "不好", "不利于", "危害"], "correct": 0 },
+    { "word": "deviate", "options": ["偏离", "背离", "偏差", "不符", "离经叛道", "不同", "违背"], "correct": 0 },
+    { "word": "devise", "options": ["设计", "发明", "策划", "想出", "发明者", "设计师", "制定"], "correct": 0 },
+    { "word": "devour", "options": ["吞噬", "吞食", "吞没", "狼吞虎咽", "狼吞豹咽", "大快朵颐", "贪婪"], "correct": 0 },
+    { "word": "dharma", "options": ["法则", "教义", "教规", "佛法", "佛教", "宗教", "道德"], "correct": 0 },
+    { "word": "diagonose", "options": ["诊断", "检查", "检测", "辨别", "鉴别", "判断", "诊疗"], "correct": 0 },
+    { "word": "diatribe", "options": ["长篇抨击", "论文", "演讲", "慷慨激昂", "激昂辩论", "长篇演说", "抨击"], "correct": 0 },
+    { "word": "diction", "options": ["用词", "措辞", "语言", "文笔", "词语", "说话方式", "发音"], "correct": 0 },
+    { "word": "differentiate", "options": ["区分", "区别", "差异化", "差别", "区别对待", "不同", "不同于"], "correct": 0 },
+    { "word": "dilettante", "options": ["业余爱好者", "外行", "半吊子", "半瓶醋", "业余艺术家", "业余玩家", "半专家"], "correct": 0 },
+    { "word": "diminish", "options": ["减少", "降低", "减弱", "削弱", "缩小", "下降", "减少"], "correct": 0 },
+    { "word": "diorama", "options": ["透视画", "透视图", "微缩景", "微缩模型", "全息图", "全息像", "场景"], "correct": 0 },
+    { "word": "diplomacy", "options": ["外交", "外交政策", "交涉", "交际", "外交手腕", "谈判", "外事"], "correct": 0 },
+    { "word": "discern", "options": ["辨别", "识别", "分辨", "领悟", "认识", "感知", "看出"], "correct": 0 },
+    { "word": "discrepancy", "options": ["差异", "不符", "矛盾", "不同", "出入", "不一致", "分歧"], "correct": 0 },
+    { "word": "discrete", "options": ["离散", "分立", "分开", "分散", "不连续", "离散的", "不连续的"], "correct": 0 },
+    { "word": "discus", "options": ["铁饼", "圆盘", "讨论", "研讨", "讲座", "辩论", "论战"], "correct": 0 },
+    { "word": "disparate", "options": ["不同", "差异", "不同的", "迥异", "截然不同", "各异", "迥然"], "correct": 0 },
+    { "word": "dispel", "options": ["驱散", "消除", "消散", "排除", "打消", "驱赶", "赶走"], "correct": 0 },
+    { "word": "disseminate", "options": ["传播", "散布", "传播", "宣传", "广泛传播", "传送", "散发"], "correct": 0 },
+    { "word": "dissonance", "options": ["不和谐", "不和", "不协调", "不谐", "不和睦", "不协和", "失调"], "correct": 0 },
+    { "word": "distributive", "options": ["分配", "分发", "散发", "分配的", "分布", "分散", "分布式"], "correct": 0 },
+    { "word": "diverge", "options": ["分歧", "分开", "分离", "偏离", "背离", "偏离", "分岔"], "correct": 0 },
+    { "word": "divergent", "options": ["分歧", "分开", "分离", "偏离", "背离", "偏离", "分岔"], "correct": 0 },
+    { "word": "diversion", "options": ["转移", "偏离", "转变", "转向", "分流", "改道", "变道"], "correct": 0 },
+    { "word": "doctrine", "options": ["教义", "学说", "信条", "原则", "教条", "学说", "主义"], "correct": 0 },
+    { "word": "dominant", "options": ["主导", "主要", "主导地位", "占优势", "占支配地位", "统治", "主导的"], "correct": 0 },
+    { "word": "dressage", "options": ["马术", "骑术", "操练", "训练", "练马", "驯马", "马匹训练"], "correct": 0 },
+    { "word": "drowsy", "options": ["瞌睡", "困倦", "昏昏欲睡", "困乏", "欲睡", "困顿", "昏昏"], "correct": 0 },
+    { "word": "dubstep", "options": ["重低音", "舞曲", "电音", "摇滚", "流行", "嘻哈", "舞曲"], "correct": 0 },
+    { "word": "ductile", "options": ["韧性", "延展性", "延性", "柔韧性", "可塑性", "韧度", "易延展"], "correct": 0 },
+    { "word": "duration", "options": ["持续时间", "期间", "时长", "时限", "时间段", "时刻", "延续时间"], "correct": 0 },
+    { "word": "dynamite", "options": ["炸药", "爆炸", "炸弹", "爆破", "炸掉", "炸毁", "毁灭"], "correct": 0 },
+
+
+
+    { "word": "ecology", "options": ["生态学", "生态", "生态环境", "生态系统", "生态地位", "生态区", "生态学家"], "correct": 0 },
+    { "word": "ecstasy", "options": ["狂喜", "狂热", "狂欢", "陶醉", "出神", "入迷", "欣喜若狂"], "correct": 0 },
+    { "word": "edify", "options": ["陶冶", "教导", "启迪", "教化", "教诲", "开导", "教训"], "correct": 0 },
+    { "word": "efficacious", "options": ["有效", "高效", "灵验", "有效的", "有效果", "效果好", "实效"], "correct": 0 },
+    { "word": "elaborate", "options": ["精心", "复杂", "详尽", "详细", "繁琐", "复杂的", "精心制作"], "correct": 0 },
+    { "word": "elastic", "options": ["弹性", "柔软", "有弹性", "灵活", "柔韧", "伸缩", "松紧带"], "correct": 0 },
+    { "word": "elate", "options": ["使高兴", "使兴奋", "使激动", "使得意", "使愉快", "使快乐", "使狂喜"], "correct": 0 },
+    { "word": "electrochemistry", "options": ["电化学", "电解学", "电学", "电磁学", "电化学反应", "电学家", "电解"], "correct": 0 },
+    { "word": "electromagnetism", "options": ["电磁学", "电磁", "电磁场", "电磁力", "电磁波", "电磁感应", "电磁铁"], "correct": 0 },
+    { "word": "elicit", "options": ["引出", "诱出", "引起", "激起", "引发", "得出", "引诱"], "correct": 0 },
+    { "word": "eloquent", "options": ["雄辩", "流利", "雄辩家", "雄辩的", "动人", "雄辩地", "雄辩家"], "correct": 0 },
+    { "word": "embrace", "options": ["拥抱", "接受", "拥有", "包容", "拥戴", "拥有", "怀抱"], "correct": 0 },
+    { "word": "embroil", "options": ["纠缠", "使卷入", "使陷入", "卷入", "使混乱", "使纠纷", "使扰乱"], "correct": 0 },
+    { "word": "emulate", "options": ["模仿", "仿效", "效仿", "模拟", "模拟器", "模拟的", "仿"], "correct": 0 },
+    { "word": "enchant", "options": ["迷住", "使陶醉", "施魔法", "使着迷", "使入迷", "使心醉", "迷人"], "correct": 0 },
+    { "word": "endearment", "options": ["爱", "爱意", "表达爱意的话", "亲昵", "深情", "温存", "爱抚"], "correct": 0 },
+    { "word": "endorse", "options": ["支持", "认可", "背书", "推荐", "赞成", "认同", "签署"], "correct": 0 },
+    { "word": "endoskeleton", "options": ["内骨骼", "外骨骼", "内部骨骼", "内骨", "内骨胳", "内躯骨", "躯骨内"], "correct": 0 },
+    { "word": "endure", "options": ["忍受", "持续", "耐受", "承受", "经受", "忍耐", "经历"], "correct": 0 },
+    { "word": "enforce", "options": ["强制", "执行", "实施", "强迫", "施行", "实行", "推行"], "correct": 0 },
+    { "word": "engage", "options": ["参与", "从事", "订婚", "交战", "占用", "吸引", "招聘"], "correct": 0 },
+    { "word": "enhance", "options": ["增强", "提高", "改善", "增加", "加强", "提升", "增进"], "correct": 0 },
+    { "word": "enkindle", "options": ["点燃", "燃起", "引燃", "燃烧", "燃", "发动", "激发"], "correct": 0 },
+    { "word": "enlightenment", "options": ["启示", "启蒙", "开明", "教化", "智慧", "启发", "开导"], "correct": 0 },
+    { "word": "enlist", "options": ["入伍", "征募", "招募", "参军", "应募", "报名", "加入"], "correct": 0 },
+    { "word": "enrage", "options": ["激怒", "愤怒", "发怒", "生气", "气愤", "怒火", "愤懑"], "correct": 0 },
+    { "word": "ensemble", "options": ["合奏", "全体", "合唱", "合奏曲", "合唱团", "舞蹈", "合唱的"], "correct": 0 },
+    { "word": "ensnare", "options": ["诱捕", "陷阱", "困住", "控制", "圈套", "圈住", "诱使"], "correct": 0 },
+    { "word": "enthusiasm", "options": ["热情", "激情", "热忱", "热烈", "激烈", "热心", "激动"], "correct": 0 },
+    { "word": "enumerate", "options": ["列举", "计数", "数", "列出", "清点", "点算", "总计"], "correct": 0 },
+    { "word": "envisage", "options": ["设想", "预见", "展望", "展示", "想象", "设定", "构想"], "correct": 0 },
+    { "word": "enzyme", "options": ["酶", "激素", "蛋白质", "化酶", "蛋白酶", "酶类", "酶活性"], "correct": 0 },
+    { "word": "epiphany", "options": ["启示", "顿悟", "感悟", "顿悟时刻", "顿悟的", "顿悟感", "神示"], "correct": 0 },
+    { "word": "epitomize", "options": ["概括", "概述", "概要", "概括起来", "代表", "象征", "概括的"], "correct": 0 },
+    { "word": "equilibrium", "options": ["平衡", "均衡", "平静", "稳定", "平衡状态", "动态平衡", "稳态"], "correct": 0 },
+    { "word": "equivocate", "options": ["含糊其词", "模棱两可", "支吾其词", "闪烁其词", "搪塞", "说谎", "弄虚作假"], "correct": 0 },
+    { "word": "erase", "options": ["擦掉", "抹去", "清除", "删除", "消除", "擦除", "擦拭"], "correct": 0 },
+    { "word": "escalate", "options": ["升级", "扩大", "逐步升级", "逐步扩大", "扩展", "加剧", "激化"], "correct": 0 },
+    { "word": "establish", "options": ["建立", "确立", "创建", "建设", "成立", "建树", "创立"], "correct": 0 },
+    { "word": "ester", "options": ["酯", "醚", "酯类", "酯化", "硝酸酯", "酯基", "酯醇"], "correct": 0 },
+    { "word": "ether", "options": ["醚", "乙醚", "以太", "醇类", "含氧化合物", "乙醚类", "氯化物"], "correct": 0 },
+    { "word": "ethereal", "options": ["飘渺", "空灵", "虚幻", "超凡", "幻化", "柔美", "神秘"], "correct": 0 },
+    { "word": "etude", "options": ["练习曲", "练习", "音乐练习曲", "练琴曲", "乐曲", "练习乐曲", "音乐练习"], "correct": 0 },
+    { "word": "evaporate", "options": ["蒸发", "挥发", "消失", "蒸发掉", "蒸发干净", "蒸发掉", "蒸发殆尽"], "correct": 0 },
+    { "word": "evoke", "options": ["唤起", "引起", "激起", "唤醒", "呼唤", "召唤", "引发"], "correct": 0 },
+    { "word": "exacerbate", "options": ["恶化", "加剧", "使恶化", "使加剧", "恶化的", "使恶劣", "加剧的"], "correct": 0 },
+    { "word": "execrable", "options": ["可憎", "可恶", "讨厌", "可恶的", "该诅咒的", "该骂的", "该咒骂的"], "correct": 0 },
+    { "word": "exemplify", "options": ["例证", "举例", "例示", "例子", "作为例子", "举例说明", "例举"], "correct": 0 },
+    { "word": "exigent", "options": ["急需", "紧急", "迫切", "急切", "紧急的", "迫切的", "急迫"], "correct": 0 },
+    { "word": "exile", "options": ["流放", "放逐", "流亡", "被流放", "流放者", "被放逐者", "被驱逐者"], "correct": 0 },
+    { "word": "exoskeleton", "options": ["外骨骼", "外壳", "外部骨骼", "外骨", "外壳的", "外骨胳", "外躯骨"], "correct": 0 },
+    { "word": "expansion", "options": ["扩张", "扩大", "膨胀", "扩展", "扩建", "拓展", "膨胀的"], "correct": 0 },
+    { "word": "expiate", "options": ["赎罪", "补偿", "赎", "赎罪的", "补救", "弥补", "清偿"], "correct": 0 },
+    { "word": "explicit", "options": ["明确", "清晰", "明确的", "详述", "直接", "明白", "坦率"], "correct": 0 },
+    { "word": "exploration", "options": ["探索", "勘探", "研究", "调查", "发掘", "考察", "发现"], "correct": 0 },
+    { "word": "exponential", "options": ["指数", "指数级", "指数函数", "指数增长", "指数级别", "指数型", "指数型增长"], "correct": 0 },
+    { "word": "expressionism", "options": ["表现主义", "表现主义者", "表现", "表现派", "表现的", "表达", "表现出"], "correct": 0 },
+    { "word": "extant", "options": ["现存", "尚存", "现存的", "现行", "存在", "尚未消失", "尚存的"], "correct": 0 },
+    { "word": "extinction", "options": ["灭绝", "绝种", "消失", "绝迹", "熄灭", "消灭", "绝灭"], "correct": 0 },
+    { "word": "fable", "options": ["寓言", "传说", "神话", "寓意", "寓言故事", "寓言式", "寓言体"], "correct": 0 },
+    { "word": "fabricate", "options": ["捏造", "制造", "编造", "伪造", "虚构", "造假", "假造"], "correct": 0 },
+    { "word": "facetious", "options": ["滑稽", "诙谐", "幽默", "风趣", "逗趣", "搞笑", "滑稽的"], "correct": 0 },
+    { "word": "facilitate", "options": ["促进", "便利", "方便", "帮助", "推动", "促使", "使容易"], "correct": 0 },
+    { "word": "falcon", "options": ["猎鹰", "隼", "鹞", "猎隼", "鸟", "猛禽", "猎鸟"], "correct": 0 },
+    { "word": "fascination", "options": ["魅力", "迷人", "着迷", "吸引", "迷恋", "魔力", "神韵"], "correct": 0 },
+    { "word": "fathom", "options": ["领会", "测量", "探测", "探究", "研究", "领悟", "弄清楚"], "correct": 0 },
+    { "word": "fauvism", "options": ["野兽派", "野兽主义", "野兽", "野性", "野蛮", "野味", "野性美"], "correct": 0 },
+    { "word": "fawn", "options": ["讨好", "奉承", "巴结", "拍马屁", "讨好的", "奉承的", "媚俗的"], "correct": 0 },
+    { "word": "fecund", "options": ["肥沃", "多产", "丰饶", "富饶", "富饶的", "多产的", "肥沃的"], "correct": 0 },
+    { "word": "ferret", "options": ["猫鼬", "搜寻", "侦查", "搜查", "打猎", "搜罗", "搜查出"], "correct": 0 },
+    { "word": "fertilization", "options": ["受精", "施肥", "授精", "肥沃化", "受精卵", "受精作用", "受孕"], "correct": 0 },
+    { "word": "fester", "options": ["溃烂", "化脓", "恶化", "烂", "使溃烂", "发炎", "化脓的"], "correct": 0 },
+    { "word": "fetid", "options": ["恶臭", "臭的", "腐臭", "难闻", "发臭", "臭气", "气味难闻"], "correct": 0 },
+    { "word": "fitness", "options": ["适应", "健身", "适合", "身体健康", "健康", "体能", "身体素质"], "correct": 0 },
+    { "word": "fjord", "options": ["峡湾", "海湾", "峡谷", "峡湾地", "湾", "峡湾的", "狭长的海湾"], "correct": 0 },
+    { "word": "flashback", "options": ["回忆", "闪回", "回顾", "回忆录", "怀旧", "回溯", "回想"], "correct": 0 },
+    { "word": "flawless", "options": ["完美", "无瑕", "无缺", "完美无瑕", "无可挑剔", "无瑕疵", "完美的"], "correct": 0 },
+    { "word": "flinch", "options": ["畏缩", "退缩", "退避", "畏首畏尾", "退却", "退避三舍", "退避风波"], "correct": 0 },
+    { "word": "foil", "options": ["挫败", "箔", "阻止", "阻挠", "箔子", "失败", "箔金"], "correct": 0 },
+    { "word": "foilage", "options": ["植被", "叶子", "树叶", "叶状物", "草木", "树木", "叶"], "correct": 0 },
+    { "word": "foist", "options": ["硬塞", "强行推进", "硬塞进", "硬压", "欺骗", "贴身", "欺压"], "correct": 0 },
+    { "word": "forage", "options": ["觅食", "搜寻", "草料", "牧草", "饲料", "搜查", "搜索"], "correct": 0 },
+    { "word": "forbear", "options": ["忍耐", "容忍", "忍受", "戒除", "忍着", "抑制", "戒掉"], "correct": 0 },
+    { "word": "forbidden", "options": ["禁止", "禁忌", "不许", "禁令", "严禁", "不许可", "禁止的"], "correct": 0 },
+    { "word": "forgo", "options": ["放弃", "弃", "不吃", "停止", "舍弃", "弃权", "取消"], "correct": 0 },
+    { "word": "formidable", "options": ["可怕", "艰巨", "令人敬畏", "难以对付", "强大", "可畏", "令人畏惧"], "correct": 0 },
+    { "word": "formulate", "options": ["制定", "规划", "阐明", "明确", "表达", "规定", "设定"], "correct": 0 },
+    { "word": "forte", "options": ["长处", "优势", "特长", "擅长", "强项", "优点", "专长"], "correct": 0 },
+    { "word": "fortify", "options": ["加强", "筑垒", "坚固", "防守", "增强", "巩固", "增援"], "correct": 0 },
+    { "word": "fortnight", "options": ["两周", "两星期", "十四天", "半个月", "一周", "半月", "二周"], "correct": 0 },
+    { "word": "foster", "options": ["培养", "促进", "养育", "鼓励", "促使", "发展", "助长"], "correct": 0 },
+    { "word": "fractious", "options": ["易怒", "倔强", "暴躁", "脾气坏", "脾气暴躁", "性情暴躁", "难以驾驭"], "correct": 0 },
+    { "word": "fracture", "options": ["骨折", "破裂", "裂缝", "断裂", "断裂处", "断", "骨折的"], "correct": 0 },
+    { "word": "fraud", "options": ["欺诈", "诈骗", "骗子", "欺骗", "诈欺", "欺诈行为", "作假"], "correct": 0 },
+    { "word": "fray", "options": ["磨损", "打架", "争吵", "激战", "战斗", "斗争", "斗殴"], "correct": 0 },
+    { "word": "fret", "options": ["烦恼", "忧虑", "焦虑", "担心", "烦躁", "苦恼", "忧郁"], "correct": 0 },
+    { "word": "friction", "options": ["摩擦", "矛盾", "擦", "不和", "冲突", "阻力", "磨擦力"], "correct": 0 },
+    { "word": "functional", "options": ["功能", "实用", "功能性", "作用", "功能的", "有用", "性能"], "correct": 0 },
+    { "word": "fungi", "options": ["真菌", "菌类", "霉菌", "细菌", "菌", "菌体", "蘑菇"], "correct": 0 },
+    { "word": "furtive", "options": ["偷偷", "鬼鬼祟祟", "偷偷摸摸", "秘密", "暗中", "暗地里", "偷偷的"], "correct": 0 },
+
+
+
+       { word: "gallop", options: ["狂奔", "飞驰", "奔驰", "疾驰", "疾行", "飞奔", "奔腾"], correct: 0 },
+  { word: "gamete", options: ["配子", "生殖细胞", "精子", "卵子", "配偶子", "胚胎", "生殖子"], correct: 0 },
+  { word: "gangster", options: ["匪徒", "暴徒", "歹徒", "黑帮成员", "流氓", "罪犯", "强盗"], correct: 0 },
+  { word: "gazebo", options: ["凉亭", "观景亭", "亭子", "露台", "花亭", "树亭", "凉亭子"], correct: 0 },
+  { word: "generosity", options: ["慷慨", "大方", "宽厚", "阔气", "豁达", "厚道", "慷慨大方"], correct: 0 },
+  { word: "genocide", options: ["种族灭绝", "大屠杀", "灭绝", "灭族", "杀戮", "消灭", "灭绝种族"], correct: 0 },
+  { word: "genotype", options: ["基因型", "遗传型", "遗传特征", "基因组", "基因结构", "遗传类型", "遗传信息"], correct: 0 },
+  { word: "geometry", options: ["几何", "几何学", "空间几何", "平面几何", "立体几何", "数学几何", "几何形状"], correct: 0 },
+  { word: "gestation", options: ["妊娠", "孕育", "怀孕", "孕期", "孕育期", "孕", "胎儿发育期"], correct: 0 },
+  { word: "glean", options: ["拾取", "收集", "搜集", "采集", "拾拣", "捡拾", "搜罗"], correct: 0 },
+  { word: "gloat", options: ["幸灾乐祸", "得意洋洋", "幸灾", "自鸣得意", "幸灾乐", "心满意足", "乐在其中"], correct: 0 },
+  { word: "globalization", options: ["全球化", "国际化", "全球经济", "国际贸易", "全球贸易", "全球性", "国际一体化"], correct: 0 },
+  { word: "gothic", options: ["哥特式", "哥特", "哥特艺术", "哥特建筑", "哥特文化", "哥特时代", "哥特教堂"], correct: 0 },
+  { word: "graffiti", options: ["涂鸦", "壁画", "乱涂乱画", "街头涂鸦", "涂抹", "涂写", "涂饰"], correct: 0 },
+  { word: "grapple", options: ["格斗", "搏斗", "搏击", "缠斗", "摔跤", "扭打", "争斗"], correct: 0 },
+  { word: "gratification", options: ["满足", "满意", "满足感", "喜悦", "享受", "快感", "满意度"], correct: 0 },
+  { word: "grouper", options: ["石斑鱼", "鲈鱼", "鲇鱼", "鲆鱼", "鲑鱼", "鲽鱼", "鲂鱼"], correct: 0 },
+  { word: "grovel", options: ["匍匐", "卑躬屈膝", "卑躬", "俯首贴耳", "奴颜婢膝", "趋炎附势", "低三下四"], correct: 0 },
+  { word: "grumble", options: ["抱怨", "埋怨", "牢骚", "怨言", "嘟囔", "发牢骚", "咕哝"], correct: 0 },
+  { word: "halibut", options: ["大比目鱼", "鲽鱼", "比目鱼", "鲆鱼", "鳕鱼", "鲇鱼", "鲈鱼"], correct: 0 },
+  { word: "hallow", options: ["神圣的", "圣洁的", "庄严的", "崇高的", "神圣", "神圣不可侵犯的", "神圣的节日"], correct: 0 },
+  { word: "halogen", options: ["卤素", "氟", "氯", "溴", "碘", "卤化物", "卤族元素"], correct: 0 },
+
+
+
+       { word: "harmonica", options: ["口琴", "马林巴琴", "管风琴", "手风琴", "口风琴", "电子琴", "风琴"], correct: 0 },
+  { word: "heathen", options: ["异教徒", "野蛮人", "未开化的人", "异端", "未信教者", "野人", "异端者"], correct: 0 },
+  { word: "heather", options: ["石南", "石楠", "石南花", "石南属", "石楠花", "石南科", "石南植物"], correct: 0 },
+  { word: "heredity", options: ["遗传", "遗传性", "遗传学", "遗传特征", "遗传信息", "遗传遗传", "遗传病"], correct: 0 },
+  { word: "hinder", options: ["妨碍", "阻碍", "阻止", "阻挠", "干扰", "阻挡", "影响"], correct: 0 },
+  { word: "holocaust", options: ["大屠杀", "浩劫", "大破坏", "大灾难", "大浩劫", "大灭绝", "大劫难"], correct: 0 },
+  { word: "hormone", options: ["激素", "荷尔蒙", "内分泌", "激发素", "激活素", "激励素", "荷尔蒙"], correct: 0 },
+  { word: "humiliate", options: ["羞辱", "侮辱", "使丢脸", "狠毒", "狠戾", "狠辣", "屈辱"], correct: 0 },
+  { word: "hurtle", options: ["猛冲", "飞驰", "猛烈碰撞", "冲撞", "猛烈运动", "迅速前进", "急速行进"], correct: 0 },
+  { word: "hydrocarbon", options: ["碳氢化合物", "烃", "石油", "烷烃", "烯烃", "芳烃", "烃类"], correct: 0 },
+  { word: "hyperbole", options: ["夸张", "夸大法", "夸张法", "夸大", "言过其实", "夸大其词", "言过其实法"], correct: 0 },
+  { word: "hypotenuse", options: ["斜边", "直角三角形的斜边", "直角边", "对角线", "三角形的斜边", "三角形斜边", "斜线"], correct: 0 },
+  { word: "ignite", options: ["点燃", "引燃", "点火", "发火", "燃烧", "起火", "着火"], correct: 0 },
+  { word: "illumination", options: ["照明", "光照", "照亮", "照明系统", "灯光", "照明装置", "照射"], correct: 0 },
+  { word: "illusion", options: ["幻觉", "错觉", "幻想", "错觉现象", "幻影", "虚幻", "幻化"], correct: 0 },
+  { word: "illustration", options: ["插图", "图示", "图解", "插画", "插图版", "图画", "说明图"], correct: 0 },
+  { word: "immortal", options: ["不朽", "永生", "长生不老", "不死", "不朽之名", "长生", "长存"], correct: 0 },
+  { word: "immunity", options: ["免疫", "免疫力", "抵抗力", "免疫系统", "抗体", "免疫功能", "免疫性"], correct: 0 },
+  { word: "imperialism", options: ["帝国主义", "殖民主义", "霸权主义", "侵略主义", "帝国霸权", "殖民掠夺", "帝国主义者"], correct: 0 },
+  { word: "implement", options: ["工具", "器具", "工具设备", "器械", "用具", "器具设备", "器械设备"], correct: 0 },
+  { word: "impress", options: ["印象", "留下深刻印象", "给人留下印象", "令人印象深刻", "印在心里", "感动", "深深印在心里"], correct: 0 },
+  { word: "impressionism", options: ["印象派", "印象主义", "印象派画家", "印象派艺术", "印象派风格", "印象派作品", "印象主义画家"], correct: 0 },
+  { word: "improvisation", options: ["即兴创作", "即兴表演", "即兴演奏", "即兴发挥", "即兴创作的作品", "即兴舞蹈", "即兴演奏的乐曲"], correct: 0 },
+  { word: "incite", options: ["煽动", "鼓动", "煽动性", "煽动言论", "引起", "挑起", "激起"], correct: 0 },
+  { word: "incorporate", options: ["合并", "合并公司", "合并企业", "并入", "结合", "纳入", "合并成为"], correct: 0 },
+  { word: "industrialization", options: ["工业化", "产业化", "工业化进程", "工业发展", "工业化水平", "工业革命", "现代工业化"], correct: 0 },
+  { word: "ineffable", options: ["难以言表", "无法言喻", "说不出的", "无法形容的", "难以形容", "不可言喻", "无法描述的"], correct: 0 },
+  { word: "infant", options: ["婴儿", "幼儿", "初生婴儿", "婴孩", "幼小的孩子", "初生", "刚出生的婴儿"], correct: 0 },
+  { word: "inflame", options: ["激怒", "激动", "点燃", "燃烧", "引起炎症", "激起", "煽动"], correct: 0 },
+  { word: "inflation", options: ["通货膨胀", "通货膨胀率", "通胀", "物价上涨", "价格上涨", "物价飞涨", "价格飞涨"], correct: 0 },
+  { word: "influenza", options: ["流感", "流行性感冒", "感冒", "流行感冒", "病毒性感冒", "流行性感冒病毒", "流感病毒"], correct: 0 },
+  { word: "inhibit", options: ["抑制", "阻止", "约束", "阻碍", "抑制剂", "抑制性", "抑制作用"], correct: 0 },
+  { word: "iniquity", options: ["邪恶", "不义", "罪恶", "恶行", "恶劣", "邪恶行为", "罪恶行为"], correct: 0 },
+  { word: "initial", options: ["最初", "起初", "初期", "开始", "首次", "初步", "初期的"], correct: 0 },
+  { word: "innocence", options: ["无辜", "清白", "纯真", "天真", "无辜者", "纯真无邪", "纯洁无暇"], correct: 0 },
+  { word: "inquisitive", options: ["好奇", "爱探究", "爱问问题", "充满好奇心", "爱打听", "爱探询", "八卦的"], correct: 0 },
+  { word: "inscribe", options: ["题写", "刻写", "铭刻", "镌刻", "题刻", "书写", "刻上"], correct: 0 },
+  { word: "insect", options: ["昆虫", "虫子", "虫类", "昆虫学", "昆虫种类", "害虫", "爬虫类"], correct: 0 },
+  { word: "insinuate", options: ["暗示", "暗指", "影射", "旁敲侧击", "含沙射影", "挑拨", "挑唆"], correct: 0 },
+  { word: "insolent", options: ["傲慢", "无礼", "嚣张", "粗鲁", "放肆", "目中无人", "无礼的"], correct: 0 },
+  { word: "installation", options: ["安装", "装置", "设备", "装置设备", "设施", "装配", "设置"], correct: 0 },
+  { word: "instigate", options: ["煽动", "挑起", "激起", "引发", "策动", "发动", "唆使"], correct: 0 },
+  { word: "institute", options: ["学院", "机构", "研究所", "学会", "研究院", "科研机构", "研究单位"], correct: 0 },
+  { word: "insurgent", options: ["叛乱分子", "起义者", "叛军", "暴徒", "叛乱者", "叛国者", "暴动分子"], correct: 0 },
+  { word: "integrity", options: ["完整性", "诚实", "正直", "廉正", "正直品质", "正直行为", "完善性"], correct: 0 },
+  { word: "intercept", options: ["拦截", "截取", "拦截战术", "拦截导弹", "拦截器", "拦截火箭", "拦截器具"], correct: 0 },
+  { word: "interlude", options: ["插曲", "幕间", "间歇", "过场", "插话", "过度", "中场休息"], correct: 0 },
+  { word: "intrepid", options: ["无畏的", "勇敢的", "坚毅的", "大胆的", "英勇的", "刚毅的", "勇猛的"], correct: 0 },
+  { word: "interpret", options: ["解释", "翻译", "口译", "翻译员", "解读", "演绎", "诠释"], correct: 0 },
+  { word: "intersection", options: ["交叉口", "路口", "十字路口", "交汇处", "交叉点", "相交点", "路口交通"], correct: 0 },
+  { word: "intervene", options: ["干预", "介入", "干涉", "插手", "介入行动", "干预行动", "介入事件"], correct: 0 },
+  { word: "intoxicant", options: ["酒精", "毒品", "麻醉品", "迷幻药", "酒精类", "醉人的", "酒精含量"], correct: 0 },
+  { word: "intrepid", options: ["无畏的", "勇敢的", "坚毅的", "大胆的", "英勇的", "刚毅的", "勇猛的"], correct: 0 },
+  { word: "invective", options: ["谩骂", "辱骂", "骂人", "诅咒", "恶语", "恶言", "猛烈抨击"], correct: 0 },
+  { word: "invertebrate", options: ["无脊椎动物", "软体动物", "节肢动物", "无脊椎类", "无骨", "无骨动物", "无脊椎物种"], correct: 0 },
+  { word: "investigate", options: ["调查", "研究", "调查研究", "调查工作", "勘察", "侦查", "查明"], correct: 0 },
+  { word: "invincible", options: ["无敌", "不可战胜", "不可征服", "无敌手", "绝对无敌", "不可一世", "无坚不摧"], correct: 0 },
+  { word: "iodine", options: ["碘", "碘元素", "碘酊", "碘化钾", "碘酒", "碘酊液", "碘类"], correct: 0 },
+  { word: "isomer", options: ["异构体", "同分异构体", "同分异构物", "同分异构体", "同分异构化合物", "同分异构物质", "异构物"], correct: 0 },
+  { word: "isomeric", options: ["同分异构", "同分异构的", "同分异构体", "同分异构的化合物", "同分异构体系", "同分异构物质", "同分异构性"], correct: 0 },
+  { word: "isotope", options: ["同位素", "同位素元素", "放射性同位素", "稳定同位素", "核素", "同位素化合物", "同位素体"], correct: 0 },
+  { word: "itinerary", options: ["行程", "旅行计划", "路线", "旅行路线", "行程安排", "行程表", "旅行日程"], correct: 0 },
+
+       { "word": "jabber", "options": ["叽叽喳喳", "胡说八道", "急促说话", "滔滔不绝", "啰嗦", "絮絮叨叨", "喋喋不休"], "correct": 0 },
+  { "word": "jape", "options": ["嘲弄", "开玩笑", "戏谑", "玩笑", "打趣", "嬉笑", "讥笑"], "correct": 0 },
+  { "word": "jaunt", "options": ["短途旅行", "游览", "旅游", "漫步", "游览短途", "短途出游", "远足"], "correct": 0 },
+  { "word": "javelin", "options": ["标枪", "投掷标枪比赛", "投掷标枪", "标枪比赛", "标枪项目", "投掷项目", "田径项目"], "correct": 0 },
+  { "word": "jeer", "options": ["嘲笑", "讥讽", "嘲弄", "嘲笑声", "讥笑", "嘲弄声", "戏弄"], "correct": 0 },
+  { "word": "jibe", "options": ["嘲讽", "挖苦", "讥讽", "讥笑", "讥刺", "讽刺", "冷嘲热讽"], "correct": 0 },
+  { "word": "jilt", "options": ["抛弃", "背叛", "抛弃情人", "拋弃", "抛弃爱人", "遗弃", "抛下"], "correct": 0 },
+  { "word": "jostle", "options": ["推挤", "拥挤", "挤", "争抢", "拥挤的人群", "推搡", "碰撞"], "correct": 0 },
+  { "word": "jovial", "options": ["快乐的", "愉快的", "开心的", "欢乐的", "笑容满面的", "友好的", "高兴的"], "correct": 0 },
+  { "word": "jubilant", "options": ["欢呼的", "喜悦的", "欢欣的", "兴高采烈的", "狂喜的", "欢腾的", "高兴的"], "correct": 0 },
+  { "word": "juxtapose", "options": ["并置", "并列", "并列放置", "放在一起", "对比", "并置对比", "对照"], "correct": 0 },
+  { "word": "karate", "options": ["空手道", "日本空手道", "武术", "格斗", "搏击", "拳击", "击打"], "correct": 0 },
+  { "word": "karma", "options": ["因果报应", "业报", "因果律", "因果关系", "因果报应理论", "业力", "善恶报应"], "correct": 0 },
+  { "word": "kindle", "options": ["点燃", "激起", "引发", "燃起", "照亮", "点火", "点燃火焰"], "correct": 0 },
+  { "word": "kinetics", "options": ["动力学", "动力", "力学", "动力性", "动态", "动态学", "动力性能"], "correct": 0 },
+  { "word": "knead", "options": ["揉", "搓", "抓", "捏", "揉搓", "按摩", "捏揉"], "correct": 0 },
+  { "word": "lament", "options": ["哀悼", "哀叹", "悲叹", "悲伤", "哀歌", "悲哀", "痛哭"], "correct": 0 },
+  { "word": "lampoon", "options": ["讽刺", "讥讽", "嘲笑", "讽笑", "讥笑", "嘲弄", "戏谑"], "correct": 0 },
+  { "word": "lamprey", "options": ["鳗鲡", "七鳃鳗", "七鳃鲡", "鳗鲡科", "吸盘口鱼", "吸盘口动物", "寄生鱼"], "correct": 0 },
+
+
+    { "word": "lancelet", "options": ["文昌鱼", "线虫动物", "匙吻鱼", "鳕形目", "无颌动物", "脊索动物", "海鳃"], "correct": 0 },
+  { "word": "languish", "options": ["衰弱", "枯萎", "消瘦", "萎靡", "憔悴", "虚弱", "颓废"], "correct": 0 },
+  { "word": "lanthanide", "options": ["镧系元素", "稀土元素", "镧族元素", "稀土金属", "稀有金属", "金属元素", "金属"], "correct": 0 },
+  { "word": "lather", "options": ["起泡沫", "肥皂泡", "泡沫", "打泡沫", "沫子", "肥皂水", "洗涤泡沫"], "correct": 0 },
+  { "word": "laud", "options": ["赞美", "称赞", "颂扬", "赞颂", "歌颂", "赞美诗", "颂词"], "correct": 0 },
+  { "word": "legtimate", "options": ["合法的", "正当的", "合理的", "合法化", "合法性", "正当化", "合法权益"], "correct": 0 },
+  { "word": "levitate", "options": ["飘浮", "漂浮", "悬浮", "升空", "空中飘浮", "飞升", "飘逸"], "correct": 0 },
+  { "word": "ligament", "options": ["韧带", "纤维", "肌腱", "筋膜", "结缔组织", "软组织", "连接组织"], "correct": 0 },
+  { "word": "linger", "options": ["徘徊", "逗留", "停留", "缓慢移动", "磨蹭", "徘徊不去", "徘徊不舍"], "correct": 0 },
+  { "word": "linguistics", "options": ["语言学", "语言学家", "语言分析", "语言研究", "语言学理论", "语言结构", "语言学科"], "correct": 0 },
+  { "word": "lipid", "options": ["脂质", "脂肪", "脂类", "脂肪质", "脂类物质", "脂肪含量", "脂肪分子"], "correct": 0 },
+  { "word": "logarithm", "options": ["对数", "对数表", "对数尺", "指数", "对数函数", "对数规律", "对数关系"], "correct": 0 },
+  { "word": "lucid", "options": ["清晰的", "明了的", "清楚的", "透彻的", "明晰的", "清醒的", "明亮的"], "correct": 0 },
+  { "word": "luminous", "options": ["发光的", "明亮的", "光亮的", "闪亮的", "发光体", "明亮耀眼的", "发光体质"], "correct": 0 },
+  { "word": "lure", "options": ["诱惑", "诱饵", "诱使", "引诱", "吸引", "诱惑物", "诱捕"], "correct": 0 },
+  { "word": "magnificant", "options": ["壮丽的", "宏伟的", "雄伟的", "宏大的", "壮观的", "辉煌的", "伟大的"], "correct": 0 },
+  { "word": "magnifier", "options": ["放大镜", "放大器", "放大透镜", "放大仪", "增大器", "扩大镜", "放大放映机"], "correct": 0 },
+  { "word": "majestic", "options": ["雄伟的", "壮丽的", "宏伟的", "庄严的", "威严的", "高大的", "宏大的"], "correct": 0 },
+  { "word": "malevolent", "options": ["恶意的", "恶毒的", "恶霸的", "怀恶意的", "恶毒", "邪恶的", "凶狠的"], "correct": 0 },
+  { "word": "malicious", "options": ["恶意的", "恶毒的", "恶意攻击", "恶意伤害", "恶毒言论", "恶毒行为", "恶毒心理"], "correct": 0 },
+  { "word": "malign", "options": ["诽谤", "恶意", "中伤", "诋毁", "污蔑", "陷害", "抹黑"], "correct": 0 },
+  { "word": "malleable", "options": ["可塑的", "易弯曲的", "柔软的", "易受影响的", "易变形的", "易变的", "可锻的"], "correct": 0 },
+  { "word": "mammal", "options": ["哺乳动物", "哺乳类", "哺乳类动物", "胎生动物", "哺育动物", "乳兽", "母兽"], "correct": 0 },
+  { "word": "mandate", "options": ["授权", "命令", "要求", "指令", "批准", "规定", "委托"], "correct": 0 },
+  { "word": "mandolin", "options": ["曼陀林琴", "曼陀琴", "曼陀林", "曼陀林琴手", "弦乐器", "弦鸣乐器", "乐器"], "correct": 0 },
+  { "word": "maneuver", "options": ["操纵", "机动", "调动", "策略", "演习", "操作", "运用"], "correct": 0 },
+  { "word": "manifest", "options": ["清单", "表明", "显现", "展现", "显示", "呈现", "展示"], "correct": 0 },
+  { "word": "manipulate", "options": ["操纵", "控制", "操作", "操控", "操纵手段", "操作手法", "控制手段"], "correct": 0 },
+  { "word": "manufacture", "options": ["制造", "生产", "制造业", "制作", "生产制造", "加工", "生产加工"], "correct": 0 },
+  { "word": "mar", "options": ["玷污", "损坏", "毁坏", "弄脏", "破坏", "污染", "破坏性"], "correct": 0 },
+  { "word": "margin", "options": ["边缘", "余地", "幅度", "利润", "边际", "边界", "空白"], "correct": 0 },
+  { "word": "marimba", "options": ["马林巴琴", "木琴", "非洲木琴", "打击乐器", "西非木琴", "木琴演奏者", "木琴乐曲"], "correct": 0 },
+  { "word": "marvelous", "options": ["奇妙的", "不可思议的", "了不起的", "极好的", "美妙的", "精彩的", "绝妙的"], "correct": 0 },
+  { "word": "mashup", "options": ["混搭", "混合", "拼凑", "大杂烩", "混搭歌曲", "混搭作品", "组合"], "correct": 0 },
+  { "word": "masticate", "options": ["咀嚼", "嚼", "嚼碎", "咬碎", "咀嚼食物", "咀嚼过程", "咀嚼动作"], "correct": 0 },
+  { "word": "matrix", "options": ["矩阵", "基质", "模型", "体系", "结构", "网络", "矩阵式"], "correct": 0 },
+  { "word": "meander", "options": ["蜿蜒", "曲折", "弯曲", "迂回", "绕行", "迂回曲折", "曲折地走"], "correct": 0 },
+  { "word": "merriment", "options": ["欢乐", "快乐", "愉快", "笑声", "欢笑", "喜悦", "快活"], "correct": 0 },
+  { "word": "mesa", "options": ["台地", "高原", "平顶山", "台阶", "丘陵", "高原区", "高原地带"], "correct": 0 },
+  { "word": "metafiction", "options": ["元小说", "后设小说", "后现代小说", "自指小说", "后现代主义小说", "后现代主义文学", "元小说性质"], "correct": 0 },
+  { "word": "metaphor", "options": ["隐喻", "比喻", "暗喻", "修辞", "象征", "借喻", "修辞手法"], "correct": 0 },
+  { "word": "meteorology", "options": ["气象学", "气象", "气候学", "气象观测", "天气学", "气象条件", "气象研究"], "correct": 0 },
+  { "word": "meter", "options": ["计量器", "仪表", "计量仪器", "测量仪器", "测量器", "测距仪", "度量衡器"], "correct": 0 },
+  { "word": "migration", "options": ["迁徙", "移民", "迁移", "移动", "迁徙动物", "迁徙季节", "候鸟迁徙"], "correct": 0 },
+  { "word": "minimalism", "options": ["极简主义", "简约主义", "最简化", "极简化", "极简风格", "简约风格", "极简艺术"], "correct": 0 },
+  { "word": "modification", "options": ["修改", "改变", "修正", "变更", "更改", "调整", "变动"], "correct": 0 },
+  { "word": "modulation", "options": ["调制", "调节", "调整", "变调", "变化", "改变", "调音"], "correct": 0 },
+  { "word": "molecule", "options": ["分子", "分子结构", "化学分子", "微粒", "原子", "分子级", "基本微粒"], "correct": 0 },
+  { "word": "momentuous", "options": ["重要的", "重大的", "关键的", "重要性", "重大事件", "重要时刻", "紧要的"], "correct": 0 },
+  { "word": "monarchy", "options": ["君主制", "王权", "帝制", "王权政治", "帝国", "帝王统治", "皇权"], "correct": 0 },
+  { "word": "monatomic", "options": ["单原子", "单原子分子", "单一原子", "单元素", "单质", "单体", "单一分子"], "correct": 0 },
+  { "word": "monomer", "options": ["单体", "单体分子", "单元", "单体化合物", "单聚体", "单元组成", "单体单元"], "correct": 0 },
+  { "word": "monotheism", "options": ["一神论", "唯一神论", "单一神论", "一神教", "独一神论", "单一神信仰", "单一神教义"], "correct": 0 },
+  { "word": "mosaic", "options": ["马赛克", "镶嵌画", "镶嵌", "马赛克图案", "镶嵌艺术", "拼贴", "拼花"], "correct": 0 },
+  { "word": "motif", "options": ["主题", "主旨", "图案", "元素", "题材", "设计", "纹样"], "correct": 0 },
+  { "word": "multiplication", "options": ["乘法", "增加", "繁殖", "翻倍", "翻倍增加", "增值", "增多"], "correct": 0 },
+
+
+
+  { "word": "mumble", "options": ["含糊", "咕哝", "嘟囔", "嘟囔地说", "嘟哝", "咕噜咕噜", "咕隆咕隆"], "correct": 1 },
+  { "word": "mutation", "options": ["突变", "变异", "基因突变", "遗传变异", "基因变异", "基因突发", "基因突变体"], "correct": 0 },
+  { "word": "mutiny", "options": ["叛变", "反叛", "暴动", "兵变", "叛乱", "反抗", "造反"], "correct": 0 },
+  { "word": "mutualism", "options": ["互利共生", "互惠共生", "共生关系", "互惠关系", "共存", "互利关系", "互惠互利"], "correct": 0 },
+  { "word": "nationalism", "options": ["民族主义", "民族情绪", "爱国主义", "国家主义", "爱国心", "爱国情怀", "爱国情绪"], "correct": 0 },
+  { "word": "natter", "options": ["唠叨", "闲聊", "废话", "絮叨", "瞎扯", "瞎说", "碎碎念"], "correct": 0 },
+  { "word": "navigate", "options": ["导航", "航行", "航海", "航空", "航向", "航行器", "航行方向"], "correct": 0 },
+  { "word": "nebulous", "options": ["朦胧", "模糊", "云状", "朦胧的", "云雾", "云状的", "朦胧状态"], "correct": 0 },
+  { "word": "negotiate", "options": ["谈判", "协商", "洽谈", "商议", "磋商", "交涉", "商讨"], "correct": 0 },
+  { "word": "nettle", "options": ["荨麻", "激怒", "惹恼", "惹火", "惹怒", "激怒的", "激愤"], "correct": 0 },
+  { "word": "neuron", "options": ["神经元", "神经细胞", "脑神经元", "神经系统", "神经细胞体", "神经元群", "脑神经细胞"], "correct": 0 },
+  { "word": "neuroscience", "options": ["神经科学", "脑科学", "神经学", "神经生物学", "脑功能科学", "脑神经科学", "脑神经学"], "correct": 0 },
+  { "word": "neutron", "options": ["中子", "中性子", "原子核", "原子", "质子", "核子", "粒子"], "correct": 0 },
+  { "word": "nip", "options": ["夹", "掐", "捏", "夹住", "轻夹", "轻捏", "夹紧"], "correct": 0 },
+  { "word": "nomad", "options": ["游牧民族", "游牧部落", "流浪者", "游牧生活", "游牧文化", "游牧民", "游牧方式"], "correct": 0 },
+  { "word": "nonfiction", "options": ["非虚构", "事实", "真实", "真实性", "事实故事", "实事", "非小说"], "correct": 0 },
+  { "word": "novella", "options": ["中篇小说", "短篇小说", "小说", "小说家", "文学作品", "短篇故事", "中短篇小说"], "correct": 0 },
+  { "word": "nucleolus", "options": ["核仁", "细胞核", "核内小体", "核内结构", "细胞器", "核内小核", "细胞核仁"], "correct": 0 },
+  { "word": "nymph", "options": ["仙女", "幼虫", "幼体", "水蛭", "水虫", "美少女", "仙子"], "correct": 0 },
+  { "word": "oboe", "options": ["双簧管", "管乐器", "木管乐器", "管弦乐器", "管乐", "音乐", "古典音乐"], "correct": 0 },
+  { "word": "obsolete", "options": ["过时", "废弃", "淘汰", "不再使用", "陈旧", "老旧", "老化"], "correct": 0 },
+  { "word": "obtrude", "options": ["强迫", "强加", "强行", "强制", "硬要", "强悍", "猛推"], "correct": 0 },
+  { "word": "occupation", "options": ["职业", "占领", "占据", "职业工作", "职业生涯", "占用", "职业生活"], "correct": 0 },
+  { "word": "ogle", "options": ["注视", "瞪视", "眼馋", "目光", "色眯眯", "媚眼", "饥眼"], "correct": 0 },
+  { "word": "oligarchy", "options": ["寡头政治", "寡头制", "少数统治", "少数掌权", "少数家族", "少数政治", "寡头政权"], "correct": 0 },
+  { "word": "oppress", "options": ["压迫", "压制", "镇压", "压抑", "压迫性", "残酷", "欺压"], "correct": 0 },
+  { "word": "optics", "options": ["光学", "视觉", "光学系统", "光学仪器", "光学器件", "光学装置", "光学器"], "correct": 0 },
+  { "word": "orbital", "options": ["轨道", "轨道的", "眼眶", "轨迹", "环状", "圆形", "轨迹的"], "correct": 0 },
+  { "word": "orchestra", "options": ["管弦乐团", "交响乐团", "乐团", "交响乐队", "交响音乐", "交响曲", "交响音乐会"], "correct": 0 },
+  { "word": "organelle", "options": ["细胞器", "细胞内器官", "细胞内结构", "细胞组织", "细胞微器官", "细胞小器官", "细胞脏器"], "correct": 0 },
+  { "word": "organism", "options": ["生物体", "有机体", "有机生物", "生物", "生物学", "有机体系", "微生物"], "correct": 0 },
+  { "word": "overcome", "options": ["克服", "战胜", "击败", "摆脱", "超越", "征服", "克制"], "correct": 0 },
+  { "word": "overtake", "options": ["超过", "追赶", "赶上", "抢先", "压倒", "超越", "夺去"], "correct": 0 },
+  { "word": "overture", "options": ["序曲", "开幕曲", "开场曲", "前奏曲", "序言", "序幕", "前奏"], "correct": 0 },
+  { "word": "overwhelm", "options": ["压倒", "淹没", "震撼", "势不可挡", "无法抵挡", "无法承受", "深深打动"], "correct": 0 },
+  { "word": "paleontology", "options": ["古生物学", "古生物", "化石学", "古生物研究", "古生物学家", "古生物学研究", "古生物学领域"], "correct": 0 },
+  { "word": "palpitate", "options": ["心悸", "跳动", "悸动", "抖动", "颤动", "抽动", "悸动的"], "correct": 0 },
+  { "word": "paltry", "options": ["微薄", "少量", "不足", "微不足道", "微小", "微不足道的", "不值钱"], "correct": 0 },
+  { "word": "parachuting", "options": ["跳伞", "空降", "跳伞运动", "跳伞行动", "空降行动", "伞兵", "跳伞课程"], "correct": 0 },
+  { "word": "paradigm", "options": ["范例", "典范", "模式", "典型", "模型", "样板", "标准"], "correct": 0 },
+  { "word": "paradox", "options": ["悖论", "矛盾", "似是而非", "自相矛盾", "悖论性", "悖论的", "悖论之处"], "correct": 0 },
+  { "word": "paragliding", "options": ["滑翔伞", "滑翔", "飞行伞", "空中滑翔", "伞翼飞行", "滑翔运动", "伞翼滑翔"], "correct": 0 },
+  { "word": "parasitism", "options": ["寄生", "寄生生活", "寄生现象", "寄生状态", "寄生生物", "寄生关系", "寄生虫"], "correct": 0 },
+  { "word": "parkour", "options": ["跑酷", "极限", "极限运动", "跑跳", "障碍", "跑跳运动", "跑跳表演"], "correct": 0 },
+  { "word": "parley", "options": ["会谈", "谈判", "谈和", "协商", "商谈", "交涉", "交流"], "correct": 0 },
+  { "word": "parody", "options": ["模仿", "戏仿", "滑稽模仿", "讽刺", "滑稽", "讽刺性", "搞笑"], "correct": 0 },
+  { "word": "pathogen", "options": ["病原体", "致病菌", "病原微生物", "病原生物", "致病原", "病原", "致病微生物"], "correct": 0 },
+  { "word": "patronize", "options": ["赞助", "资助", "光顾", "惠顾", "支持", "保护", "庇护"], "correct": 0 },
+  { "word": "peddle", "options": ["兜售", "叫卖", "沿街叫卖", "流动售货", "贩卖", "叫卖小贩", "挨户贩卖"], "correct": 0 },
+  { "word": "peep", "options": ["窥视", "偷窥", "瞧", "看一眼", "探视", "窥探", "偷看"], "correct": 0 },
+  { "word": "pelican", "options": ["鹈鹕", "鲣鸟", "水鸟", "鹈鹕属", "大白鹈鹕", "白鹈鹕", "白鹈"], "correct": 0 },
+  { "word": "peninsula", "options": ["半岛", "半岛地区", "半岛状", "半岛地带", "半岛状态", "半岛性", "半岛性质"], "correct": 0 },
+  { "word": "pensive", "options": ["沉思", "忧思", "苦思", "默想", "寻思", "忧郁", "深思"], "correct": 0 },
+  { "word": "pentathlon", "options": ["五项全能", "五项比赛", "五项", "五项运动", "五项赛事", "五项竞赛", "五项项目"], "correct": 0 },
+  { "word": "peptide", "options": ["肽", "多肽", "蛋白质", "肽链", "胜肽", "蛋白", "多肽链"], "correct": 0 },
+  { "word": "perimeter", "options": ["周长", "边缘", "周界", "边长", "周围", "外围", "四周"], "correct": 0 },
+  { "word": "periodicity", "options": ["周期性", "定期性", "定期", "循环性", "周期", "定时性", "定时"], "correct": 0 },
+  { "word": "persecution", "options": ["迫害", "残酷对待", "残害", "压迫", "迫害行为", "残忍对待", "逼迫"], "correct": 0 },
+  { "word": "persevere", "options": ["坚持", "毅力", "执着", "不懈", "恒心", "持之以恒", "不屈不挠"], "correct": 0 },
+  { "word": "perspective", "options": ["视角", "透视", "观点", "看法", "角度", "眼光", "看问题"], "correct": 0 },
+  { "word": "petulant", "options": ["脾气坏", "易怒", "暴躁", "发脾气", "脾气不好", "性情暴躁", "脾气暴躁"], "correct": 0 },
+  { "word": "phantom", "options": ["幻影", "幽灵", "幽影", "幽灵船", "幻影般", "虚影", "鬼影"], "correct": 0 },
+  { "word": "phenotype", "options": ["表型", "表现型", "表观型", "现象", "表现", "显型", "表观性状"], "correct": 0 },
+  { "word": "physiology", "options": ["生理学", "生理", "生理功能", "生理特性", "生理过程", "生物功能", "体液学"], "correct": 0 },
+  { "word": "piano", "options": ["钢琴", "钢琴曲", "琴键", "钢琴家", "钢琴演奏", "键盘乐器", "弹钢琴"], "correct": 0 },
+  { "word": "pilgrimage", "options": ["朝圣", "朝觐", "朝拜", "进香", "朝圣者", "朝圣地", "圣地之旅"], "correct": 0 },
+  { "word": "pinnacle", "options": ["顶峰", "顶点", "顶尖", "巅峰", "极点", "极高点", "最高点"], "correct": 0 },
+  { "word": "pious", "options": ["虔诚", "虔敬", "信仰", "信神", "敬神", "信佛", "信奉"], "correct": 0 },
+  { "word": "polymer", "options": ["聚合物", "聚合", "高分子", "聚合物质", "聚合反应", "高分子化合物", "高分子材料"], "correct": 0 },
+  { "word": "polymerization", "options": ["聚合", "聚合反应", "聚合作用", "聚合过程", "聚合物化", "聚合反应过程", "聚合化学反应"], "correct": 0 },
+  { "word": "polynomial", "options": ["多项式", "代数式", "多项式函数", "代数方程式", "多次方程", "高次方程", "代数多项式"], "correct": 0 },
+  { "word": "polytheism", "options": ["多神论", "多神教", "信奉多神", "多神信仰", "信仰多神", "崇拜多神", "多神教义"], "correct": 0 },
+  { "word": "portrait", "options": ["肖像", "画像", "肖像画", "人像", "画家", "画", "人物画"], "correct": 0 },
+  { "word": "pottery", "options": ["陶器", "陶瓷", "陶艺", "陶瓷器", "陶瓷制品", "陶瓷工艺", "陶土"], "correct": 0 },
+  { "word": "pragmatic", "options": ["务实", "实用主义", "实际", "实干", "实用", "务实主义", "实事求是"], "correct": 0 },
+  { "word": "prioritize", "options": ["优先考虑", "优先", "重点考虑", "优先级", "优先处理", "首先", "优先级别"], "correct": 0 },
+  { "word": "pristine", "options": ["原始", "古老", "原始状态", "原始的", "原始森林", "古朴", "古代的"], "correct": 0 },
+  { "word": "profound", "options": ["深刻", "深远", "深邃", "高深", "博大", "微妙", "深奥"], "correct": 0 },
+  { "word": "prolific", "options": ["多产", "丰富", "富饶", "多产的", "生产力", "丰收", "多结果的"], "correct": 0 },
+  { "word": "prophet", "options": ["先知", "预言家", "预言", "先知先觉", "先知先觉者", "先知者", "预言者"], "correct": 0 },
+  { "word": "proportion", "options": ["比例", "比率", "占比", "比例关系", "比重", "占比率", "比例尺"], "correct": 0 },
+  { "word": "proscribe", "options": ["禁止", "取缔", "禁忌", "废除", "剥夺", "放逐", "禁令"], "correct": 0 },
+  { "word": "prose", "options": ["散文", "文学", "诗歌", "诗", "文学作品", "文章", "文学作品中的散文"], "correct": 0 },
+  { "word": "prosperous", "options": ["繁荣", "兴旺", "昌盛", "富裕", "兴盛", "繁荣富强", "繁盛"], "correct": 0 },
+  { "word": "protagonist", "options": ["主角", "主人公", "中心人物", "领主", "核心人物", "主导人物", "主角之一"], "correct": 0 },
+  { "word": "protein", "options": ["蛋白质", "蛋白", "蛋白质分子", "蛋白质结构", "蛋白质含量", "氨基酸", "大分子"], "correct": 0 },
+  { "word": "protist", "options": ["原生生物", "原生动物", "原生质", "原生植物", "原生生物类", "原生生物界", "原生动植物"], "correct": 0 },
+  { "word": "proton", "options": ["质子", "原子核", "正电子", "核子", "正电荷", "粒子", "质子数"], "correct": 0 },
+  { "word": "prudent", "options": ["谨慎", "慎重", "审慎", "明智", "小心", "谨慎的", "聪明"], "correct": 0 },
+  { "word": "prune", "options": ["修剪", "修枝", "剪枝", "修剪树木", "修理", "修整", "整修"], "correct": 0 },
+  { "word": "puberty", "options": ["青春期", "发育期", "性成熟期", "青春", "发育阶段", "青春发育期", "青春发育阶段"], "correct": 0 },
+  { "word": "puncture", "options": ["刺穿", "穿刺", "戳破", "刺破", "扎穿", "针刺", "贯穿"], "correct": 0 },
+
+
+
+       { "word": "quadrant", "options": ["部分", "区域", "地区", "四分之一", "象限", "分区", "方块"], "correct": 4 },
+  { "word": "quadratic", "options": ["二次的", "平方的", "二次方程", "二次函数", "平方根", "平方", "二次项"], "correct": 3 },
+  { "word": "quaint", "options": ["古雅的", "别致的", "古怪的", "迷人的", "奇特的", "怪诞的", "怪异的"], "correct": 1 },
+  { "word": "qualm", "options": ["疑虑", "不安", "担忧", "恐惧", "犹豫", "顾虑", "忧虑"], "correct": 5 },
+  { "word": "quandary", "options": ["困境", "进退两难", "左右为难", "两难", "为难", "难题", "困扰"], "correct": 5 },
+  { "word": "quantum", "options": ["量子", "量", "分子", "微粒", "量级", "单位", "数额"], "correct": 0 },
+  { "word": "quarantine", "options": ["隔离", "检疫", "封锁", "隔离期", "禁闭", "隔离状态", "隔离所"], "correct": 0 },
+  { "word": "quartet", "options": ["四重奏", "四人组", "四重唱", "四人乐团", "四重", "四个人", "四方"], "correct": 0 },
+  { "word": "quibble", "options": ["吹毛求疵", "争辩", "辩论", "找茬", "找理由", "扯皮", "讨价还价"], "correct": 0 },
+  { "word": "quintet", "options": ["五重奏", "五人组", "五重唱", "五人乐团", "五方", "五重", "五个人"], "correct": 0 },
+  { "word": "quixotic", "options": ["不切实际", "空想的", "异想天开", "痴心妄想", "乌托邦的", "妄想的", "理想化的"], "correct": 0 },
+  { "word": "quotient", "options": ["商数", "比值", "结果", "商", "比率", "除数", "分数"], "correct": 0 },
+  { "word": "radiant", "options": ["辐射", "发光", "光芒", "明亮", "光辉", "照耀", "灿烂"], "correct": 0 },
+  { "word": "radioactive", "options": ["放射性", "放射", "辐射", "放射物质", "放射状", "放射性物质", "放射线"], "correct": 0 },
+  { "word": "rankle", "options": ["恼火", "激怒", "怨恨", "生气", "激愤", "愤怒", "激动"], "correct": 0 },
+  { "word": "rapture", "options": ["狂喜", "欢欣", "陶醉", "着迷", "极度愉快", "痴迷", "快乐"], "correct": 0 },
+  { "word": "ratiate", "options": ["辐射", "放射", "辐射出", "发散", "散发", "放射出", "释放"], "correct": 0 },
+  { "word": "realism", "options": ["现实主义", "现实", "写实", "实在", "现实性", "实际", "实在感"], "correct": 0 },
+  { "word": "rebuff", "options": ["拒绝", "断然拒绝", "回绝", "回绝的", "拒绝的", "拒绝接受", "拒绝者"], "correct": 0 },
+  { "word": "recant", "options": ["改变", "否认", "放弃", "撤回", "宣布放弃", "悔过", "收回"], "correct": 0 },
+  { "word": "recession", "options": ["衰退", "经济衰退", "萧条", "不景气", "经济不景气", "低迷", "经济不景气期"], "correct": 0 },
+  { "word": "recessive", "options": ["隐性", "退化", "隐形", "倒退", "不显性", "隐藏", "落后"], "correct": 0 },
+  { "word": "reciprocal", "options": ["互惠", "相互的", "互相的", "相互", "对等", "互惠的", "对等的"], "correct": 0 },
+  { "word": "reconcile", "options": ["调和", "和解", "协调", "调解", "解决", "融合", "调和一致"], "correct": 0 },
+  { "word": "redeption", "options": ["赎回", "救赎", "赎回权", "挽回", "收回", "挽救", "赎回权利"], "correct": 0 },
+  { "word": "redox", "options": ["氧化还原", "氧化-还原", "氧化还原反应", "氧化", "还原", "氧化还原反应的", "氧化反应"], "correct": 0 },
+  { "word": "reel", "options": ["卷轴", "卷筒", "卷", "卷起", "卷曲", "绕", "绕回"], "correct": 0 },
+  { "word": "refrain", "options": ["节制", "克制", "制止", "忍住", "抑制", "阻止", "制止自己"], "correct": 0 },
+  { "word": "refute", "options": ["驳斥", "反驳", "辩驳", "否定", "驳倒", "推翻", "反驳的"], "correct": 0 },
+  { "word": "refute", "options": ["驳斥", "反驳", "辩驳", "否定", "驳倒", "推翻", "反驳的"], "correct": 0 },
+  { "word": "reggae", "options": ["雷鬼", "雷鬼音乐", "雷鬼乐曲", "雷鬼风格", "雷鬼舞曲", "雷鬼风", "雷鬼文化"], "correct": 0 },
+  { "word": "reggaeton", "options": ["雷鬼音乐", "雷鬼", "雷鬼风格", "雷鬼舞曲", "雷鬼歌曲", "流行音乐", "拉丁音乐"], "correct": 1 },
+  { "word": "reiterate", "options": ["重申", "反复", "重复", "再次强调", "再三", "再说一遍", "再说一次"], "correct": 0 },
+  { "word": "rejoice", "options": ["高兴", "欢喜", "喜悦", "快乐", "庆祝", "欣喜", "幸福"], "correct": 0 },
+  { "word": "remediate", "options": ["补救", "纠正", "矫正", "治疗", "修复", "修补", "治疗方法"], "correct": 0 },
+  { "word": "remix", "options": ["混音", "重新混音", "改编", "重新编排", "再次混合", "重制", "重编"], "correct": 0 },
+  { "word": "remonstrate", "options": ["抗议", "反对", "理论", "争辩", "反驳", "质疑", "谴责"], "correct": 0 },
+  { "word": "renaissance", "options": ["文艺复兴", "复兴", "新生", "复活", "复苏", "重生", "再生"], "correct": 0 },
+  { "word": "render", "options": ["呈现", "提供", "展现", "表现", "使成为", "使得", "使"], "correct": 0 },
+  { "word": "renegade", "options": ["叛徒", "叛变者", "背叛者", "变节者", "叛教者", "逃兵", "叛国者"], "correct": 0 },
+  { "word": "renounce", "options": ["放弃", "宣布放弃", "拒绝", "否认", "断绝关系", "放弃权利", "弃权"], "correct": 0 },
+  { "word": "repeal", "options": ["废除", "取消", "撤销", "废止", "废除法律", "废除条款", "废除权利"], "correct": 0 },
+  { "word": "replicate", "options": ["复制", "重复", "复刻", "翻版", "仿制", "模仿", "模拟"], "correct": 0 },
+  { "word": "reproduction", "options": ["繁殖", "生殖", "复制", "再现", "繁衍", "再生产", "复制品"], "correct": 0 },
+  { "word": "reptile", "options": ["爬行动物", "爬行类动物", "爬虫", "爬行类", "爬行", "爬虫动物", "蛇类"], "correct": 0 },
+  { "word": "repudiate", "options": ["拒绝", "否认", "否定", "抛弃", "放弃", "不承认", "否认的"], "correct": 0 },
+  { "word": "resilient", "options": ["有弹性", "弹性", "坚韧", "适应性强", "有韧性", "韧性", "强韧"], "correct": 0 },
+  { "word": "resolute", "options": ["坚定", "坚决", "果断", "坚定的", "坚决的", "坚定不移", "坚决不移"], "correct": 0 },
+  { "word": "resolution", "options": ["决心", "决议", "解决", "分辨率", "解决方案", "决定", "解析度"], "correct": 0 },
+  { "word": "resonance", "options": ["共鸣", "共振", "回响", "共振频率", "谐振", "共振现象", "共鸣频率"], "correct": 0 },
+  { "word": "respiration", "options": ["呼吸", "呼吸作用", "气体交换", "呼吸过程", "呼吸运动", "植物呼吸", "动物呼吸"], "correct": 0 },
+  { "word": "revere", "options": ["尊敬", "崇敬", "敬畏", "尊重", "崇拜", "仰慕", "敬重"], "correct": 0 },
+  { "word": "reverence", "options": ["尊敬", "崇敬", "敬畏", "尊重", "崇拜", "仰慕", "敬重"], "correct": 0 },
+  { "word": "reverie", "options": ["幻想", "白日梦", "空想", "梦幻", "幻梦", "沉思", "遐想"], "correct": 0 },
+  { "word": "rhapsody", "options": ["狂想曲", "赞美诗", "赞歌", "赞美", "激情", "颂歌", "热情洋溢"], "correct": 0 },
+  { "word": "rhyme", "options": ["押韵", "韵脚", "押韵的", "韵律", "诗歌", "韵文", "韵诗"], "correct": 0 },
+  { "word": "riff", "options": ["即兴", "引子", "主题", "旋律", "段落", "段", "主旋律"], "correct": 0 },
+  { "word": "rococo", "options": ["洛可可", "洛可可风格", "洛可可艺术", "洛可可时期", "洛可可装饰", "洛可可式", "洛可可艺术风格"], "correct": 0 },
+  { "word": "rodeo", "options": ["竞技表演", "牛仔", "牛仔表演", "牛仔竞技", "西部牛仔", "牛仔赛", "牛仔竞技表演"], "correct": 0 },
+  { "word": "sabbath", "options": ["安息日", "安息日的", "星期六", "安息", "周六", "安息日礼拜", "安息日礼拜日"], "correct": 0 },
+  { "word": "salvation", "options": ["救赎", "拯救", "救世", "救助", "解救", "拯救行动", "救济"], "correct": 0 },
+  { "word": "samsara", "options": ["轮回", "生死轮回", "生死循环", "转世", "轮回说", "转生", "转世说"], "correct": 0 },
+  { "word": "sardine", "options": ["沙丁鱼", "小鱼", "鱼罐头", "罐头", "小沙丁鱼", "鱼", "鱼类"], "correct": 0 },
+  { "word": "sardonic", "options": ["讽刺", "嘲笑", "嘲讽", "讥讽", "讽刺的", "挖苦", "讽笑"], "correct": 0 },
+  { "word": "satire", "options": ["讽刺", "讽刺文学", "讽刺作品", "讽刺性", "讽刺画", "讥讽", "讥刺"], "correct": 0 },
+  { "word": "savanna", "options": ["热带草原", "大草原", "非洲草原", "草原", "非洲大草原", "热带草地", "草地"], "correct": 0 },
+  { "word": "scheme", "options": ["计划", "方案", "策略", "阴谋", "计谋", "体系", "计划的"], "correct": 0 },
+  { "word": "scone", "options": ["烤饼", "司康", "甜饼", "糕点", "蛋糕", "烘饼", "英式糕点"], "correct": 0 },
+  { "word": "seethe", "options": ["沸腾", "激动", "愤怒", "翻滚", "激烈", "煮沸", "愤慨"], "correct": 0 },
+  { "word": "segregation", "options": ["种族隔离", "隔离", "分离", "分裂", "隔离政策", "隔离主义", "歧视"], "correct": 0 },
+  { "word": "seismology", "options": ["地震学", "地震", "震动", "地震活动", "地震研究", "震动学", "地震研究所"], "correct": 0 },
+  { "word": "serenade", "options": ["小夜曲", "献歌", "赠歌", "赞美诗", "唱歌", "赠送歌曲", "嘲讽歌曲"], "correct": 0 },
+  { "word": "serene", "options": ["宁静", "平静", "安详", "祥和", "清澈", "安宁", "清净"], "correct": 0 },
+  { "word": "shackle", "options": ["枷锁", "束缚", "脚镣", "铁链", "限制", "镣铐", "束手无策"], "correct": 0 },
+  { "word": "siege", "options": ["围攻", "包围", "攻城", "攻打", "攻坚", "围困", "包围战"], "correct": 0 },
+  { "word": "simile", "options": ["明喻", "比喻", "隐喻", "象征", "暗喻", "类比", "比拟"], "correct": 0 },
+  { "word": "simulate", "options": ["模拟", "仿真", "模仿", "模拟器", "虚拟", "模拟仿真", "模拟的"], "correct": 0 },
+  { "word": "sitar", "options": ["西塔琴", "锡塔琴", "印度琴", "印度乐器", "印度古琴", "印度", "古琴"], "correct": 0 },
+  { "word": "sketch", "options": ["素描", "草图", "素描画", "速写", "轮廓", "速写画", "草图的"], "correct": 0 },
+  { "word": "slacklining", "options": ["走slackline", "走钢丝", "松弛索", "走高空索道", "走松弛索", "高空索道", "高空走索"], "correct": 0 },
+  { "word": "slavery", "options": ["奴隶制", "奴役", "奴隶社会", "奴隶主", "奴隶制度", "奴隶生活", "奴隶主义"], "correct": 0 },
+  { "word": "snaredrum", "options": ["军鼓", "敲击", "鼓", "架子鼓", "击鼓", "敲鼓", "击鼓手"], "correct": 0 },
+  { "word": "solitude", "options": ["孤独", "寂寞", "独处", "隐居", "孤单", "幽居", "独居"], "correct": 0 },
+  { "word": "somatic", "options": ["体细胞", "体细胞的", "躯体", "体感", "身体的", "体内", "身体"], "correct": 0 },
+  { "word": "sonata", "options": ["奏鸣曲", "交响曲", "协奏曲", "小奏鸣曲", "室内乐", "序曲", "交响乐"], "correct": 0 },
+  { "word": "sonnet", "options": ["十四行诗", "诗", "抒情诗", "诗篇", "诗歌", "写诗", "写的"], "correct": 0 },
+  { "word": "soprano", "options": ["女高音", "高音", "女低音", "高音部", "高音部分", "女中音", "男高音"], "correct": 0 },
+  { "word": "spectroscopy", "options": ["光谱学", "分光学", "光谱", "光谱分析", "分光分析", "光学", "光谱仪"], "correct": 0 },
+  { "word": "squabble", "options": ["争吵", "争执", "争论", "吵架", "口角", "争执不休", "激烈争吵"], "correct": 0 },
+  { "word": "squander", "options": ["浪费", "挥霍", "花费", "耗费", "挥金如土", "败家子", "浪费的"], "correct": 0 },
+  { "word": "staccato", "options": ["断音", "断奏", "音符", "音乐", "间奏", "拍子", "乐曲"], "correct": 0 },
+  { "word": "stanza", "options": ["段落", "诗", "诗篇", "诗歌", "句子", "篇章", "诗句"], "correct": 0 },
+  { "word": "stargaze", "options": ["凝视星空", "凝视", "注视", "仰望星空", "盯着", "瞻仰", "向往"], "correct": 0 },
+  { "word": "statistics", "options": ["统计", "数据", "统计学", "数字", "统计资料", "数量", "数据统计"], "correct": 0 },
+  { "word": "steppe", "options": ["草原", "大草原", "平原", "草地", "干草原", "蒙古草原", "寒冷草原"], "correct": 0 },
+  { "word": "stereochemistry", "options": ["立体化学", "立体", "化学", "化学反应", "化学结构", "有机化学", "物理化学"], "correct": 0 },
+  { "word": "stifle", "options": ["抑制", "压制", "扼杀", "阻止", "捂住", "扼制", "控制"], "correct": 0 },
+  { "word": "stimulate", "options": ["刺激", "激励", "促进", "激发", "激活", "激发生长", "激发兴趣"], "correct": 0 },
+  { "word": "stipulate", "options": ["规定", "约定", "规定的", "规定要求", "规定为", "规定时间", "规定条件"], "correct": 0 },
+  { "word": "stitch", "options": ["缝", "针线", "缝合", "针脚", "缝纫", "绣", "缝补"], "correct": 0 },
+  { "word": "strategize", "options": ["制定策略", "策略", "制定战略", "制订策略", "设计策略", "制订计划", "规划策略"], "correct": 0 },
+  { "word": "sublimation", "options": ["升华", "昇华", "升华过程", "升华作用", "升华现象", "升华点", "昇華"], "correct": 0 },
+  { "word": "submarine", "options": ["潜水艇", "潜艇", "海底", "水面下", "海底沉积", "水下", "海底地形"], "correct": 0 },
+  { "word": "subset", "options": ["子集", "部分", "子集合", "集合", "子", "分支", "分类"], "correct": 0 },
+  { "word": "subtraction", "options": ["减法", "减去", "减少", "减", "剪掉", "减法运算", "减法的"], "correct": 0 },
+  { "word": "suffrage", "options": ["选举权", "投票权", "选举", "表决权", "参政权", "政治权利", "投票"], "correct": 0 },
+  { "word": "supplant", "options": ["取代", "替代", "代替", "取而代之", "代之以", "取代者", "替代品"], "correct": 0 },
+  { "word": "surge", "options": ["激增", "增长", "激增", "激增", "急剧上升", "波涛", "激增的"], "correct": 0 },
+  { "word": "surrealism", "options": ["超现实主义", "超现实", "梦幻", "梦幻般", "超现实主义者", "梦境", "超现实画派"], "correct": 0 },
+  { "word": "symbiosis", "options": ["共生", "共生关系", "共栖", "共生生物", "共生现象", "共生状态", "共生共存"], "correct": 0 },
+  { "word": "syntax", "options": ["句法", "语法", "句子", "语句", "句型", "句子结构", "句法规则"], "correct": 0 },
+  { "word": "synthesizer", "options": ["合成器", "合成音乐", "合成声音", "合成乐器", "合成的", "合成音频", "合成物"], "correct": 0 },
+
+
+
+    { "word": "tacos", "options": ["塔科斯", "玉米饼", "墨西哥卷饼", "辣酱", "玉米片", "奶酪薯片", "莎莎酱"], "correct": 0 },
+    { "word": "taiga", "options": ["泰加", "冻土地带", "热带雨林", "草原", "森林", "沙漠", "丛林"], "correct": 0 },
+    { "word": "taint", "options": ["玷污", "污点", "瑕疵", "污染", "亵渎", "污秽", "净化"], "correct": 0 },
+    { "word": "tambourine", "options": ["铃鼓", "鼓", "吉他", "小号", "钢琴", "小提琴", "长笛"], "correct": 0 },
+    { "word": "tantalize", "options": ["逗弄", "诱惑", "引诱", "吸引", "勾引", "诱奸", "排斥"], "correct": 0 },
+    { "word": "techno", "options": ["技术", "摇滚", "流行", "爵士", "蓝调", "古典", "嘻哈"], "correct": 0 },
+    { "word": "tenderness", "options": ["温柔", "善良", "温和", "深情", "同情", "爱", "残忍"], "correct": 0 },
+    { "word": "tension", "options": ["紧张", "张力", "电压", "拉力", "紧张感", "压力", "紧迫感"], "correct": 0 },
+    { "word": "tenuous", "options": ["脆弱", "微弱", "不牢靠", "稀薄", "稀释", "薄弱", "脆弱的"], "correct": 0 },
+    { "word": "terrace", "options": ["露台", "平台", "阳台", "台阶", "梯田", "平地", "阶地"], "correct": 0 },
+    { "word": "texture", "options": ["质地", "纹理", "肌理", "构造", "结构", "材质", "感觉"], "correct": 0 },
+    { "word": "thiol", "options": ["硫醇", "硫代醇", "硫化物", "硫酸", "硫磺", "硫化氢", "硫化钠"], "correct": 0 },
+    { "word": "throttle", "options": ["节流阀", "油门", "扼杀", "限制", "抑制", "控制", "压制"], "correct": 0 },
+    { "word": "tissue", "options": ["组织", "纸巾", "织物", "纤维", "面部组织", "鼻涕纸", "纸张"], "correct": 0 },
+    { "word": "titration", "options": ["滴定", "滴定法", "滴定管", "滴定计", "滴定试剂", "滴定液", "滴定定量"], "correct": 0 },
+    { "word": "topography", "options": ["地形", "地势", "地形学", "地形图", "地貌", "地面", "地形测量"], "correct": 0 },
+    { "word": "torrid", "options": ["酷热", "激情", "炽热", "热带", "炎热", "灼热", "酷烈"], "correct": 0 },
+    { "word": "trance", "options": ["恍惚", "出神", "发呆", "入定", "催眠", "昏睡", "昏迷"], "correct": 0 },
+    { "word": "tranquil", "options": ["宁静", "平静", "安静", "安宁", "平和", "祥和", "静谧"], "correct": 0 },
+    { "word": "tranquility", "options": ["宁静", "平静", "安静", "安宁", "平和", "祥和", "静谧"], "correct": 0 },
+    { "word": "transparent", "options": ["透明", "透明的", "清晰", "明了", "透彻", "透亮", "明亮"], "correct": 0 },
+    { "word": "transposition", "options": ["转位", "置换", "变换", "换位", "转换", "调位", "迁位"], "correct": 0 },
+    { "word": "treaty", "options": ["条约", "合约", "协议", "公约", "契约", "协定", "和约"], "correct": 0 },
+    { "word": "tremendous", "options": ["巨大", "惊人", "极大", "巨大的", "庞大", "惊人的", "可观"], "correct": 0 },
+    { "word": "triathlon", "options": ["铁人三项", "三项全能", "三项赛", "马拉松", "自行车", "游泳", "跑步"], "correct": 0 },
+    { "word": "trigonometry", "options": ["三角", "三角学", "三角函数", "三角形", "三角关系", "三角恒等式", "三角形状"], "correct": 0 },
+    { "word": "trio", "options": ["三重奏", "三人组", "三位一体", "三部曲", "三合一", "三件套", "三人行"], "correct": 0 },
+    { "word": "triumph", "options": ["胜利", "成功", "凯旋", "胜利者", "战胜", "得胜", "克服"], "correct": 0 },
+    { "word": "trombone", "options": ["长号", "小号", "吉他", "鼓", "钢琴", "小提琴", "长笛"], "correct": 0 },
+    { "word": "tuba", "options": ["大号", "小号", "吉他", "鼓", "钢琴", "小提琴", "长笛"], "correct": 0 },
+    { "word": "tundra", "options": ["冻土地带", "冰川", "草原", "森林", "沙漠", "丛林", "沼泽"], "correct": 0 },
+    { "word": "tweak", "options": ["扭曲", "微调", "调整", "改进", "修正", "改动", "纠缠"], "correct": 0 },
+    { "word": "twit", "options": ["傻瓜", "白痴", "笨蛋", "蠢货", "混蛋", "愚蠢", "嘲笑"], "correct": 0 },
+    { "word": "undermine", "options": ["破坏", "破坏力", "削弱", "损害", "破坏性", "腐蚀", "危害"], "correct": 0 },
+    { "word": "understatement", "options": ["轻描淡写", "低调", "轻描淡写地说", "掩盖", "夸大", "低调的说", "轻描淡写地表现"], "correct": 0 },
+    { "word": "undetermined", "options": ["未确定的", "不确定", "未决定", "未定", "不明确", "未解决", "无法确定"], "correct": 0 },
+    { "word": "urbanization", "options": ["城市化", "都市化", "城镇化", "城市化进程", "市区化", "城市化程度", "城市规划"], "correct": 0 },
+    { "word": "urge", "options": ["冲动", "激励", "推动", "驱使", "敦促", "迫使", "促使"], "correct": 0 },
+    { "word": "utopia", "options": ["乌托邦", "理想国", "理想", "乌托邦式", "完美世界", "乌托邦主义", "空想社会"], "correct": 0 },
+    { "word": "vacillate", "options": ["摇摆", "犹豫", "动摇", "摇晃", "变化", "踌躇", "挣扎"], "correct": 0 },
+    { "word": "valiant", "options": ["英勇", "勇敢", "勇猛", "英勇的", "无畏", "坚韧", "勇士"], "correct": 0 },
+    { "word": "validate", "options": ["验证", "确认", "证实", "批准", "使有效", "鉴定", "认证"], "correct": 0 },
+    { "word": "vanquish", "options": ["征服", "击败", "战胜", "打败", "克服", "击溃", "夺取"], "correct": 0 },
+    { "word": "vector", "options": ["矢量", "向量", "载体", "病媒", "指示", "方向", "携带"], "correct": 0 },
+    { "word": "venerate", "options": ["尊敬", "崇敬", "敬畏", "崇拜", "崇奉", "礼敬", "敬重"], "correct": 0 },
+    { "word": "venture", "options": ["冒险", "投资", "风险", "企业", "冒险活动", "冒险者", "敢于"], "correct": 0 },
+    { "word": "verbose", "options": ["啰嗦", "冗长", "罗嗦", "累赘", "冗赘", "啰唆", "冗长的"], "correct": 0 },
+    { "word": "verse", "options": ["诗歌", "诗句", "诗", "歌词", "经文", "圣经", "诗篇"], "correct": 0 },
+    { "word": "vertebrate", "options": ["脊椎动物", "脊椎", "脊柱", "脊髓", "脊椎动物的", "脊椎动物学", "脊神经"], "correct": 0 },
+    { "word": "vexation", "options": ["烦恼", "恼怒", "苦恼", "生气", "困扰", "愤怒", "痛苦"], "correct": 0 },
+    { "word": "viable", "options": ["可行", "生存", "可行性", "有效", "存活", "可持续", "生存能力"], "correct": 0 },
+    { "word": "vibrant", "options": ["充满活力", "生机勃勃", "活力", "充满活力的", "振动", "强烈", "光彩夺目"], "correct": 0 },
+    { "word": "vicarious", "options": ["代理", "间接", "替代", "间接经验", "非亲身", "代表", "代为"], "correct": 0 },
+    { "word": "vigorous", "options": ["有力", "强劲", "精力充沛", "有力量的", "充满活力", "积极", "繁荣"], "correct": 0 },
+    { "word": "viola", "options": ["中提琴", "小提琴", "吉他", "鼓", "钢琴", "长号", "长笛"], "correct": 0 },
+    { "word": "visceral", "options": ["内脏", "内心", "本能", "直觉", "本能的", "内脏的", "肉体"], "correct": 0 },
+    { "word": "viscous", "options": ["粘稠", "黏性", "黏稠", "粘度", "稠密", "粘性", "黏性的"], "correct": 0 },
+    { "word": "vitiate", "options": ["损害", "破坏", "削弱", "败坏", "影响", "破坏性", "破坏力"], "correct": 0 },
+    { "word": "viva", "options": ["维娃", "欢呼", "呼唤", "万岁", "长存", "活着", "存活"], "correct": 0 },
+    { "word": "vivacious", "options": ["活泼", "快活", "活跃", "有生气", "活泼的", "欢快", "开朗"], "correct": 0 },
+    { "word": "voracious", "options": ["贪婪", "狼吞虎咽", "饥不择食", "贪吃", "贪得无厌", "食欲旺盛", "狼吞虎咽的"], "correct": 0 },
+    { "word": "vow", "options": ["誓言", "发誓", "许愿", "誓约", "许诺", "承诺", "发誓要"], "correct": 0 },
+    { "word": "wag", "options": ["摇摆", "摇尾巴", "挥动", "动摇", "晃动", "挥舞", "开玩笑"], "correct": 0 },
+    { "word": "wallow", "options": ["沉湎", "打滚", "滚", "沉浸", "堕落", "腐化", "自怜"], "correct": 0 },
+    { "word": "wane", "options": ["衰退", "减少", "减弱", "消退", "萎缩", "落幕", "变少"], "correct": 0 },
+    { "word": "wary", "options": ["谨慎", "小心", "警惕", "慎重", "戒备", "警觉", "警戒"], "correct": 0 },
+    { "word": "wayfarer", "options": ["旅人", "行人", "远行者", "游人", "旅游者", "游客", "路人"], "correct": 0 },
+    { "word": "whirl", "options": ["旋转", "转动", "旋风", "急转", "回旋", "纷乱", "快速旋转"], "correct": 0 },
+    { "word": "wistful", "options": ["忧伤", "渴望", "怀念", "哀伤", "惆怅", "忧郁", "感伤"], "correct": 0 },
+    { "word": "wither", "options": ["枯萎", "凋谢", "枯竭", "消逝", "干枯", "消失", "衰败"], "correct": 0 },
+    { "word": "wrecking", "options": ["拆除", "毁坏", "破坏", "破坏行为", "破坏性", "毁灭", "摧毁"], "correct": 0 },
+    { "word": "writ", "options": ["令状", "法令", "法令书", "命令", "文书", "法院令状", "裁决书"], "correct": 0 },
+    { "word": "wry", "options": ["讽刺", "扭曲", "歪曲", "挖苦", "讥讽", "嘲笑", "冷嘲热讽"], "correct": 0 },
+    { "word": "xenon", "options": ["氙气", "氪气", "氡气", "氖气", "氦气", "氢气", "氮气"], "correct": 0 },
+    { "word": "xylophone", "options": ["木琴", "钢琴", "吉他", "鼓", "小号", "小提琴", "长笛"], "correct": 0 },
+    { "word": "zeal", "options": ["热情", "热忱", "热心", "热衷", "激情", "热烈", "热情的"], "correct": 0 },
+    { "word": "zealous", "options": ["热情", "热心", "热忱", "热衷", "积极", "狂热", "满腔热情"], "correct": 0 },
+    { "word": "zenith", "options": ["顶点", "最高点", "巅峰", "顶峰", "鼎盛时期", "极点", "最高峰"], "correct": 0 },
+    { "word": "zephyr", "options": ["和风", "微风", "凉风", "和煦的风", "柔风", "清风", "轻风"], "correct": 0 },
+    { "word": "zodiac", "options": ["黄道十二宫", "占星术", "星座", "黄道", "十二宫", "宫", "黄道带"], "correct": 0 },
+    { "word": "zoology", "options": ["动物学", "动物", "生物学", "昆虫学", "动植物", "植物学", "动物界"], "correct": 0 },
+
+      
+     
+        // Add more expert words and options
+
+
+
+
+          //IMPORTANT WORDS - 英语词汇2-40的lhh错词!!!!!
+      ]
+      // Define medium, hard, and expert words similarly
+    };
+
+    //let currentWordIndex;
+    //let score = 0;
+    //let correctCount = 0;
+    //let totalQuestions = 0;
+    //let timer;
+    //let currentQuestionIndex = 0;
+    //let currentDifficulty = 'easy';
+    //let shuffledWords = [];
+
+    const nextBtn = document.getElementById('nextBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+    const correctDiv = document.getElementById('correct');
+    const timerDiv = document.getElementById('timer');
+    const questionNumberDiv = document.getElementById('questionNumber');
+
+    nextBtn.addEventListener('click', askQuestion);
+
+    function startGame() {
+      //score = 0;
+      //correctCount = 0;
+      score = parseInt(localStorage.getItem('score')) || 0;
+      correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
+      totalQuestions = 45;
+      resultDiv.textContent = '';
+      nextBtn.style.display = 'block';
+      currentQuestionIndex = 0;
+      currentDifficulty = 'expert';
+      shuffledWords = shuffle(words[currentDifficulty].slice());
+      askQuestion();
+    }
+
+    function checkAnswer(isCorrectOption) {
+      totalQuestions++;
+      clearTimeout(timer);
+
+      if (isCorrectOption) {
+        const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
+        score += timeLeft;
+        correctCount++;
+        correctDiv.textContent = 'Correct: ' + correctCount + "/60";
+        scoreDiv.textContent = 'Score: ' +  (score / (0.2 * totalQuestions)).toFixed(0);;
+        resultDiv.textContent = 'Correct!';
+      } else {
+        resultDiv.textContent = 'Incorrect!';
+      }
+
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.pointerEvents = 'none';
+      });
+
+      nextBtn.disabled = false;
+      currentQuestionIndex++;
+
+      if (totalQuestions === 60) {
+        resultDiv.textContent = 'Your final score is: ' + (score/1200*100).toFixed(1);
+        nextBtn.style.display = 'none';
+      }
+    }
+
+    function handleOptionClick(event) {
+      const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
+      const isCorrectOption = optionIndex === currentWordIndex;
+      checkAnswer(isCorrectOption);
+
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.cursor = 'default';
+      });
+
+      nextBtn.style.display = 'block';
+    }
+
+    function askQuestion() {
+      if (totalQuestions < 60) {
+        const questionData = shuffledWords[currentQuestionIndex];
+        currentWordIndex = questionData.correct;
+        const currentWord = questionData.word;
+        questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
+        questionDiv.textContent = currentWord;
+
+        const shuffledOptions = shuffle(questionData.options.slice());
+        currentWordIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
+
+        optionsDiv.innerHTML = '';
+        for (let i = 0; i < shuffledOptions.length; i++) {
+          const option = document.createElement('div');
+          option.className = 'option';
+          option.textContent = shuffledOptions[i];
+          option.addEventListener('click', handleOptionClick);
+          optionsDiv.appendChild(option);
+        }
+
+        resultDiv.textContent = '';
+        startTimer();
+      }
+    }
+
+    function startTimer() {
+      let timeLeft = 20;
+      timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+        if (timeLeft === 0) {
+          clearTimeout(timer);
+          checkAnswer(false); // Timeout, passing false as the answer is incorrect
+        }
+      }, 1000);
+    }
+
+    function shuffle(array) {
+      let currentIndex = array.length, temporaryValue, randomIndex;
+      while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    }
+  
+    startGame();
+  </script>
+</body>
+</html>
