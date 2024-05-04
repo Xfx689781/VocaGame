@@ -1538,9 +1538,9 @@
        if ((score / (0.2 * totalQuestions)) >= 95) {
   body.style.backgroundColor = '#00ccff';
 }  else if ((score / (0.2 * totalQuestions)) >= 90) {
-  body.style.backgroundColor = '#09e6ae';
+  body.style.backgroundColor = '#3cf5c7';
 } else if ((score / (0.2 * totalQuestions)) >= 85) {
-    body.style.backgroundColor = '#8dfd92';
+    body.style.backgroundColor = '#70fd8f';
 } else if ((score / (0.2 * totalQuestions)) >= 80) {
     body.style.backgroundColor = '#c1f504';
 } else if ((score / (0.2 * totalQuestions)) >= 75) {
@@ -1555,9 +1555,13 @@
     body.style.backgroundColor = '#F36055';
 } else if ((score / (0.2 * totalQuestions)) >= 50) {
     body.style.backgroundColor = '#F82E7B';
-} else if ((score / (0.2 * totalQuestions))>=30) {
+} else if ((score / (0.2 * totalQuestions))>=40) {
     body.style.backgroundColor = 'red';
-}else if ((score / (0.2 * totalQuestions))<30) {
+}else if ((score / (0.2 * totalQuestions))>=30) {
+    body.style.backgroundColor = '#6e0101';
+}else if ((score / (0.2 * totalQuestions))>=20) {
+    body.style.backgroundColor = '#2a0241';
+}else if ((score / (0.2 * totalQuestions))<20) {
     body.style.backgroundColor = '#000000';
 }
       nextBtn.disabled = false;
