@@ -1153,7 +1153,7 @@
 
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-        score += (timeLeft >= 17 ? 20 : (timeLeft + 1));
+        score += (timeLeft >= 17 ? 20 : (timeLeft + 3));
         correctCount++;
         resultDiv.textContent = 'Correct!';
       } else {
@@ -1170,27 +1170,29 @@
        // Set background color based on score
        let body = document.querySelector('body');
        if ((score / (0.2 * totalQuestions)) >= 95) {
-  body.style.backgroundColor = 'skyblue';
+  body.style.backgroundColor = '#00ccff';
 }  else if ((score / (0.2 * totalQuestions)) >= 90) {
-  body.style.backgroundColor = 'turquoise';
+  body.style.backgroundColor = '#09e6ae';
 } else if ((score / (0.2 * totalQuestions)) >= 85) {
-    body.style.backgroundColor = 'lime';
+    body.style.backgroundColor = '#8dfd92';
 } else if ((score / (0.2 * totalQuestions)) >= 80) {
-    body.style.backgroundColor = 'lightgreen';
+    body.style.backgroundColor = '#c1f504';
 } else if ((score / (0.2 * totalQuestions)) >= 75) {
-    body.style.backgroundColor = 'yellow';
+    body.style.backgroundColor = '#f4f748';
 }else if ((score / (0.2 * totalQuestions)) >= 70) {
-    body.style.backgroundColor = 'gold';
+    body.style.backgroundColor = '#f5c833';
 } else if ((score / (0.2 * totalQuestions)) >= 65) {
-    body.style.backgroundColor = 'orange';
-}else if ((score / (0.2 * totalQuestions)) >= 60) {
-    body.style.backgroundColor = 'pink';
-} else if ((score / (0.2 * totalQuestions)) >= 55) {
     body.style.backgroundColor = 'coral';
+}else if ((score / (0.2 * totalQuestions)) >= 60) {
+    body.style.backgroundColor = '#FF5D13';
+} else if ((score / (0.2 * totalQuestions)) >= 55) {
+    body.style.backgroundColor = '#F36055';
 } else if ((score / (0.2 * totalQuestions)) >= 50) {
-    body.style.backgroundColor = '#E75480';
-} else if ((score / (0.2 * totalQuestions))<50) {
+    body.style.backgroundColor = '#F82E7B';
+} else if ((score / (0.2 * totalQuestions))>=30) {
     body.style.backgroundColor = 'red';
+}else if ((score / (0.2 * totalQuestions))<30) {
+    body.style.backgroundColor = '#000000';
 }
       nextBtn.disabled = false;
       currentQuestionIndex++;

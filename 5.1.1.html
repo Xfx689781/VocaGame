@@ -1476,7 +1476,10 @@
   { "word": "blues", "options": ["蓝色", "悲伤", "抑郁", "前卫摇滚", "节奏布鲁斯", "迷幻摇滚", "布鲁斯"], "correct": 6 },
 ]
     };
-
+    const wordss = {
+        easy: [],
+        medium: []
+    };
     let currentWordIndex;
     let score = 0;
     let correctCount = 0;
@@ -1486,6 +1489,7 @@
     let currentDifficulty = 'easy';
     let shuffledWords = [];
     let correctOptionIndex;
+    let playerAnswers = [];
 
     const startBtn = document.getElementById('startBtn');
     const nextBtn = document.getElementById('nextBtn');
@@ -1507,6 +1511,7 @@
       resultDiv.textContent = '';
       startBtn.style.display = 'none';
       nextBtn.style.display = 'block';
+      let playerAnswers = [];
       currentQuestionIndex = 0;
       currentDifficulty = 'easy';
       shuffledWords = shuffle(words[currentDifficulty].slice());
@@ -1527,7 +1532,12 @@
       }
       correctDiv.textContent = 'Correct: ' + correctCount + "/60";
         scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
-      // Disable all options after a choice is made
+      
+        const questionData = shuffledWords[currentQuestionIndex];
+        const currentWord = questionData.word;
+        const chosenOption = shuffledOptions[optionIndex];
+        playerAnswers.push({ question: currentWord, chosenOption });
+        // Disable all options after a choice is made
       const options = document.querySelectorAll('.option');
       options.forEach(option => {
         option.removeEventListener('click', handleOptionClick);
@@ -1564,6 +1574,7 @@
       currentQuestionIndex++;
       if (totalQuestions === 30) {
         // Redirect to 3.html after question 30
+        endGame();
         nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
           backgroundColorLevel30 = document.body.style.backgroundColor;
@@ -1572,6 +1583,12 @@
           window.location.href = '4.4.1b.html';
         });
       }
+    }
+function endGame() {
+        // Print all recorded questions and answers
+        playerAnswers.forEach((answer, index) => {
+            console.log(`Question ${index + 1}: ${answer.question}, Chosen Option: ${answer.chosenOption}`);
+        });
     }
 
     function handleOptionClick(event) {
