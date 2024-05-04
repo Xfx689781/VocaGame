@@ -77,6 +77,26 @@
       font-size: 18px;
       margin-bottom: 20px;
     }
+    #nextBtn {
+        font-size: 22px;
+        background-color: transparent;
+        border: transparent;
+        margin-top: 20px;
+        display: block;
+        margin: 0 auto;
+        display: none;
+    
+    }
+
+    #startBtn {
+        background-color: rgb(145, 248, 243);
+        border: transparent;
+        margin-top: 20px;
+        display: block;
+        margin: 0 auto;
+        font-size: 22px;
+    
+    }
   </style>
 </head>
 <body>
@@ -1114,6 +1134,8 @@
     function startGame() {
       //score = 0;
       //correctCount = 0;
+      backgroundColorLevel30 = localStorage.getItem('backgroundColorLevel30');
+      document.body.style.backgroundColor = backgroundColorLevel30;
       score = parseInt(localStorage.getItem('score')) || 0;
       correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
       totalQuestions = 30;
@@ -1131,77 +1153,115 @@
 
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-        score += (timeLeft >= 17 ? 20 : (timeLeft + 3));
+        score += (timeLeft >= 17 ? 20 : (timeLeft + 1));
         correctCount++;
-        correctDiv.textContent = 'Correct: ' + correctCount + "/60";
-        scoreDiv.textContent = 'Score: ' +  (score / (0.2 * totalQuestions)).toFixed(0);;
         resultDiv.textContent = 'Correct!';
       } else {
         resultDiv.textContent = 'Incorrect!';
       }
+      correctDiv.textContent = 'Correct: ' + correctCount + "/60";
+        scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
+      // Disable all options after a choice is made
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.pointerEvents = 'none';
+      });
+       // Set background color based on score
+       let body = document.querySelector('body');
+       if ((score / (0.2 * totalQuestions)) >= 95) {
+  body.style.backgroundColor = 'skyblue';
+}  else if ((score / (0.2 * totalQuestions)) >= 90) {
+  body.style.backgroundColor = 'turquoise';
+} else if ((score / (0.2 * totalQuestions)) >= 85) {
+    body.style.backgroundColor = 'lime';
+} else if ((score / (0.2 * totalQuestions)) >= 80) {
+    body.style.backgroundColor = 'lightgreen';
+} else if ((score / (0.2 * totalQuestions)) >= 75) {
+    body.style.backgroundColor = 'yellow';
+}else if ((score / (0.2 * totalQuestions)) >= 70) {
+    body.style.backgroundColor = 'gold';
+} else if ((score / (0.2 * totalQuestions)) >= 65) {
+    body.style.backgroundColor = 'orange';
+}else if ((score / (0.2 * totalQuestions)) >= 60) {
+    body.style.backgroundColor = 'pink';
+} else if ((score / (0.2 * totalQuestions)) >= 55) {
+    body.style.backgroundColor = 'coral';
+} else if ((score / (0.2 * totalQuestions)) >= 50) {
+    body.style.backgroundColor = '#E75480';
+} else if ((score / (0.2 * totalQuestions))<50) {
+    body.style.backgroundColor = 'red';
+}
+      nextBtn.disabled = false;
+      currentQuestionIndex++;
+      if (totalQuestions === 45) {
+        // Redirect to 3.html after question 30
+        nextBtn.addEventListener('click', function() {
+        backgroundColorLevel45 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
+          localStorage.setItem('score', score);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '4.4.1c.html';
+        });
+      }
+    }
 
+    function handleOptionClick(event) {
+      const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
+      const isCorrectOption = optionIndex === correctOptionIndex;
+      checkAnswer(isCorrectOption);
+
+      // Highlight the clicked option
+      event.currentTarget.classList.add(isCorrectOption ? 'correct' : 'incorrect');
+
+      // Disable all options
       const options = document.querySelectorAll('.option');
       options.forEach(option => {
         option.removeEventListener('click', handleOptionClick);
         option.style.pointerEvents = 'none';
       });
 
-      nextBtn.disabled = false;
-      currentQuestionIndex++;
-
-      if (totalQuestions === 60) {
-        resultDiv.textContent = 'Your final score is: ' + score;
-        nextBtn.style.display = 'none';
-      }
-      if (totalQuestions === 45) {
-        // Redirect to 3.html after question 30
-        nextBtn.addEventListener('click', function() {
-          localStorage.setItem('score', score);
-localStorage.setItem('correctCount', correctCount);
-      window.location.href = '4.1.1c.html';
-    });
-      }
-    }
-
-    function handleOptionClick(event) {
-      const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
-      const isCorrectOption = optionIndex === currentWordIndex;
-      checkAnswer(isCorrectOption);
-
-      const options = document.querySelectorAll('.option');
-      options.forEach(option => {
-        option.removeEventListener('click', handleOptionClick);
-        option.style.cursor = 'default';
-      });
-
+      // Enable next button
       nextBtn.style.display = 'block';
     }
 
-    function askQuestion() {
-      if (totalQuestions < 60) {
-        const questionData = shuffledWords[currentQuestionIndex];
-        currentWordIndex = questionData.correct;
-        const currentWord = questionData.word;
-        questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
-        questionDiv.textContent = currentWord;
-
-        const shuffledOptions = shuffle(questionData.options.slice());
-        currentWordIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
-
-        optionsDiv.innerHTML = '';
-        for (let i = 0; i < shuffledOptions.length; i++) {
-          const option = document.createElement('div');
-          option.className = 'option';
-          option.textContent = shuffledOptions[i];
-          option.addEventListener('click', handleOptionClick);
-          optionsDiv.appendChild(option);
+    function getDifficulty() {
+      if (currentQuestionIndex === 15 || currentQuestionIndex === 30) {
+        if (currentQuestionIndex === 15) {
+          currentDifficulty = 'medium';
         }
-
-        resultDiv.textContent = '';
-        startTimer();
+        shuffledWords = shuffle(words[currentDifficulty].slice());
       }
     }
 
+    function askQuestion() {
+  getDifficulty();
+  if (totalQuestions < 60) {
+    const questionData = shuffledWords[currentQuestionIndex];
+    currentWordIndex = questionData.correct;
+    const currentWord = questionData.word;
+    questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
+    questionDiv.textContent = currentWord;
+
+    const shuffledOptions = shuffle(questionData.options.slice());
+    correctOptionIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
+
+    optionsDiv.innerHTML = '';
+    for (let i = 0; i < shuffledOptions.length; i++) {
+      const option = document.createElement('div');
+      option.className = 'option';
+      option.textContent = shuffledOptions[i];
+      option.addEventListener('click', handleOptionClick);
+      optionsDiv.appendChild(option);
+    }
+
+    resultDiv.textContent = '';
+    startTimer();
+  } else {
+    resultDiv.textContent = 'Your final score is: ' + score / (0.2 * 60).toFixed(0);
+    nextBtn.style.display = 'none';
+  }
+}
     function startTimer() {
       let timeLeft = 20;
       timerDiv.textContent = 'Time left: ' + timeLeft + 's';
@@ -1226,7 +1286,6 @@ localStorage.setItem('correctCount', correctCount);
       }
       return array;
     }
-  
     startGame();
   </script>
 </body>
