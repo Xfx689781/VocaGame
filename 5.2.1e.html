@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #questionNumber {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: black; /* Default color */
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      display: none;
+
+    }
+
+    #correct {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    #nextBtn {
+        font-size: 22px;
+        background-color: transparent;
+        border: transparent;
+        margin-top: 20px;
+        display: block;
+        margin: 0 auto;
+        display: none;
+    
+    }
+
+    #startBtn {
+        background-color: rgb(145, 248, 243);
+        border: transparent;
+        margin-top: 20px;
+        display: block;
+        margin: 0 auto;
+        font-size: 22px;
+    
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="questionNumber"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="correct">Correct:</div>
+    <div id="score">Score:</div>
+    <div id="timer">Time left:</div>
+    <button id="nextBtn" style="display: none;">Next</button>
+  </div>
+
+  <script>
+    const words = {
+      expert: [
+       //8个选项
+       //A
+  { word: "aberrant", options: ["不规则的", "奇怪的", "神秘的", "隐藏的", "深刻的", "异常的", "现实的", "未来的"], correct: 0 },
+  { word: "aberration", options: ["偏差", "环绕", "变形", "扭曲", "变异", "隔离", "深刻", "神秘"], correct: 0 },
+  { word: "abhorrent", options: ["可恶的", "大度的", "克制的", "虔诚的", "无理的", "有准备的", "具象的", "抽象的"], correct: 0 },
+  { word: "abnegation", options: ["否认", "放弃", "控制", "信心", "喜悦", "抛射", "喷发", "阻尼"], correct: 0 },
+  { word: "abscond", options: ["潜逃", "意识", "仪式", "控制", "流亡", "撤销", "异常", "曲线"], correct: 0 },
+  { word: "abstruse", options: ["深奥的", "抽象的", "复杂的", "阴暗的", "具象的", "熟悉的", "绝对的", "相对的"], correct: 0 },
+  { word: "accelerando", options: ["旋律加快", "加速度", "油门", "逐渐减慢", "重力加速度", "摩擦减速", "减速带", "速率变化"], correct: 0 },
+  { word: "accolade", options: ["赞美", "诽谤", "诬陷", "勋章", "奖励", "加速", "合作", "协奏"], correct: 0 },
+  { word: "acetylcholinesterase", options: ["乙酰胆碱酯酶", "轨道杂化", "乙碳正离子", "二对映异构体", "亲核取代反应", "迪尔斯-奥尔德反应", "烯醇负离子", "杂环化合物"], correct: 0 },
+  { word: "adagio", options: ["慢板", "快板", "柔板", "行板", "马头琴", "木琴", "钢片琴", "手风琴"], correct: 0 },
+  { word: "adumbrate", options: ["预示", "描绘", "遮蔽", "隐藏", "显露", "影射", "阴霾", "怀念"], correct: 0 },
+  { word: "aegis", options: ["保护", "预示", "前兆", "回应", "阴霾", "趋势", "建造", "编辑"], correct: 0 },
+  { word: "aerodynamics", options: ["空气动力学", "流体力学", "气候变化学", "热力学", "气动性", "导热性", "厄尔尼诺现象", "拉尼娜现象"], correct: 0 },
+  { word: "aerospace", options: ["航天", "航空", "大气层", "太空", "外太空", "航空航天", "小行星", "人造天体"], correct: 0 },
+  { word: "ailurophile", options: ["猫爱好者", "血浆", "合成纤维", "干细胞", "厄尔尼诺现象", "异构体", "卷积", "有机大分子"], correct: 0 },
+  { word: "ailurophobia", options: ["恐猫症", "人工纤维", "解构主义", "区块链", "老年痴呆症", "小儿麻痹症", "体内平衡", "乙醯胆碱酯酶"], correct: 0 },
+  { word: "alacrity", options: ["乐意", "敏捷", "公告", "提醒", "警告", "焦虑", "轻松", "痴迷"], correct: 0 },
+  { word: "acetaldehyde", options: ["乙醛", "乙醇", "甲醛", "甲醇", "乙酸", "甲酸", "乙醚", "甲醚"], correct: 0 },
+  { word: "alkyl", options: ["烷基", "羧基", "羰基", "羟基", "甲醛", "甲醇", "甲醚", "甲酰"], correct: 0 },
+  { word: "allegro", options: ["快板", "过敏", "活泼", "壁虎", "肽聚糖", "鳄鱼", "宣称", "赞美诗", "野兽派"], correct: 0 },
+  { word: "allosteric", options: ["别构", "碉堡", "变异", "编译", "调试", "节制", "斋戒", "奠基"], correct: 0 },
+  { word: "amalgamation", options: ["合并", "迁徙", "移民", "解剖", "凝聚", "分割", "摘要", "前往"], correct: 0 },
+  { word: "anabolism", options: ["合成代谢", "体内平衡", "威权主义", "战略", "对撞", "催化", "毁灭", "霸权主义"], correct: 0 },
+  { word: "anachronism", options: ["时代错误", "拱门", "落伍", "过时现象", "新型潮流", "艺术流派", "降解", "辐射"], correct: 0 },
+  { word: "anathema", options: ["诅咒", "史诗", "地狱", "憎恶", "宇宙飞船", "断层扫描", "碳十四", "异构体"], correct: 0 },
+  { word: "annelid", options: ["环节动物", "节肢动物", "软体动物", "脊索动物", "扁盘动物", "栉板动物", "刺胞动物", "多孔动物"], correct: 0 },
+  { word: "antediluvian", options: ["史前", "洪水", "密码", "化石", "始祖鸟", "尼安德特人", "直立人", "霸王龙"], correct: 0 },
+  { word: "anticodon", options: ["反密码子", "转子", "阶段性迁徙", "海马体", "枷锁", "垂序商陆", "香气", "呼吸急促"], correct: 0 },
+  { word: "aplomb", options: ["垂直", "自信", "争夺", "冷静", "稳重", "焦躁", "喝彩", "隐士"], correct: 0 },
+  { word: "apocryphal", options: ["伪经的", "高尚的", "踏实的", "祥和的", "幸运的", "属实的", "坚韧的", "畸形的"], correct: 0 },
+  { word: "apoptosis", options: ["细胞凋亡", "脑死亡", "组织坏死", "花瓣凋落", "葡萄球菌", "螺旋杆菌", "乳酸杆菌", "金黄色葡萄球菌"], correct: 0 },
+  { word: "approbation", options: ["赞许", "欣赏", "认可", "批判", "匹配", "应用", "继承", "下载"], correct: 0 },
+  { word: "apricity", options: ["温暖", "温暖和", "和煦", "温暖的阳光", "春日暖阳", "和暖的"], correct: 0 },
+  { word: "arbiter", options: ["仲裁者", "协调者", "独裁者", "经纪人", "策划者", "执行官", "考核官","统筹人"], correct: 0 },
+  { word: "arcane", options: ["神秘", "产业链", "光合作用", "发光二极管", "如法炮制", "偶然", "静谧", "鬼影"], correct: 0 },
+  { word: "archaeopteryx", options: ["始祖鸟", "渡渡鸟", "剑齿虎", "霸王龙", "文昌鱼", "直立人", "巨齿鲨", "眼镜蛇"], correct: 0 },
+  { word: "archipelago", options: ["群岛", "建筑学", "产业链", "内海", "卷积", "下潜", "统治者", "镰刀"], correct: 0 },
+  { word: "aristocracy", options: ["贵族", "佛像", "阶级", "王权", "人造卫星", "核磁共振", "轨道杂化", "光合作用"], correct: 0 },
+  { word: "arpeggio", options: ["琶音", "半音", "颤音", "回旋音", "重音", "八度音", "音阶", "滑音"], correct: 0 },
+  { word: "arthropod", options: ["节肢动物", "环节动物", "软体动物", "脊索动物", "扁盘动物", "栉板动物", "刺胞动物", "多孔动物"], correct: 0 },
+  { word: "astrophysics", options: ["天体物理学", "核物理学", "宇宙物理学", "地球物理学", "材料物理学", "原子物理学", "量子物理学", "粒子物理学"], correct: 0 },
+  { word: "atonal", options: ["无调的", "居心叵测的", "不协调的", "温馨的", "平缓的", "光滑的", "放射性的", "凝聚态的"], correct: 0 },
+  { word: "attenuate", options: ["衰减", "感悟", "堕落", "揣摩", "恶化", "减轻", "突显", "变异"], correct: 0 },
+  { word: "audacious", options: ["大胆的", "无畏的", "敢于冒险的", "胆大妄为的", "勇敢的", "大胆的"], correct: 0 },
+  { word: "augment", options: ["增加", "调整", "威慑", "光圈", "招募", "照明", "字节", "阵痛"], correct: 0 },
+  { word: "autonomous", options: ["自治的", "独立的", "自动的", "移动的", "孤立的", "无人接管的", "六神无主的", "偏僻的"], correct: 0 },
+  { word: "autotroph", options: ["自养生物", "体内平衡", "轨道杂化", "独立自主", "自动", "孤立", "下潜", "积累"], correct: 0 },
+  { word: "avantgarde", options: ["先锋", "奉献", "危机", "升级", "突破", "勇敢", "卷积", "下潜"], correct: 0 },
+  { word: "axiomatic", options: ["公理", "定式", "手势", "轴突", "轮轴", "毒性", "管道", "佛像"], correct: 0 },
+  { word: "axon", options: ["轴突", "树突", "神经元", "神经细胞", "体内平衡", "轨道杂化", "卷积", "佛像"], correct: 0 },
+       //B
+    { "word": "bacteriophage", "options": ["噬菌体", "神经元", "微量元素", "螺旋杆菌", "抗生素", "细菌鞭毛", "寄生虫", "真菌"], "correct": 0 },
+    { "word": "baleful", "options": ["凶恶", "苍白", "释放", "粗鲁", "稚嫩", "兴奋", "幸运", "魔鬼"], "correct": 0 },
+    { "word": "banal", "options": ["陈腐", "运河", "过时", "无聊", "观念", "凶恶", "幸运", "骗局"], "correct": 0 },
+    { "word": "beguile", "options": ["欺骗", "误导", "舆论", "娱乐", "管控", "搏斗", "入迷", "辱骂"], "correct": 0 },
+    { "word": "beleaguer", "options": ["围攻", "激发", "推动", "推广", "烦恼", "救济", "疲劳", "绑架"], "correct": 0 },
+    { "word": "belie", "options": ["掩饰", "证明", "背叛", "拐卖", "导致", "战栗", "保释", "屈服"], "correct": 0 },
+    { "word": "bellicose", "options": ["好战", "行李", "礼仪", "恐吓", "批斗", "革命", "剽悍", "罕见"], "correct": 0 },
+    { "word": "benevolence", "options": ["仁慈", "恶心", "眩晕", "平衡", "友谊", "益处", "价值", "共存"], "correct": 0 },
+    { "word": "benevolent", "options": ["仁慈", "眩晕", "平衡", "有益", "共存", "竞争", "寄生", "奉承"], "correct": 0 },
+    { "word": "bequeath", "options": ["遗赠", "掩埋", "放置", "底部", "下方", "偷袭", "后继", "传承"], "correct": 0 },
+    { "word": "bereft", "options": ["丧失", "增益", "取笑", "漂泊", "贫乏", "腐败", "纠缠", "孤独"], "correct": 0 },
+    { "word": "besiege", "options": ["包围", "捆绑", "威慑", "攻击", "捣鼓", "覆盖", "益处", "危害"], "correct": 0 },
+    { "word": "bifurcate", "options": ["分叉", "精确", "路径", "落寞", "化解", "界限", "树立", "梳理"], "correct": 0 },
+    { "word": "bildungsroman", "options": ["成长小说", "众议院", "古希腊民权", "少女", "浪漫主义文学", "参议院", "剥夺公民所有权", "少年"], "correct": 0 },
+    { "word": "biocatalysis", "options": ["生物催化", "生物技术", "生物计算", "生物激素", "生物反应", "生物辐射", "生物识别", "生物制冷"], "correct": 0 },
+    { "word": "biocomputing", "options": ["生物计算", "生物设备", "生物制冷", "生物钟", "生物酶", "生物碱", "生物圈", "生物识别"], "correct": 0 },
+    { "word": "biodevices", "options": ["生物器件", "生物设备", "生物电磁学", "生物多样性", "生物技术", "生物信息", "生物力学", "生物制冷"], "correct": 0 },
+    { "word": "bioelectromagnetics", "options": ["生物电磁学", "生物计算机", "生物多样性", "生物脑电波", "生物辐射性", "生物信息学", "生物机电学", "生物化合物"], "correct": 0 },
+    { "word": "bioelectronics", "options": ["生物电子学", "生物激素", "生物计算", "生物修复", "生物技术", "生物统计", "生物高分子", "生物识别"], "correct": 0 },
+    { "word": "bioinformatics", "options": ["生物信息学", "信息学", "生物学", "信息", "生物", "计算机", "生物技术", "生物化学"], "correct": 0 },
+    { "word": "biomechanics", "options": ["生物力学", "仿生机器人", "生物机械", "生物修复", "生物机电学", "仿生学", "生物材料", "生物体"], "correct": 0 },
+    { "word": "biomechatronics", "options": ["生物机电学", "仿生学", "生物高分子", "生物统计学", "生物机械", "生物修复", "生物激素", "生物计算"], "correct": 0 },
+    { "word": "bionics", "options": ["仿生学", "生物脑电波", "生物计算机", "生物信息学", "生物医学", "生物催化", "生物修复", "生物识别"], "correct": 0 },
+    { "word": "biophotonics", "options": ["生物光子学", "生物电子学", "生物力学", "生物医学", "生物化合物", "生物脑电波", "生物统计学", "生物识别"], "correct": 0 },
+    { "word": "biopolymers", "options": ["生物高分子", "生物电击", "生物力学", "生物计算机", "生物统计学", "生物脑电波", "生物加工", "生物技术"], "correct": 0 },
+    { "word": "bioprocessing", "options": ["生物加工", "生物高分子", "生物力学", "生物修复", "生物工程", "生物机器人", "生物脑电波", "生物脑机接口"], "correct": 0 },
+    { "word": "bioremediation", "options": ["生物修复", "生物计算机", "生物脑电波", "生物芯片", "生物脑机接口", "生物电击", "生物催化", "生物芯片"], "correct": 0 },
+    { "word": "biorobotics", "options": ["生物机械学", "生物计算机", "生物脑电波", "生物芯片", "生物半导体", "生物脑机接口", "生物工程", "生物催化"], "correct": 0 },
+    { "word": "biostatistics", "options": ["生物统计学", "生物电磁学", "生物制冷", "生物计算机", "生物辐射性", "仿生学", "生物信息学", "生物工程"], "correct": 0 },
+    { "word": "biotechnology", "options": ["生物技术", "生物机械", "生物计算机", "生物电磁学", "仿生学", "生物电磁波", "生物半导体", "生物辐射"], "correct": 0 },
+    { "word": "blasphemy", "options": ["亵渎", "模糊", "圣旨", "吹嘘", "显现", "盛世", "顿悟", "劫持"], "correct": 0 },
+    { "word": "blatant", "options": ["炫耀", "露骨", "唐突", "吹嘘", "亵渎", "喧嚣", "耀眼", "丰满"], "correct": 0 },
+    { "word": "blockchain", "options": ["区块链", "核反应堆", "光合作用", "基因编辑", "可控核聚变", "三聚氰胺", "洲际导弹", "基因突变"], "correct": 0 },
+    { "word": "bloviate", "options": ["夸夸其谈", "基因突变", "光合作用", "基因重组", "希腊神话", "古典哲学", "钻牛角尖", "事物变迁"], "correct": 0 },
+    { "word": "bobsleigh", "options": ["雪橇", "树突", "滩涂", "蟾蜍", "渡渡鸟", "始祖鸟", "山脊", "山谷"], "correct": 0 },
+    { "word": "brusque", "options": ["唐突", "莽撞", "粗鲁", "暴行", "渡渡鸟", "始祖鸟", "苏醒", "潜意识"], "correct": 0 },
+    { "word": "bucolic", "options": ["牧歌", "公告牌", "导弹", "鱼雷", "组织坏死", "潜意识", "异国风情", "异构体"], "correct": 0 },
+    { "word": "bulwark", "options": ["堡垒", "都督", "电池", "典藏", "护盾", "绿幕", "苏醒", "塑像"], "correct": 0 },
+    { "word": "bureaucracy", "options": ["官僚制度", "组织坏死", "基因重组", "干细胞", "民权政治", "君主专制", "奴隶制", "血红蛋白"], "correct": 0 },
+    { "word": "buxom", "options": ["丰满", "性感", "魁梧", "苗条", "肥胖", "健美", "英俊", "强壮"], "correct": 0 },
+      
+    //C
+    { "word": "cacophony", "options": ["刺耳声", "尖锐", "开关", "回旋曲", "喧闹", "对唱", "广播", "母乳"], "correct": 0 },
+    { "word": "cadenza", "options": ["华彩乐段", "玛尼堆", "诗篇", "十四行诗", "潜意识", "圆舞曲", "机械臂", "断层扫描"], "correct": 0 },
+    { "word": "callous", "options": ["冷酷", "麻木", "安静", "淡漠", "坚韧", "感情", "激情", "善良"], "correct": 0 },
+    { "word": "cameo", "options": ["浮雕", "特写", "小品", "演员", "篆刻", "装饰", "挂链", "屏风"], "correct": 0 },
+    { "word": "cancus", "options": ["候选人", "蜡烛", "潜意识", "顿悟", "佛像", "党派", "组织坏死", "公民权"], "correct": 0 },
+    { "word": "canter", "options": ["慢跑", "中心", "离心机", "向心力", "流浪汉", "吸引", "地心引力", "内核"], "correct": 0 },
+    { "word": "canonization", "options": ["列为圣徒", "渡渡鸟", "光合作用", "信徒", "十四行诗", "神像", "教皇", "地壳"], "correct": 0 },
+    { "word": "canto", "options": ["段落", "飞蛾", "演讲稿", "圣旨", "连贯", "凤仙花", "组织坏死", "人物形象"], "correct": 0 },
+    { "word": "capacitance", "options": ["电容", "电阻", "电压", "电流", "导电性", "热电偶", "电泳", "电磁感应"], "correct": 0 },
+    { "word": "capitulate", "options": ["投降", "防御", "屈服", "溃败", "亏本", "和谈", "判决", "刑罚"], "correct": 0 },
+    { "word": "capricious", "options": ["反复无常", "病情恶化", "结构重组", "并发症", "导电性", "云雾缭绕", "光合作用", "民权政治"], "correct": 0 },
+    { "word": "capricorn", "options": ["摩羯座", "射手座", "双子座", "巨蟹座", "处女座", "天秤座", "双鱼座", "金牛座"], "correct": 0 },
+    { "word": "carboxylic", "options": ["羧酸", "羟基", "氨基酸", "铵根", "碳氧化物", "臭氧", "有机化合物", "酸性溶液"], "correct": 0 },
+    { "word": "cardigan", "options": ["开襟衫", "芒刺", "稻穗", "心血管", "有氧运动", "循环系统", "断层扫描", "巨噬细胞"], "correct": 0 },
+    { "word": "castigate", "options": ["严厉批评", "分解代谢", "酸中毒", "有氧运动", "调剂", "救生衣", "浪漫主义", "写实主义"], "correct": 0 },
+    { "word": "catabolism", "options": ["分解代谢", "合成代谢", "无机化合物", "有机化合物", "有丝分裂", "减数分裂", "碳氢化合物", "碳水化合物"], "correct": 0 },
+    { "word": "catastrophism", "options": ["灾变说", "板块运动", "生物大灭绝", "自杀", "大屠杀", "种族灭绝", "地壳运动", "熔岩柱喷发"], "correct": 0 },
+    { "word": "catechism", "options": ["教义", "教皇", "圣旨", "信徒", "神像", "继承", "解释", "信条"], "correct": 0 },
+    { "word": "categoric", "options": ["绝对", "相对", "条件", "反对", "讽刺", "坚决", "韧性", "笃定"], "correct": 0 },
+    { "word": "catharsis", "options": ["净化", "宣泄", "情感", "保留", "疗愈", "中毒", "解码", "嵌入"], "correct": 0 },
+    { "word": "centriole", "options": ["中心粒", "核心", "地心引力", "循环系统", "细胞器", "离心机", "核糖体", "向心力"], "correct": 0 },
+    { "word": "cerebral", "options": ["大脑的", "完善的", "智力的", "传承的", "顶尖的", "中心的", "心理的", "遗留的"], "correct": 0 },
+    { "word": "chandelier", "options": ["吊灯", "激荡", "佛像", "机会", "神显", "追踪", "顿悟", "幻灭"], "correct": 0 },
+    { "word": "chastise", "options": ["责备", "裁判", "诉讼", "书院", "演练", "嵌入", "韧性", "疼痛"], "correct": 0 },
+    { "word": "chemotaxis", "options": ["趋化性", "偶极", "光的衍射", "置换反应", "草履虫", "强迫症", "舆论", "人云亦云"], "correct": 0 },
+    { "word": "chiaroscuro", "options": ["明暗对比", "分割线", "光影", "循环", "定速巡航", "电池正极", "斡旋", "热带气旋"], "correct": 0 },
+    { "word": "chicanery", "options": ["狡诈", "诡计", "诱惑", "诈骗", "联络", "锻炼", "透视", "圆满"], "correct": 0 },
+    { "word": "chloroplast", "options": ["叶绿体", "染色体", "线粒体", "细胞质", "细胞器", "细胞核", "细胞壁", "核糖体"], "correct": 0 },
+    { "word": "chromatid", "options": ["染色单体", "染色质", "质子理论", "量子力学", "中心粒", "等位基因", "遗传基因", "隐性基因"], "correct": 0 },
+    { "word": "chromatin", "options": ["染色质", "质子理论", "量子力学", "中心粒", "等位基因", "遗传基因", "隐性基因", "核糖体"], "correct": 0 },
+    { "word": "chrysalis", "options": ["蛹", "晶体", "滤镜", "透视", "鲽鱼", "变态", "强迫症", "视觉感知"], "correct": 0 },
+    { "word": "churlish", "options": ["粗鲁的", "暴躁的", "无礼的", "易燃的", "坚韧的", "和平的", "莽撞的", "理论的"], "correct": 0 },
+    { "word": "cilia", "options": ["纤毛", "核糖体", "核仁", "拟核", "菌毛", "菌丝体", "衣藻", "草履虫"], "correct": 0 },
+    { "word": "circumspect", "options": ["慎重", "捕获", "全面", "周到", "静止", "精致", "清晰", "庆幸"], "correct": 0 },
+    { "word": "cladistics", "options": ["分类学", "进化枝", "洞察力", "透视", "规划", "贪心算法", "归纳法", "二分法"], "correct": 0 },
+    { "word": "clairvoyance", "options": ["透视力", "巨噬细胞", "潜意识", "迷惘", "皇族", "千里眼", "心灵感应", "顿悟"], "correct": 0 },
+    { "word": "clinomania", "options": ["爱睡眠", "强迫症", "抑郁症", "焦虑症", "失眠症", "完美主义者", "过度劳累者", "失语症"], "correct": 0 },
+    { "word": "cnidarian", "options": ["刺胞动物", "环节动物", "多孔动物", "软体动物", "节肢动物", "脊索动物", "栉板动物", "变盘动物"], "correct": 0 },
+    { "word": "coalesce", "options": ["合并", "熔化", "强制", "迁移", "诉讼", "联盟", "怜悯", "聚集"], "correct": 0 },
+    { "word": "codon", "options": ["密码子", "生成", "遗传", "转子", "前卫", "圣旨", "赛艇", "编译器"], "correct": 0 },
+    { "word": "coevolution", "options": ["共同进化", "系数", "密码子", "反革命", "化合反应", "演变", "事物变迁", "顿悟"], "correct": 0 },
+    { "word": "commensurate", "options": ["相称", "对称", "防守", "符合", "反弹", "配对", "穿越", "称职"], "correct": 0 },
+    { "word": "compendium", "options": ["概要", "踪迹", "纲领", "杠铃", "哑铃", "受领", "亡灵", "汇编"], "correct": 0 },
+    { "word": "concomitant", "options": ["伴随", "同时", "对应", "变异", "编译", "伴侣", "发生", "串联"], "correct": 0 },
+    { "word": "conductance", "options": ["导电", "串联电路", "并联电路", "导火索", "导热率", "辐射量", "热对流", "热传导"], "correct": 0 },
+    { "word": "conflagration", "options": ["大火", "篝火", "点燃", "火花", "祸患", "禁忌", "罹患", "灾难"], "correct": 0 },
+    { "word": "congenial", "options": ["意气相投", "臭味相投", "志同道合", "不约而同", "简谐振", "相干波", "心灵感应", "电磁感应"], "correct": 0 },
+    { "word": "conjure", "options": ["变戏法", "魔鬼", "施法", "潜意识", "十四行诗", "幻灭", "错觉", "祈求"], "correct": 0 },
+    { "word": "consecrate", "options": ["祝圣", "顿悟", "佛像", "奉献", "口供", "给予", "继承", "信徒"], "correct": 0 },
+    { "word": "consonance", "options": ["和谐", "共振", "共鸣", "腔体", "关系", "和弦", "和声", "合奏"], "correct": 0 },
+    { "word": "conundrum", "options": ["谜语", "迷宫", "解决", "孑孓", "佛像", "神像", "显现", "顿悟"], "correct": 0 },
+    { "word": "convalesce", "options": ["康复", "顿悟", "治疗", "手术", "复发", "并发症", "脑神经", "强迫症"], "correct": 0 },
+    { "word": "copious", "options": ["丰富", "频发", "频率", "缺乏", "武器", "无聊", "误区", "禁忌"], "correct": 0 },
+    { "word": "coupon", "options": ["优惠券", "热电偶", "偶像", "武器", "群体", "朋党", "夫妻", "心灵感应"], "correct": 0 },
+    { "word": "coy", "options": ["害羞", "畏惧", "顿悟", "潜伏", "怯生", "悲伤", "惭愧", "无理"], "correct": 0 },
+    { "word": "credulous", "options": ["轻信", "诈骗集团", "犯罪分子", "宦官", "外族人", "羊毛衫", "草履虫", "上当"], "correct": 0 },
+    { "word": "crescendo", "options": ["高潮", "草履虫", "脑神经", "碳十四", "断层扫描", "羊毛衫", "始祖鸟", "组织坏死"], "correct": 0 },
+    { "word": "crestfallen", "options": ["垂头丧气", "基因编辑", "哭泣", "背叛", "感到被抛弃", "群体免疫", "心灵感应", "共同进化"], "correct": 0 },
+    { "word": "crustacean", "options": ["甲壳动物", "共同祖先", "断层扫描", "基因编辑", "信徒", "十四行诗", "潜意识", "马蹄蟹"], "correct": 0 },
+    { "word": "cryogenics", "options": ["低温技术", "人体冷冻", "机械臂", "核磁共振", "偏振", "陀螺仪", "简谐振", "减震器"], "correct": 0 },
+    { "word": "cryptic", "options": ["神秘", "秘密", "化纤", "竹荪", "涤纶", "云雾", "隐晦", "难解"], "correct": 0 },
+    { "word": "cryptocurrency", "options": ["加密货币", "十四行诗", "碳十四", "断层扫描", "区块链", "神像", "脑神经", "秘密武器"], "correct": 0 },
+    { "word": "cupid", "options": ["丘比特", "愚蠢", "立方体", "神箭", "长方体", "博爱", "天使", "神显"], "correct": 0 },
+    { "word": "cupidity", "options": ["贪婪", "愚蠢", "方正", "功利", "尖利", "博爱", "长方体", "鱿鱼"], "correct": 0 },
+    { "word": "cursory", "options": ["草率", "潜在", "预兆", "功利", "继承", "潦草", "顿悟", "神像"], "correct": 0 },
+    { "word": "cybernetics", "options": ["控制论", "网络安全", "万众瞩目的焦点", "信息控制论", "人工智能取代论", "心灵感应", "断层扫描", "碳十四"], "correct": 0 },
+    { "word": "cybersecurity", "options": ["网络安全", "控制论", "万众瞩目的焦点", "信息控制论", "人工智能取代论", "心灵感应", "断层扫描", "碳十四"], "correct": 0 },
+    { "word": "cynosure", "options": ["焦点", "细胞分裂", "减数分裂", "有丝分裂", "细胞分化", "举世闻名", "佛像", "神像"], "correct": 0 },
+    { "word": "cytokinesis", "options": ["细胞分裂", "外骨骼", "骨质疏松", "脑神经", "断层扫描", "核裂变", "聚光灯", "核聚变"], "correct": 0 },
+    { "word": "cytomegalovirus", "options": ["巨细胞病毒", "巨噬细胞", "吞噬作用", "腐蚀作用", "风蚀现象", "类风湿性关节炎", "严重细菌感染", "脑神经异常"], "correct": 0 },
+    { "word": "cytoplasm", "options": ["细胞质", "细胞器", "细胞液", "液泡", "囊泡", "细胞核", "核糖体", "高尔基体"], "correct": 0 },
+    { "word": "cytoskeleton", "options": ["细胞骨架", "巨噬细胞", "心灵感应", "断层扫描", "结缔组织", "骨质疏松", "肌腱损伤", "脑脊液"], "correct": 0 },
+
+       //D
+       { "word": "depolarization", "options": ["去极化", "解雇", "激荡", "干冰", "太阳黑子", "宇宙射线", "本星系团", "体内平衡"], "correct": 0 },
+       { word: "dalliance", options: ["调戏", "消遣", "挑衅", "恋爱", "怜悯", "奇观", "驱赶", "鉴定"], correct: 0 },
+  { word: "damnation", options: ["诅咒", "傻瓜", "聚合", "水坝", "阳光", "讽刺", "祸患", "刻度"], correct: 0 },
+  { word: "dearth", options: ["缺乏", "死亡", "广阔", "亲近", "关注", "衰败", "妄想", "焦灼"], correct: 0 },
+  { word: "debauchery", options: ["放荡", "公布", "青年", "宪法", "症状", "治理", "慌乱", "腐烂"], correct: 0 },
+  { word: "debilitate", options: ["削弱", "精致", "韵味", "力量", "寒冷", "挑衅", "辩论", "脱离"], correct: 0 },
+  { word: "decadence", options: ["衰落", "精致", "十年", "代沟", "末代", "复仇", "附近", "偶像"], correct: 0 },
+  { word: "decimate", options: ["杀害", "估计", "小数点", "质数", "癫狂", "同伴", "魔羯座", "体细胞"], correct: 0 },
+  { word: "decipher", options: ["解密", "剔除", "挑战", "调整", "识别", "突破", "困难", "幻觉"], correct: 0 },
+  { word: "decrescendo", options: ["渐弱", "牛角面包", "放射性衰变", "圆锥曲线", "理论科学", "管弦乐", "急性炎症", "头戴式耳机"], correct: 0 },
+  { word: "defenestration", options: ["抛弃", "提出", "孕育", "幻觉", "缓解", "前兆", "理想", "追悼"], correct: 0 },
+  { word: "defunct", options: ["已不存在的", "效率低下的", "激进的", "死亡的", "保守的", "心灰意冷的", "原住民的", "环境恶劣的"], correct: 0 },
+  { word: "degenerate", options: ["堕落", "解释", "变质", "魔鬼", "苏醒", "前兆", "变异", "废物"], correct: 0 },
+  { word: "deleterious", options: ["有害的", "苏醒的", "激进的", "土著的", "趋炎附势的", "不约而同的", "记忆中断的", "逐渐减弱的"], correct: 0 },
+  { word: "deliquescent", options: ["易溶的", "富足的", "含有酒精的", "不纯洁的", "系统性的", "状态转换的", "最后的", "逐渐的"], correct: 0 },
+  { word: "delisequent", options: ["删节的", "易溶的", "富足的", "含有酒精的", "数列的", "逐渐的", "列表上的", "核能的"], correct: 0 },
+  { word: "demagogue", options: ["煽动者", "屏风", "鼓舞", "政客", "追悼会", "体细胞", "纯粹的", "前卫艺术"], correct: 0 },
+  { word: "demoralize", options: ["士气低落", "意识到", "样本", "展示", "两德统一", "哲学思想", "古典主义者", "实现梦想"], correct: 0 },
+  { word: "dendrite", options: ["树突", "神经元", "搅拌机", "突出的", "冰凌", "水分子", "高密度的", "头部的"], correct: 0 },
+  { word: "denouement", options: ["结局", "宣告", "表彰", "展开", "发布", "部分", "绕道", "编写"], correct: 0 },
+  { word: "desideratum", options: ["必需品", "思乡之情", "考虑", "预告片", "原则性", "稀释溶液", "防晒霜", "紫草膏"], correct: 0 },
+  { word: "desperado", options: ["亡命之徒", "逐渐减慢", "苦思冥想", "暴君", "激进分子", "起义运动", "哲学思想", "西班牙斗牛士"], correct: 0 },
+  { word: "despot", options: ["暴君", "平底锅", "污点", "尽管", "霍乱", "勤政", "政变", "干冰"], correct: 0 },
+  { word: "desultory", options: ["散漫", "库存", "离散数学", "组合数学", "魔羯座", "追悼会", "伪君子", "经济大萧条"], correct: 0 },
+  { word: "diastereomer", options: ["非对映异构体", "乙酰胆碱酯酶", "轨道杂化", "乙碳正离子", "二对映异构体", "亲核取代反应", "迪尔斯-奥尔德反应", "烯醇负离子"], correct: 0 },
+  { word: "diatribe", options: ["长篇抨击性演说", "乙酰胆碱酯酶", "轨道杂化", "乙碳正离子", "二对映异构体", "迪尔斯-奥尔德反应",  "人工通用智能", "无言论自由的社会"], correct: 0 },
+  { word: "dichotomous", options: ["二分法", "贪心算法", "合成", "树形图", "双管齐下", "对弈", "产生分歧", "心灵感应"], correct: 0 },
+  { word: "digitalization", options: ["数字化", "生物计算机", "现代化", "工业革命", "数码相机", "离散数学", "宇宙射线", "区块链"], correct: 0 },
+  { word: "disciple", options: ["信徒", "追悼会", "散乱", "离散数学", "魔羯座", "癫狂", "屏风", "激进"], correct: 0 },
+  { word: "discombobulate", options: ["困惑", "加速", "激素", "促进", "精神失控", "抑郁症", "狼狈不堪", "心灵感应"], correct: 0 },
+  { word: "disembark", options: ["下船", "树皮", "犬吠", "激进", "屏风", "癫狂", "追悼", "色盲"], correct: 0 },
+  { word: "disingenuous", options: ["不真诚的", "追悼会", "坦率", "白种人", "日耳曼人", "斯拉夫人", "凯尔特人", "激进"], correct: 0 },
+  { word: "disparate", options: ["迥然不同", "土星", "圆润", "润滑油", "和谐", "相干波", "脑神经", "碳十四"], correct: 0 },
+  { word: "dissonance", options: ["不和谐", "共振", "简谐运动", "谐振", "偏振", "离子方程式", "体细胞", "魔羯座"], correct: 0 },
+  { word: "djembe", options: ["非洲鼓", "小军鼓", "手鼓", "架子鼓", "京韵大鼓", "铃鼓", "低音鼓", "定音鼓"], correct: 0 },
+  { word: "doggerel", options: ["打油诗", "追悼会", "长难句", "俗气", "海峡", "魔羯座", "癫狂", "体细胞"], correct: 0 },
+  { word: "dogmatic", options: ["教条", "独断", "独立", "固执", "官僚", "专制", "死板", "阴险"], correct: 0 },
+  { word: "dolorous", options: ["忧伤", "窄的", "前卫", "疼痛", "黑暗", "恐怖", "寂寞", "空白"], correct: 0 },
+  { word: "dubious", options: ["可疑", "双重", "祈祷", "把握", "信任", "忧伤", "优势", "诉说"], correct: 0 },
+  { word: "duende", options: ["精灵", "恶魔", "鬼影", "祈祷", "癫狂", "怪兽", "幽灵", "疯子"], correct: 0 },
+  { word: "dulcet", options: ["美妙", "刺耳", "精灵", "图层", "屠杀", "保留", "释放", "甜蜜"], correct: 0 },
+  { word: "duplicity", options: ["口是心非", "体细胞", "复杂性", "双重性", "复制", "双倍的", "奸诈", "极权主义"], correct: 0 },
+  { word: "dystopia", options: ["反乌托邦", "屏风", "追悼会", "耳鸣", "理想国", "极权主义", "草履虫", "十四行诗"], correct: 0 }
+       //E
+       
+        // Add more expert words and options
+
+
+
+
+          //IMPORTANT WORDS - 英语词汇2-40的lhh错词!!!!!
+
+          //meiosis
+          //mitosis
+          //miosis
+          //amoeba
+      ]
+      // Define medium, hard, and expert words similarly
+    };
+
+    //let currentWordIndex;
+    //let score = 0;
+    //let correctCount = 0;
+    //let totalQuestions = 0;
+    //let timer;
+    //let currentQuestionIndex = 0;
+    //let currentDifficulty = 'easy';
+    //let shuffledWords = [];
+
+    const nextBtn = document.getElementById('nextBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+    const correctDiv = document.getElementById('correct');
+    const timerDiv = document.getElementById('timer');
+    const questionNumberDiv = document.getElementById('questionNumber');
+
+    nextBtn.addEventListener('click', askQuestion);
+
+    function startGame() {
+      //score = 0;
+      //correctCount = 0;
+      backgroundColorLevel45 = localStorage.getItem('backgroundColorLevel45');
+      document.body.style.backgroundColor = backgroundColorLevel45;
+      score = parseInt(localStorage.getItem('score')) || 0;
+      correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
+      totalQuestions = 45;
+      resultDiv.textContent = '';
+      nextBtn.style.display = 'block';
+      currentQuestionIndex = 0;
+      currentDifficulty = 'expert';
+      shuffledWords = shuffle(words[currentDifficulty].slice());
+      askQuestion();
+    }
+
+    function checkAnswer(isCorrectOption) {
+      totalQuestions++;
+      clearTimeout(timer);
+
+      if (isCorrectOption) {
+        const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
+        score += (timeLeft >= 16 ? 20 : (timeLeft + 4));
+        correctCount++;
+        resultDiv.textContent = 'Correct!';
+      } else {
+        resultDiv.textContent = 'Incorrect!';
+      }
+      correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
+        scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
+      // Disable all options after a choice is made
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.pointerEvents = 'none';
+      });
+       // Set background color based on score
+       let body = document.querySelector('body');
+       if ((score / (0.2 * totalQuestions)) >= 95) {
+  body.style.backgroundColor = '#00ccff';
+}  else if ((score / (0.2 * totalQuestions)) >= 90) {
+  body.style.backgroundColor = '#3cf5c7';
+} else if ((score / (0.2 * totalQuestions)) >= 85) {
+    body.style.backgroundColor = '#70fd8f';
+} else if ((score / (0.2 * totalQuestions)) >= 80) {
+    body.style.backgroundColor = '#c1f504';
+} else if ((score / (0.2 * totalQuestions)) >= 75) {
+    body.style.backgroundColor = '#f4f748';
+}else if ((score / (0.2 * totalQuestions)) >= 70) {
+    body.style.backgroundColor = '#f5c833';
+} else if ((score / (0.2 * totalQuestions)) >= 65) {
+    body.style.backgroundColor = '#f7a961';
+}else if ((score / (0.2 * totalQuestions)) >= 60) {
+    body.style.backgroundColor = '#FF5D13';
+} else if ((score / (0.2 * totalQuestions)) >= 55) {
+    body.style.backgroundColor = '#fd5d5d';
+} else if ((score / (0.2 * totalQuestions)) >= 50) {
+    body.style.backgroundColor = '#F82E7B';
+} else if ((score / (0.2 * totalQuestions))>=40) {
+    body.style.backgroundColor = 'red';
+}else if ((score / (0.2 * totalQuestions))>=30) {
+    body.style.backgroundColor = '#6e0101';
+}else if ((score / (0.2 * totalQuestions))>=20) {
+    body.style.backgroundColor = '#2a0241';
+}else if ((score / (0.2 * totalQuestions))<20) {
+    body.style.backgroundColor = '#000000';
+}
+      nextBtn.disabled = false;
+      currentQuestionIndex++;
+      if (totalQuestions === 60) {
+        scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * 60)).toFixed(1);
+    nextBtn.style.display = 'none';
+      }
+    }
+
+    function handleOptionClick(event) {
+      const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
+      const isCorrectOption = optionIndex === correctOptionIndex;
+      checkAnswer(isCorrectOption);
+
+      // Highlight the clicked option
+      event.currentTarget.classList.add(isCorrectOption ? 'correct' : 'incorrect');
+
+      // Disable all options
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.pointerEvents = 'none';
+      });
+
+      // Enable next button
+      nextBtn.style.display = 'block';
+    }
+
+    function getDifficulty() {
+      if (currentQuestionIndex === 15 || currentQuestionIndex === 30) {
+        if (currentQuestionIndex === 15) {
+          currentDifficulty = 'medium';
+        }
+        shuffledWords = shuffle(words[currentDifficulty].slice());
+      }
+    }
+
+    function askQuestion() {
+  getDifficulty();
+  if (totalQuestions < 60) {
+    const questionData = shuffledWords[currentQuestionIndex];
+    currentWordIndex = questionData.correct;
+    const currentWord = questionData.word;
+    questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
+    questionDiv.textContent = currentWord;
+
+    const shuffledOptions = shuffle(questionData.options.slice());
+    correctOptionIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
+
+    optionsDiv.innerHTML = '';
+    for (let i = 0; i < shuffledOptions.length; i++) {
+      const option = document.createElement('div');
+      option.className = 'option';
+      option.textContent = shuffledOptions[i];
+      option.addEventListener('click', handleOptionClick);
+      optionsDiv.appendChild(option);
+    }
+
+    resultDiv.textContent = '';
+    startTimer();
+  } 
+}
+    function startTimer() {
+      let timeLeft = 20;
+      timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+        if (timeLeft === 0) {
+          clearTimeout(timer);
+          checkAnswer(false); // Timeout, passing false as the answer is incorrect
+        }
+      }, 1000);
+    }
+
+    function shuffle(array) {
+      let currentIndex = array.length, temporaryValue, randomIndex;
+      while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    }
+    startGame();
+
+  </script>
+</body>
+</html>
