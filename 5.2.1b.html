@@ -1086,7 +1086,7 @@
       currentQuestionIndex++;
       if (totalQuestions === 45) {
         // Redirect to 3.html after question 30
-        if ((score / (0.2 * totalQuestions))<50){
+        if (((score / (0.2 * totalQuestions)))<50){
             nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
           backgroundColorLevel45 = document.body.style.backgroundColor;
