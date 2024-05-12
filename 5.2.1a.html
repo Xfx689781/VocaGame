@@ -1568,7 +1568,7 @@
       currentQuestionIndex++;
       if (totalQuestions === 30) {
         // Redirect to 3.html after question 30
-        if ((score / (0.2 * totalQuestions))<50){
+        if ((score / (0.2 * totalQuestions))<60){
             nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
           backgroundColorLevel30 = document.body.style.backgroundColor;
@@ -1577,7 +1577,7 @@
           window.location.href = '5.2.1b.html';
         });
         }
-        else if (((score / (0.2 * totalQuestions)))>50){
+        else if (((score / (0.2 * totalQuestions)))>=60){
         nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
           backgroundColorLevel30 = document.body.style.backgroundColor;
