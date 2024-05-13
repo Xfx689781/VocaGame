@@ -1513,32 +1513,31 @@
       askQuestion();
     }
 
-function checkAnswer(isCorrectOption) {
-  totalQuestions++;
-  clearTimeout(timer);
+    function checkAnswer(isCorrectOption) {
+      totalQuestions++;
+      clearTimeout(timer);
 
-  if (isCorrectOption) {
-    const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-    score += (timeLeft >= 18 ? 20 : (timeLeft + 2));
-    correctCount++;
-    resultDiv.textContent = 'Correct!';
-  } else {
-    resultDiv.textContent = 'Incorrect!';
-  }
-  correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
-  scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
-
-  // Disable all options after a choice is made
-  const options = document.querySelectorAll('.option');
-  options.forEach(option => {
-    option.removeEventListener('click', handleOptionClick);
-    option.style.pointerEvents = 'none';
-  });
-
-  // Show the next button
-  nextBtn.style.display = 'block';
-  let body = document.querySelector('body');
-  if ((score / (0.2 * totalQuestions)) >= 95) {
+      if (isCorrectOption) {
+        const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
+        score += (timeLeft >= 18 ? 20 : (timeLeft + 2));
+        correctCount++;
+        resultDiv.textContent = 'Correct!';
+        nextBtn.style.display = 'block';
+      } else {
+        resultDiv.textContent = 'Incorrect!';
+        nextBtn.style.display = 'block';
+      }
+      correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
+        scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
+      // Disable all options after a choice is made
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.pointerEvents = 'none';
+      });
+       // Set background color based on score
+       let body = document.querySelector('body');
+       if ((score / (0.2 * totalQuestions)) >= 95) {
   body.style.backgroundColor = '#00ccff';
 }  else if ((score / (0.2 * totalQuestions)) >= 90) {
   body.style.backgroundColor = '#3cf5c7';
@@ -1567,11 +1566,9 @@ function checkAnswer(isCorrectOption) {
 }else if ((score / (0.2 * totalQuestions))<20) {
     body.style.backgroundColor = '#000000';
 }
-  // Your existing background color logic here...
-
-  // Show the next button
-  nextBtn.style.display = 'block';
-  if (totalQuestions === 30) {
+    //  nextBtn.disabled = false;
+      currentQuestionIndex++;
+      if (totalQuestions === 30) {
         // Redirect to 3.html after question 30
         if ((score / (0.2 * totalQuestions))<50){
             nextBtn.addEventListener('click', function() {
@@ -1592,29 +1589,8 @@ function checkAnswer(isCorrectOption) {
         });
     }
       }
-}
-function startTimer() {
-  let timeLeft = 20;
-  timerDiv.textContent = 'Time left: ' + timeLeft + 's';
-  timer = setInterval(() => {
-    timeLeft--;
-    timerDiv.textContent = 'Time left: ' + timeLeft + 's';
-    if (timeLeft === 0) {
-      clearTimeout(timer);
-      checkAnswer(false); // Timeout, passing false as the answer is incorrect
-      nextBtn.style.display = 'block'; // Show the Next button
     }
-  }, 1000);
 
-  // Enable the Next button after clicking an answer
-  const options = document.querySelectorAll('.option');
-  options.forEach(option => {
-    option.addEventListener('click', () => {
-      clearTimeout(timer); // Stop the timer
-      nextBtn.style.display = 'block'; // Show the Next button
-    });
-  });
-}
     function handleOptionClick(event) {
       const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
       const isCorrectOption = optionIndex === correctOptionIndex;
@@ -1631,7 +1607,7 @@ function startTimer() {
       });
 
       // Enable next button
-      nextBtn.style.display = 'block';
+  
     }
 
     function getDifficulty() {
@@ -1671,7 +1647,18 @@ function startTimer() {
     nextBtn.style.display = 'none';
   }
 }
-    
+    function startTimer() {
+      let timeLeft = 20;
+      timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+        if (timeLeft === 0) {
+          clearTimeout(timer);
+          checkAnswer(false); // Timeout, passing false as the answer is incorrect
+        }
+      }, 1000);
+    }
 
     function shuffle(array) {
       let currentIndex = array.length, temporaryValue, randomIndex;
