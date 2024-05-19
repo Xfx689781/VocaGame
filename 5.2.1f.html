@@ -1002,7 +1002,7 @@
     const correctDiv = document.getElementById('correct');
     const timerDiv = document.getElementById('timer');
     const questionNumberDiv = document.getElementById('questionNumber');
-
+    let cor=0;
     nextBtn.addEventListener('click', askQuestion);
     function startGame() {
       //score = 0;
@@ -1015,19 +1015,22 @@
       resultDiv.textContent = '';
       nextBtn.style.display = 'block';
       currentQuestionIndex = 0;
+      cor = 0;
       currentDifficulty = 'expert';
       shuffledWords = shuffle(words[currentDifficulty].slice());
       askQuestion();
+      nextBtn.style.display = 'none';
     }
 
     function checkAnswer(isCorrectOption) {
       totalQuestions++;
       clearTimeout(timer);
-
+      nextBtn.style.display = 'block';
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
         score += (timeLeft >= 16 ? 20 : (timeLeft + 4));
         correctCount++;
+        cor++;
         resultDiv.textContent = 'Correct!';
       } else {
         resultDiv.textContent = 'Incorrect!';
@@ -1073,12 +1076,15 @@
 }
       nextBtn.disabled = false;
       currentQuestionIndex++;
-      if (totalQuestions === 60) {
-        scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * 60)).toFixed(1);
-    nextBtn.style.display = 'none';
+      if (cor==8) {
+        scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
+    hideButton();
+
       }
     }
-
+    function hideButton() {
+            document.getElementById("nextBtn").style.display = "none";
+        }
     function handleOptionClick(event) {
       const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
       const isCorrectOption = optionIndex === correctOptionIndex;
@@ -1098,18 +1104,19 @@
       nextBtn.style.display = 'block';
     }
 
-    function getDifficulty() {
-      if (currentQuestionIndex === 15 || currentQuestionIndex === 30) {
-        if (currentQuestionIndex === 15) {
-          currentDifficulty = 'medium';
-        }
-        shuffledWords = shuffle(words[currentDifficulty].slice());
-      }
-    }
+   // function getDifficulty() {
+    //  if (currentQuestionIndex === 15 || currentQuestionIndex === 30) {
+    //    if (currentQuestionIndex === 15) {
+    //      currentDifficulty = 'medium';
+    //    }
+    //    shuffledWords = shuffle(words[currentDifficulty].slice());
+    //  }
+  //  }
 
     function askQuestion() {
-  getDifficulty();
-  if (totalQuestions < 60) {
+  //getDifficulty();
+  nextBtn.style.display = 'none';
+  if (cor<8) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;
     const currentWord = questionData.word;

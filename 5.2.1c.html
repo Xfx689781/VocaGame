@@ -1131,7 +1131,7 @@
     const correctDiv = document.getElementById('correct');
     const timerDiv = document.getElementById('timer');
     const questionNumberDiv = document.getElementById('questionNumber');
-
+  let cor=0;
     nextBtn.addEventListener('click', askQuestion);
 
     function startGame() {
@@ -1148,16 +1148,19 @@
       currentDifficulty = 'hard';
       shuffledWords = shuffle(words[currentDifficulty].slice());
       askQuestion();
+      cor=0;
+      nextBtn.style.display = 'none';
     }
 
     function checkAnswer(isCorrectOption) {
       totalQuestions++;
       clearTimeout(timer);
-
+      nextBtn.style.display = 'block';
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
         score += (timeLeft >= 17 ? 20 : (timeLeft + 3));
         correctCount++;
+        cor++;
         resultDiv.textContent = 'Correct!';
       } else {
         resultDiv.textContent = 'Incorrect!';
@@ -1205,7 +1208,16 @@
       currentQuestionIndex++;
       if (totalQuestions === 45) {
         // Redirect to 3.html after question 30
-        if ((score / (0.2 * totalQuestions))<50){
+        if (cor==13||cor==14||cor==15){
+            nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', score);
+          backgroundColorLevel45 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '5.2.1g.html';
+        });
+        }
+        else if ((score / (0.2 * totalQuestions))<53){
             nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
           backgroundColorLevel30 = document.body.style.backgroundColor;
@@ -1214,7 +1226,7 @@
           window.location.href = '5.2.1d.html';
         });
         }
-        else if (((score / (0.2 * totalQuestions)))>=50){
+        else if (((score / (0.2 * totalQuestions)))>=53){
         nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
           backgroundColorLevel30 = document.body.style.backgroundColor;
@@ -1256,6 +1268,7 @@
 
     function askQuestion() {
   getDifficulty();
+  nextBtn.style.display = 'none';
   if (totalQuestions < 60) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;

@@ -20,7 +20,6 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    
     h1 {
       color: #333;
     }
@@ -121,6 +120,7 @@
   <script>
     const words = {
       easy: [
+   
       { word: "rain", options: ["风", "人物", "城市", "雷", "雨", "雪"], correct: 4 },
         { word: "sun", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 0 },
         { word: "moon", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 1 },
@@ -1474,7 +1474,8 @@
   { word: "lead", options: ["督率", "领袖", "天花板", "首席", "盖子", "领导人"], correct: 0 },
   { word: "current", options: ["电流", "咖喱", "哥伦布", "加仑", "库仑", "当时"], correct: 0 },
   { "word": "blues", "options": ["蓝色", "悲伤", "抑郁", "前卫摇滚", "节奏布鲁斯", "迷幻摇滚", "布鲁斯"], "correct": 6 },
-]
+
+      ]
     };
 
     let currentWordIndex;
@@ -1506,7 +1507,7 @@
       totalQuestions = 0;
       resultDiv.textContent = '';
       startBtn.style.display = 'none';
-      nextBtn.style.display = 'block';
+      nextBtn.style.display = 'none';
       currentQuestionIndex = 0;
       currentDifficulty = 'easy';
       shuffledWords = shuffle(words[currentDifficulty].slice());
@@ -1526,7 +1527,7 @@
         resultDiv.textContent = 'Incorrect!';
       }
       correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
-        scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
+      scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
       // Disable all options after a choice is made
       const options = document.querySelectorAll('.option');
       options.forEach(option => {
@@ -1566,9 +1567,43 @@
 }
       nextBtn.disabled = false;
       currentQuestionIndex++;
+      //if (totalQuestions==15){
+    //   getRandomIntBetween11And15(num);
+      //  if (num==correctCount){
+       //   nextBtn.addEventListener('click', function() {
+      //   localStorage.setItem('score', score);
+        //  backgroundColorLevel30 = document.body.style.backgroundColor;
+       //   localStorage.setItem('backgroundColorLevel15', backgroundColorLevel15);
+       //   localStorage.setItem('correctCount', correctCount);
+       //   window.location.href = '5.2.1h.html';
+       //   });
+      //  }
+      //  else if (num!=correctCount){
+     //       currentDifficulty = 'medium';
+      //      nextBtn.display='block';
+     //   }
+    //  }
       if (totalQuestions === 30) {
         // Redirect to 3.html after question 30
-        if ((score / (0.2 * totalQuestions))<60){
+          if (correctCount%4==0){
+          nextBtn.addEventListener('click', function() {
+         localStorage.setItem('score', score);
+          backgroundColorLevel30 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel30', backgroundColorLevel30);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '5.2.1h.html';
+         });
+        }
+        else if (correctCount==30){
+            nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', score+50);
+          backgroundColorLevel30 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel30', backgroundColorLevel30);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '5.2.1c.html';
+        });
+        }
+        else if ((score / (0.2 * totalQuestions))<65){
             nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
           backgroundColorLevel30 = document.body.style.backgroundColor;
@@ -1577,7 +1612,7 @@
           window.location.href = '5.2.1b.html';
         });
         }
-        else if (((score / (0.2 * totalQuestions)))>=60){
+        else if (((score / (0.2 * totalQuestions)))>=65){
         nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
           backgroundColorLevel30 = document.body.style.backgroundColor;
@@ -1587,8 +1622,13 @@
         });
     }
       }
+      // Show the "Next" button after a question is completed
+      nextBtn.style.display = 'block';
     }
 
+    function getRandomIntBetween11And15(num) {
+  num=Math.floor(Math.random() * 5) + 21;
+}
     function handleOptionClick(event) {
       const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
       const isCorrectOption = optionIndex === correctOptionIndex;
@@ -1600,72 +1640,69 @@
       // Disable all options
       const options = document.querySelectorAll('.option');
       options.forEach(option => {
-        option.removeEventListener('click', handleOptionClick);
         option.style.pointerEvents = 'none';
       });
 
-      // Enable next button
-      nextBtn.style.display = 'block';
-    }
-
-    function getDifficulty() {
-      if (currentQuestionIndex === 15 || currentQuestionIndex === 30) {
-        if (currentQuestionIndex === 15) {
-          currentDifficulty = 'medium';
-        }
-        shuffledWords = shuffle(words[currentDifficulty].slice());
+      // Highlight the correct option if the selected option is incorrect
+      if (!isCorrectOption) {
+        const correctOptionElement = optionsDiv.children[correctOptionIndex];
+        correctOptionElement.classList.add('correct');
       }
     }
 
     function askQuestion() {
-  getDifficulty();
-  if (totalQuestions < 60) {
-    const questionData = shuffledWords[currentQuestionIndex];
-    currentWordIndex = questionData.correct;
-    const currentWord = questionData.word;
-    questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
-    questionDiv.textContent = currentWord;
+      if (currentQuestionIndex >= 15 && currentQuestionIndex < 30) {
+        currentDifficulty = 'medium';
+        shuffledWords = shuffle(words[currentDifficulty].slice());
+      } else if (currentQuestionIndex >= 30 && currentQuestionIndex < 45) {
+        currentDifficulty = 'hard';
+        shuffledWords = shuffle(words[currentDifficulty].slice());
+      } else if (currentQuestionIndex >= 45) {
+        currentDifficulty = 'expert';
+        shuffledWords = shuffle(words[currentDifficulty].slice());
+      }
 
-    const shuffledOptions = shuffle(questionData.options.slice());
-    correctOptionIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
+      if (currentQuestionIndex === shuffledWords.length) {
+        resultDiv.textContent = `Game over! Your score is ${score}`;
+        nextBtn.style.display = 'none';
+        return;
+      }
 
-    optionsDiv.innerHTML = '';
-    for (let i = 0; i < shuffledOptions.length; i++) {
-      const option = document.createElement('div');
-      option.className = 'option';
-      option.textContent = shuffledOptions[i];
-      option.addEventListener('click', handleOptionClick);
-      optionsDiv.appendChild(option);
-    }
+      const currentWord = shuffledWords[currentQuestionIndex];
+      correctOptionIndex = currentWord.correct;
+      questionDiv.textContent = currentWord.word;
+      questionNumberDiv.textContent = `Question ${currentQuestionIndex + 1}`;
+      optionsDiv.innerHTML = '';
 
-    resultDiv.textContent = '';
-    startTimer();
-  } else {
-    resultDiv.textContent = 'Your final score is: ' + score / (0.2 * 60).toFixed(0);
-    nextBtn.style.display = 'none';
-  }
-}
-    function startTimer() {
+      currentWord.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.textContent = option;
+        optionElement.classList.add('option');
+        optionElement.addEventListener('click', handleOptionClick);
+        optionsDiv.appendChild(optionElement);
+      });
+
+      resultDiv.textContent = '';
+
+      // Hide the "Next" button until the question is answered
+      nextBtn.style.display = 'none';
+
       let timeLeft = 20;
-      timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+      timerDiv.textContent = `Time left: ${timeLeft}`;
       timer = setInterval(() => {
         timeLeft--;
-        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
-        if (timeLeft === 0) {
-          clearTimeout(timer);
-          checkAnswer(false); // Timeout, passing false as the answer is incorrect
+        timerDiv.textContent = `Time left: ${timeLeft}`;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          checkAnswer(false); // Treat it as an incorrect answer if time runs out
         }
       }, 1000);
     }
 
     function shuffle(array) {
-      let currentIndex = array.length, temporaryValue, randomIndex;
-      while (0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
       }
       return array;
     }
