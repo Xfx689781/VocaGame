@@ -646,7 +646,7 @@
       nextBtn.style.display = 'block';
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-        score += (timeLeft >= 16 ? 20 : (timeLeft + 4));
+        score += (timeLeft >= 36 ? 40 : (timeLeft + 4));
         correctCount++;
         cor++;
         resultDiv.textContent = 'Correct!';
@@ -795,7 +795,7 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
   } 
 }
     function startTimer() {
-      let timeLeft = 20;
+      let timeLeft = 40;
       timerDiv.textContent = 'Time left: ' + timeLeft + 's';
       timer = setInterval(() => {
         timeLeft--;
@@ -804,7 +804,7 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
           clearTimeout(timer);
           checkAnswer(false); // Timeout, passing false as the answer is incorrect
         }
-      }, 1500);
+      }, 1000);
     }
 
     function shuffle(array) {
