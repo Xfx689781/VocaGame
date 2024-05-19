@@ -105,8 +105,8 @@
 
     #level {
       position: absolute;
-      left: 20px;
-      top: 20px;
+      left: 12px;
+      top: 4px;
       font-size:15px;
       font-family:'Times New Roman', Times, serif;
       margin-top: 20px;
@@ -1642,6 +1642,7 @@
       if (currentQuestionIndex === 15 || currentQuestionIndex === 30) {
         if (currentQuestionIndex === 15) {
           currentDifficulty = 'medium';
+          levelDiv.textContent = '中等模式'
         }
         shuffledWords = shuffle(words[currentDifficulty].slice());
       }
