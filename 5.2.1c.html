@@ -1276,11 +1276,29 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
           window.location.href = '5.2.1o.html';
         });
         }
-        else if ((score / (0.2 * totalQuestions))<53){
+        else if (cor==randomNumber2){
             nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
-          backgroundColorLevel30 = document.body.style.backgroundColor;
-          localStorage.setItem('backgroundColorLevel30', backgroundColorLevel30);
+          backgroundColorLevel45 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '5.2.1j.html';
+        });
+        }
+        else if (cor==randomNumber3){
+            nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', score);
+          backgroundColorLevel45 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '5.2.1p.html';
+        });
+        }
+        else if (((score / (0.2 * totalQuestions)))<53){
+            nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', score);
+          backgroundColorLevel45 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
           localStorage.setItem('correctCount', correctCount);
           window.location.href = '5.2.1d.html';
         });
@@ -1288,8 +1306,8 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
         else if (((score / (0.2 * totalQuestions)))>=53){
         nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
-          backgroundColorLevel30 = document.body.style.backgroundColor;
-          localStorage.setItem('backgroundColorLevel30', backgroundColorLevel30);
+          backgroundColorLevel45 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
           localStorage.setItem('correctCount', correctCount);
           window.location.href = '5.2.1e.html';
         });

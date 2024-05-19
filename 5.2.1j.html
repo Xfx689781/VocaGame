@@ -650,11 +650,17 @@
         correctCount++;
         cor++;
         resultDiv.textContent = 'Correct!';
+        if ((score/(0.2*totalQuestions))>=100) {
+           score=100*(0.2*totalQuestions)
+        }
       } else {
         resultDiv.textContent = 'Incorrect!';
         score -= 40;
         if (score<=0){
             score=0;
+        }
+        if ((score/(0.2*totalQuestions))>=100) {
+           score=100*(0.2*totalQuestions)
         }
       }
       correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
