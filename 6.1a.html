@@ -102,11 +102,22 @@
         font-size: 22px;
     
     }
+
+    #level {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      font-size:15px;
+      font-family:'Times New Roman', Times, serif;
+      margin-top: 20px;
+      top: 30px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>English Word Game</h1>
+    <div id="level">简单模式</div>
     <div id="questionNumber"></div>
     <div id="question"></div>
     <div id="options"></div>
@@ -1496,7 +1507,7 @@
     const correctDiv = document.getElementById('correct');
     const timerDiv = document.getElementById('timer');
     const questionNumberDiv = document.getElementById('questionNumber');
-
+    const levelDiv = document.getElementById('level');
     startBtn.addEventListener('click', startGame);
     nextBtn.addEventListener('click', askQuestion);
 
