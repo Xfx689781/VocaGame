@@ -103,10 +103,10 @@
     #level {
       position: absolute;
       left: 12px;
-      top: 10px;
+      top: 5px;
       font-size:15px;
       font-family:'Times New Roman', Times, serif;
-      margin-top: 20px;
+      
      
     }
   </style>
@@ -1185,7 +1185,44 @@
       });
        // Set background color based on score
        let body = document.querySelector('body');
-       if ((score / (0.2 * totalQuestions)) >= 95) {
+       if (score > 108) {
+  document.body.style.backgroundImage = "url('Images/109.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 107) {
+  document.body.style.backgroundImage = "url('Images/108.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 106) {
+  document.body.style.backgroundImage = "url('Images/107.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 105) {
+  document.body.style.backgroundImage = "url('Images/106.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 104) {
+  document.body.style.backgroundImage = "url('Images/105.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 103) {
+  document.body.style.backgroundImage = "url('Images/104.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 102) {
+  document.body.style.backgroundImage = "url('Images/103.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 101) {
+  document.body.style.backgroundImage = "url('Images/102.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 100) {
+  document.body.style.backgroundImage = "url('Images/101.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+
+else if ((score / (0.2 * totalQuestions)) >= 95) {
   body.style.backgroundColor = '#00ccff';
 }  else if ((score / (0.2 * totalQuestions)) >= 90) {
   body.style.backgroundColor = '#3cf5c7';

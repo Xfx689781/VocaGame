@@ -69,7 +69,17 @@
       margin-top: 20px;
       font-size: 18px;
       display: none;
+      .spinner {
+      width: 100px;
+      height: 100px;
+      background-color: #f00;
+      animation: spin 2s linear infinite;
+    }
 
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
     }
 
     #correct {
@@ -1520,7 +1530,7 @@
 
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-        score += (timeLeft >= 18 ? 20 : (timeLeft + 2));
+        score += (timeLeft >= 19 ? 20 : (timeLeft + 2));
         correctCount++;
         resultDiv.textContent = 'Correct!';
       } else {

@@ -93,7 +93,7 @@
     #level {
       position: absolute;
       left: 12px;
-      top: 10px;
+      top: 5px;
       font-size:15px;
       font-family:'Times New Roman', Times, serif;
       
@@ -1048,7 +1048,7 @@
       nextBtn.style.display = 'block';
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-        score += (timeLeft >= 17 ? 20 : (timeLeft + 3));
+        score += (timeLeft >= 18 ? 20 : (timeLeft + 3));
         correctCount++;
         cor++;
         resultDiv.textContent = 'Correct!';
@@ -1065,7 +1065,45 @@
       });
        // Set background color based on score
        let body = document.querySelector('body');
-       if ((score / (0.2 * totalQuestions)) >= 95) {
+       
+       if (score > 108) {
+  document.body.style.backgroundImage = "url('Images/109.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 107) {
+  document.body.style.backgroundImage = "url('Images/108.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 106) {
+  document.body.style.backgroundImage = "url('Images/107.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 105) {
+  document.body.style.backgroundImage = "url('Images/106.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 104) {
+  document.body.style.backgroundImage = "url('Images/105.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 103) {
+  document.body.style.backgroundImage = "url('Images/104.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 102) {
+  document.body.style.backgroundImage = "url('Images/103.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 101) {
+  document.body.style.backgroundImage = "url('Images/102.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if (score > 100) {
+  document.body.style.backgroundImage = "url('Images/101.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+
+else if ((score / (0.2 * totalQuestions)) >= 95) {
   body.style.backgroundColor = '#00ccff';
 }  else if ((score / (0.2 * totalQuestions)) >= 90) {
   body.style.backgroundColor = '#3cf5c7';
@@ -1090,9 +1128,10 @@
 }else if ((score / (0.2 * totalQuestions))>=30) {
     body.style.backgroundColor = '#6e0101';
 }else if ((score / (0.2 * totalQuestions))>=20) {
-    body.style.backgroundColor = '#2a0241';
+  body.style.backgroundColor = '#2a0241';
 }else if ((score / (0.2 * totalQuestions))<20) {
-    body.style.backgroundColor = '#000000';
+  body.style.backgroundColor = "#000000";
+  
 }
       nextBtn.disabled = false;
       currentQuestionIndex++;
