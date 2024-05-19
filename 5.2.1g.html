@@ -937,7 +937,7 @@ function updateBackground(score, totalQuestions) {
     document.body.style.backgroundSize = "cover";
 }
     function startTimer() {
-      let timeLeft = 35;
+      let timeLeft = 40;
       timerDiv.textContent = 'Time left: ' + timeLeft + 's';
       timer = setInterval(() => {
         timeLeft--;
@@ -946,7 +946,7 @@ function updateBackground(score, totalQuestions) {
           clearTimeout(timer);
           checkAnswer(false); // Timeout, passing false as the answer is incorrect
         }
-      }, 300);
+      }, 240);
     }
 
     function shuffle(array) {

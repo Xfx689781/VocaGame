@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #questionNumber {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #level {
+      position: absolute;
+      left: 12px;
+      top: 5px;
+      font-size:15px;
+      font-family:'Times New Roman', Times, serif;
+   
+      
+    }
+    .option {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: black; /* Default color */
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      display: none;
+    }
+
+    #correct {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    #nextBtn {
+        font-size: 22px;
+        background-color: transparent;
+        border: transparent;
+        margin-top: 20px;
+        display: block;
+        margin: 0 auto;
+        display: none;
+    
+    }
+
+    #startBtn {
+        background-color: rgb(145, 248, 243);
+        border: transparent;
+        margin-top: 20px;
+        display: block;
+        margin: 0 auto;
+        font-size: 22px;
+    
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="questionNumber"></div>
+    <div id="level">奖励模式</div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="correct">Correct:</div>
+    <div id="score">Score:</div>
+    <div id="timer">Time left:</div>
+    <button id="nextBtn" style="display: none;">Next</button>
+  </div>
+
+  <script>
+    const words = {
+        expert: [
+          //7个选项
+          { word: "rain", options: ["风", "人物", "城市", "雷", "雨", "雪"], correct: 4 },
+        { word: "sun", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 0 },
+        { word: "moon", options: ["太阳", "月亮", "星星", "花", "树", "草"], correct: 1 },
+        { word: "tree", options: ["汽车", "飞机", "轮船", "自行车", "树", "花"], correct: 4 },
+        { word: "flower", options: ["笔", "纸", "书", "花", "树", "草"], correct: 3 },
+        { word: "bird", options: ["鱼", "狗", "猫", "鸟", "老鼠", "兔子"], correct: 3 },
+        { word: "dog", options: ["狗", "猫", "鸟", "兔子", "老鼠", "鱼"], correct: 0 },
+        { word: "cat", options: ["猫", "狗", "鸟", "鱼", "老鼠", "兔子"], correct: 0 },
+        { word: "house", options: ["房子", "车子", "树", "花", "草", "水"], correct: 0 },
+        { word: "car", options: ["房子", "车子", "树", "花", "草", "水"], correct: 1 },
+        { word: "book", options: ["房子", "车子", "树", "花", "书", "草"], correct: 4 },
+        { word: "pen", options: ["笔", "纸", "书", "花", "树", "草"], correct: 0 },
+        { word: "school", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 0 },
+        { word: "apple", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 0 },
+        { word: "orange", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 2 },
+        { word: "banana", options: ["苹果", "香蕉", "橙子", "梨", "桃子", "葡萄"], correct: 1 },
+        { word: "table", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 0 },
+        { word: "chair", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 1 },
+        { word: "bed", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 4 },
+        { word: "cup", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 0 },
+        { word: "plate", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 2 },
+        { word: "spoon", options: ["杯子", "碗", "盘子", "勺子", "叉子", "刀"], correct: 3 },
+        { word: "clock", options: ["电视", "电话", "手机", "电脑", "相机", "时钟"], correct: 5 },
+        { word: "shoes", options: ["帽子", "衣服", "裤子", "鞋子", "袜子", "围巾"], correct: 3 },
+        { word: "hat", options: ["帽子", "衣服", "裤子", "鞋子", "袜子", "围巾"], correct: 0 },
+        { word: "computer", options: ["电脑", "手机", "钢笔", "书", "椅子", "桌子"], correct: 0 },
+        { word: "guitar", options: ["吉他", "钢琴", "小提琴", "笛子", "鼓", "管乐器"], correct: 0 },
+        { word: "picture", options: ["电视", "电话", "图片", "电脑", "时钟", "录音机"], correct: 2 },
+        { word: "television", options: ["电视", "电话", "相机", "电脑", "时钟", "录音机"], correct: 0 },
+        { word: "phone", options: ["电视", "电话", "相机", "电脑", "时钟", "录音机"], correct: 1 },
+        { word: "chair", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 1 },
+        { word: "bed", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 4 },
+        { word: "desk", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 2 },  
+        { word: "book", options: ["书", "手机", "电脑", "电视", "相机", "录音机"], correct: 0 },
+        { word: "pen", options: ["笔", "纸", "书", "花", "树", "草"], correct: 0 },
+        { word: "pencil", options: ["笔", "纸", "书", "花", "树", "草"], correct: 0 },
+        { word: "ruler", options: ["尺子", "圆规", "三角板", "目标", "游标卡尺", "天平"], correct: 0 },
+        { word: "eraser", options: ["橡皮擦", "削笔刀", "铅笔", "毛笔", "钢笔", "油画棒"], correct: 0 },
+        { word: "notebook", options: ["笔记本", "文具盒", "书包", "作业本", "课本", "书"], correct: 0 },
+        { word: "backpack", options: ["书包", "文具盒", "笔记本", "作业本", "课本", "书"], correct: 0 },
+        { word: "homework", options: ["作业", "书包", "文具盒", "笔记本", "课本", "书"], correct: 0 },
+        { word: "school", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 0 },
+        { word: "hospital", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 1 },
+        { word: "library", options: ["学校", "医院", "图书馆", "超市", "餐厅", "商店"], correct: 2 },
+        { word: "university", options: ["大学", "学校", "图书馆", "医院", "餐厅", "商店"], correct: 0 },
+        { word: "hospital", options: ["医院", "学校", "图书馆", "餐厅", "商店", "电影院"], correct: 0 },
+        { word: "rain", options: ["风", "人物", "城市", "雷", "雨", "雪"], correct: 4 },
+  { word: "acre", options: ["板块", "房地产", "种植园", "公里", "英亩", "公顷"], correct: 4 },
+  { word: "admire", options: ["钦佩", "惊讶", "怀疑", "尊敬", "羡慕", "喜欢"], correct: 4 },
+  { word: "admit", options: ["进入", "承认", "提交", "认为", "允许", "通知"], correct: 1 },
+  { word: "adore", options: ["憎恶", "忽视", "崇拜", "厌恶", "魔鬼", "讨厌"], correct: 2 },
+  { word: "agree", options: ["反对", "赞同", "承诺", "允许", "面膜", "管道"], correct: 1 },
+  { word: "aim", options: ["射箭", "瞄准", "射击", "球门", "采取", "预定"], correct: 1 },
+  { word: "alien", options: ["外国人", "异国的", "外星人", "不同的", "奇怪的", "未知的"], correct: 2 },
+  { word: "all", options: ["美国", "允许", "所有的", "口语", "猫", "他"], correct: 2 },
+  { word: "allow", options: ["允诺", "允许", "承认", "承诺", "进入", "箭头"], correct: 1 },
+  { word: "amaze", options: ["奶昔", "云", "使惊讶", "米饭", "成交量", "核磁共振"], correct: 2 },
+  { word: "amazing", options: ["极好的", "惊人的", "高难度的", "特殊的", "神奇的"], correct: 1 },
+  { word: "and", options: ["和", "不仅", "但是", "无论", "差", "倍数"], correct: 0 },
+  { word: "answer", options: ["答案", "回答", "解答", "问", "解释", "说"], correct: 1 },
+  { word: "ant", options: ["蚂蚁", "蚊子", "昆虫", "虫子", "蜜蜂", "飞虫"], correct: 0 },
+  { word: "apart", options: ["分开", "除了", "隔板", "阻断", "加入", "空间"], correct: 0 },
+  { word: "appear", options: ["出现", "缺席", "似乎", "显现", "看起来", "表现"], correct: 0 },
+  { word: "apple", options: ["苹果", "梨", "香蕉", "桃子", "葡萄", "水果"], correct: 0 },
+  { word: "apply", options: ["应用", "申请", "适用", "申诉", "加入", "使用"], correct: 1 },
+  { word: "arc", options: ["弧", "曲线", "拱门", "圆周", "扇形", "拱桥"], correct: 0 },
+  { word: "arch", options: ["拱门", "拱桥", "箭靶", "弓", "弧", "曲线"], correct: 0 },
+  { word: "argue", options: ["争论", "吵架", "叙述", "辨别", "诉讼", "申请"], correct: 0 },
+  { word: "arm", options: ["手臂", "武器", "军队", "坦克", "军", "兵"], correct: 0 },
+  { word: "army", options: ["军队", "陆军", "军事", "士兵", "武装", "部队"], correct: 0 },
+  { word: "art", options: ["艺术", "艺术家", "音乐", "绘画", "文艺", "美"], correct: 0 },
+  { word: "ask", options: ["问", "韵律", "要求", "苛刻的", "告诉", "答复"], correct: 0 },
+  { word: "attend", options: ["出席", "缺席", "上学", "照顾", "会议", "上课"], correct: 0 },
+  { word: "ball", options: ["球", "篮球", "足球", "皮球", "棒球", "乒乓球"], correct: 0 },
+  { word: "bamboo", options: ["竹子", "箭靶", "笋", "竹荪", "甘蔗", "竹叶"], correct: 0 },
+  { word: "banana", options: ["香蕉", "苹果", "橡胶", "水果", "树脂", "果子"], correct: 0 },
+  { word: "band", options: ["乐队", "河岸", "绑", "银行", "堤", "团体"], correct: 0 },
+  { word: "bank", options: ["银行", "乐队", "ATM取款机", "堤", "岩石", "滩"], correct: 0 },
+  { word: "bank", options: ["河岸", "乐队", "存钱", "堤", "浅水", "滩"], correct: 0 },
+  { word: "baozi", options: ["包子", "饺子", "馒头", "面条", "米饭", "粥"], correct: 0 },
+  { word: "base", options: ["基地", "低音", "电吉他", "基地设施", "根据地", "贝斯"], correct: 0 },
+  { word: "bass", options: ["低音", "电吉他", "男低音", "架子鼓", "巴士", "悲伤"], correct: 0 },
+  { word: "bass", options: ["鲈鱼", "男低音", "基地", "巴士底狱", "低语", "基础"], correct: 0 },
+  { word: "beach", options: ["海滩", "浅水", "长椅", "教堂", "河岸", "哈利法克斯"], correct: 0 },
+  { word: "bear", options: ["熊", "啤酒", "账单", "负担", "负担"], correct: 0 },
+  { word: "behave", options: ["行为", "羽毛", "拥有", "背叛", "托盘", "忧郁"], correct: 0 },
+  { word: "Beijing", options: ["北京", "上海", "广州", "深圳", "杭州", "成都"], correct: 0 },
+  { word: "belong", options: ["属于", "动物", "陆军", "海军", "空军", "拥有"], correct: 0 },
+  { word: "bird", options: ["鸟", "鲨鱼", "鲸鱼", "海鸥", "水鸟", "乌龟"], correct: 0 },
+  { word: "boil", options: ["沸腾", "炖", "烧", "炒", "开水", "淘米水"], correct: 0 },
+  { word: "borrow", options: ["借", "还给", "交换", "零钱", "图书馆", "菠萝"], correct: 0 },
+  { word: "boy", options: ["男孩", "男士", "女士", "美女", "帅哥", "老太太"], correct: 0 },
+  { word: "bread", options: ["面包", "烘焙", "布拉德", "馒头", "馕", "肉夹馍"], correct: 0 },
+  { word: "brother", options: ["兄弟", "打扰", "表哥", "学姐", "师兄", "学长"], correct: 0 },
+  { word: "bus", options: ["公交车", "贝斯", "低音", "电吉他", "火车", "汽车"], correct: 0 },
+  { word: "call", options: ["呼叫", "细胞", "电话", "电池", "电话号码", "称呼"], correct: 0 },
+  { word: "Cantonese", options: ["广东话", "普通话", "潮汕话", "客家话", "梵语", "英语"], correct: 0 },
+  { word: "car", options: ["汽车", "火车", "飞机", "船", "自行车", "坦克"], correct: 0 },
+  { word: "care", options: ["关心", "治疗", "护理", "保养", "照料", "焚烧"], correct: 0 },
+  { word: "carry", options: ["携带", "扔掉", "赠送", "吃掉", "抛弃", "寄出"], correct: 0 },
+  { word: "cat", options: ["猫", "狗", "老虎", "狮子", "豹子", "兔子"], correct: 0 },
+  { word: "catch", options: ["捕捉", "释放", "投掷", "抓伤", "接住", "扔掉"], correct: 0 },
+  { word: "cause", options: ["导致", "因为", "原因", "借口", "理由", "目的"], correct: 0 },
+  { word: "celebrate", options: ["庆祝", "哀悼", "纪念", "惋惜", "抗议", "示威"], correct: 0 },
+  { word: "chair", options: ["椅子", "桌子", "床", "凳子", "地板", "沙发"], correct: 0 },
+  { word: "chase", options: ["追逐", "逃跑", "隐藏", "观察", "疲倦", "休息"], correct: 0 },
+  { word: "chat", options: ["聊天", "打架", "赛跑", "玩耍", "思考", "疲惫"], correct: 0 },
+  { word: "check", options: ["检查", "批准", "领取", "销毁", "忽视", "遗忘"], correct: 0 },
+  { word: "Chengde", options: ["承德", "北京", "上海", "重庆", "广州", "成都"], correct: 0 },
+  { word: "Chengdu", options: ["成都", "承德", "重庆", "广州", "北京", "上海"], correct: 0 },
+  { word: "chicken", options: ["鸡", "鸭", "鹅", "鸽子", "孔雀", "乌鸦"], correct: 0 },
+  { word: "children", options: ["孩子", "成年人", "老人", "青年人", "婴儿", "青少年"], correct: 0 },
+  { word: "china", options: ["中国", "美国", "俄罗斯", "印度", "巴西", "南非"], correct: 0 },
+  { word: "chopsticks", options: ["筷子", "叉子", "勺子", "刀子", "碗", "盘子"], correct: 0 },
+  { word: "city", options: ["城市", "乡村", "山区", "荒漠", "海洋", "森林"], correct: 0 },
+  { word: "clean", options: ["清洁", "肮脏", "污染", "破旧", "陈旧", "斑驳"], correct: 0 },
+  { word: "clear", options: ["清楚", "模糊", "混乱", "困惑", "怀疑", "拒绝"], correct: 0 },
+  { word: "climb", options: ["爬", "跑", "走", "游泳", "飞", "滑"], correct: 0 },
+  { word: "clock", options: ["时钟", "手表", "日历", "手机", "电视", "电脑"], correct: 0 },
+  { word: "close", options: ["关闭", "打开", "锁定", "解锁", "移动", "靠近"], correct: 0 },
+  { word: "cloud", options: ["云", "雨", "雪", "风", "阳光", "月亮"], correct: 0 },
+  { word: "coat", options: ["外套", "裤子", "衬衫", "鞋子", "帽子", "手套"], correct: 0 },
+  { word: "color", options: ["颜色", "形状", "大小", "重量", "材料", "质量"], correct: 0 },
+  { word: "come", options: ["来", "去", "走", "停", "等", "回"], correct: 0 },
+  { word: "comfort", options: ["舒适", "紧张", "焦虑", "担忧", "忧郁", "痛苦"], correct: 0 },
+  { word: "compare", options: ["比较", "对比", "分析", "对照", "协调", "结合"], correct: 0 },
+  { word: "concern", options: ["关心", "忽视", "热爱", "厌恶", "宽容", "严厉"], correct: 0 },
+  { word: "confirm", options: ["确认", "否定", "猜测", "推测", "怀疑", "断言"], correct: 0 },
+  { word: "connect", options: ["连接", "交易", "决斗", "竞争", "争吵", "合作"], correct: 0 },
+  { word: "consider", options: ["考虑", "忽略", "拒绝", "接受", "欢迎", "拥抱"], correct: 0 },
+  { word: "continue", options: ["继续", "停止", "暂停", "延迟", "结束", "开始"], correct: 0 },
+  { word: "control", options: ["控制", "解放", "放弃", "接管", "管理", "支配"], correct: 0 },
+  { word: "corn", options: ["玉米", "小麦", "水稻", "大豆", "蔬菜", "水果"], correct: 0 },
+  { word: "correct", options: ["正确", "错误", "真实", "虚假", "合理", "不合理"], correct: 0 },
+  { word: "cow", options: ["牛", "马", "羊", "猪", "鸡", "鱼"], correct: 0 },// Add more easy words and options
+  { word: "crow", options: ["乌鸦", "爪子", "瓜子", "乌鸡", "船员", "船体"], correct: 0 },  
+  { word: "crow", options: ["乌鸦", "爪子", "瓜子", "乌鸡", "船员", "船体"], correct: 0 },  
+  { word: "crow", options: ["乌鸦", "爪子", "瓜子", "乌鸡", "船员", "船体"], correct: 0 },  
+  { word: "dance", options: ["舞蹈", "音乐", "艺术", "工程", "数字", "植物"], correct: 0 },
+  { word: "date", options: ["日期", "平行时空", "时期", "指导", "变化", "食物"], correct: 0 },
+  { word: "day", options: ["天", "粒子加速器", "量子计算机", "人工通用智能", "工作", "饭菜"], correct: 0 },
+  { word: "deal", options: ["处理", "条约", "美德", "工具", "动物", "学习"], correct: 0 },
+  { word: "decide", options: ["决定", "确定", "决心", "领导", "困难", "文化"], correct: 0 },
+  { word: "deliver", options: ["递送", "运输", "强迫", "流动", "容器", "动力"], correct: 0 },
+  { word: "destroy", options: ["摧毁", "建设", "减少", "保护", "修复", "增加"], correct: 0 },
+  { word: "develop", options: ["发展", "晴天", "落日", "减少", "深化", "改善"], correct: 0 },
+  { word: "die", options: ["死亡", "萝卜", "征集", "生命", "生长", "繁殖"], correct: 0 },
+  { word: "discuss", options: ["讨论", "美国", "听力", "阅读", "写作", "学习"], correct: 0 },
+  { word: "divide", options: ["分", "划分", "分开", "合并", "扩大", "集中"], correct: 0 },
+  { word: "dog", options: ["狗", "猫", "鸟", "鱼", "马", "象"], correct: 0 },
+  { word: "doll", options: ["娃娃", "玩偶", "布娃娃", "机器人", "玩具车", "游戏机"], correct: 0 },
+  { word: "door", options: ["门", "窗", "墙", "地板", "天花板", "家具"], correct: 0 },
+  { word: "doubt", options: ["怀疑", "确信", "确定", "观察", "研究", "学习"], correct: 0 },
+  { word: "dragon", options: ["龙", "虎", "鲸", "蛇", "鸟", "鱼"], correct: 0 },
+  { word: "draw", options: ["画", "写", "拍摄", "设计", "制作", "表演"], correct: 0 },
+  { word: "drink", options: ["喝", "吃", "玩", "跑", "看", "听"], correct: 0 },
+  { word: "drive", options: ["驾驶", "飞行", "游泳", "跳跃", "奔跑", "骑行"], correct: 0 },
+  { word: "duck", options: ["鸭", "猫", "狗", "牛", "鸟", "鱼"], correct: 0 },
+  { word: "earn", options: ["赚取", "花费", "捐赠", "奖励", "赞美", "报告"], correct: 0 },
+  { word: "egg", options: ["蛋", "米", "面", "油", "盐", "糖"], correct: 0 },
+  { word: "elephant", options: ["大象", "狮子", "老虎", "长颈鹿", "河马", "犀牛"], correct: 0 },
+  { word: "enter", options: ["进入", "离开", "停留", "出现", "消失", "迷路"], correct: 0 },
+  { word: "exist", options: ["存在", "消失", "明白", "日本", "灭亡", "存活"], correct: 0 },
+  { word: "experience", options: ["经验", "知识", "技能", "感受", "学习", "见识"], correct: 0 },
+  { word: "couch", options: ["桌子", "椅子", "书桌", "沙发", "床", "柜子"], correct: 3 },
+  { word: "couch", options: ["教练", "吊床", "大巴车", "躺椅", "床", "公交车"], correct: 3 },
+  { word: "couch", options: ["大巴车", "厂房", "扣子", "卧榻", "炕", "米糠"], correct: 3 },
+  { word: "experiment", options: ["实验", "经验", "经历", "尝试", "感受", "感官"], correct: 0 },
+  { word: "experiment", options: ["实验", "经验", "经历", "尝试", "感受", "感官"], correct: 0 },
+  { word: "experiment", options: ["实验", "经验", "经历", "尝试", "感受", "感官"], correct: 0 },
+  { word: "experiment", options: ["实验", "经验", "经历", "尝试", "感受", "感官"], correct: 0 },
+  {
+  word: "explain",
+  options: ["解释", "铭记", "座右铭", "苹果", "意大利", "西班牙"],
+  correct: 0
+},
+{
+  word: "eye",
+  options: ["眼睛", "视觉", "眼神", "舌头", "大脑", "手指"],
+  correct: 0
+},
+{
+  word: "fail",
+  options: ["失败", "成功", "胜利", "尝试", "努力", "进步"],
+  correct: 0
+},
+{
+  word: "fall",
+  options: ["秋天", "跌倒", "感觉", "冬天", "飘", "跌打"],
+  correct: 0
+},
+{
+  word: "farm",
+  options: ["农场", "工厂", "学校", "医院", "商店", "办公室"],
+  correct: 0
+},
+{
+  word: "farmer",
+  options: ["农民", "工人", "教师", "医生", "售货员", "律师"],
+  correct: 0
+},
+{
+  word: "father",
+  options: ["父亲", "母亲", "哥哥", "妹妹", "儿子", "女儿"],
+  correct: 0
+},
+{
+  word: "fear",
+  options: ["恐惧", "勇气", "冷静", "平静", "愤怒", "悲伤"],
+  correct: 0
+},
+{
+  word: "feel",
+  options: ["感觉", "思考", "表达", "接触", "了解", "相信"],
+  correct: 0
+},
+{
+  word: "feet",
+  options: ["脚", "头", "手", "胳膊", "腿", "肚子"],
+  correct: 0
+},
+{
+  word: "fever",
+  options: ["发烧", "发冷", "发疯", "发狂", "发热", "发抖"],
+  correct: 0
+},
+{
+  word: "fight",
+  options: ["战斗", "和平", "合作", "交流", "竞争", "挑战"],
+  correct: 0
+},
+{
+  word: "fill",
+  options: ["填满", "清空", "排空", "倾倒", "抛弃", "放弃"],
+  correct: 0
+},
+{
+  word: "find",
+  options: ["发现", "丢失", "遗失", "隐藏", "消失", "失去"],
+  correct: 0
+},
+{
+  word: "finish",
+  options: ["完成", "开始", "继续", "结束", "停止", "终结"],
+  correct: 0
+},
+{
+  word: "fire",
+  options: ["火", "水", "风", "土", "木", "金"],
+  correct: 0
+},
+{
+  word: "fish",
+  options: ["鱼", "鸟", "兔子", "狗", "猫", "老鼠"],
+  correct: 0
+},
+{
+  word: "floor",
+  options: ["地板", "天花板", "墙壁", "窗户", "门", "地毯"],
+  correct: 0
+},
+{
+  word: "flower",
+  options: ["花", "树", "草", "叶子", "果实", "根"],
+  correct: 0
+},
+{ word: "fog", options: ["雾", "青蛙", "霾", "鳄鱼", "两栖动物", "蛙池"], correct: 0 },
+{ word: "fog", options: ["雾", "青蛙", "霾", "鳄鱼", "两栖动物", "蛙池"], correct: 0 },
+{ word: "fog", options: ["雾", "青蛙", "霾", "鳄鱼", "两栖动物", "蛙池"], correct: 0 },
+{ "word": "follow", "options": ["跟随", "马达", "苏醒", "智能", "明白", "理解"], "correct": 0 },
+    { "word": "fool", "options": ["傻子", "眼镜", "蘑菇", "日本", "韩国", "吉他"], "correct": 0 },
+    { "word": "form", "options": ["形式", "披萨", "梨子", "建筑", "厨房", "健身"], "correct": 0 },
+    { "word": "frame", "options": ["框架", "相机", "音乐", "眼镜", "画家", "门框"], "correct": 0 },
+    { "word": "frog", "options": ["青蛙", "水泥", "泥土", "蝌蚪", "蟾蜍", "玩具"], "correct": 0 },
+    { "word": "from", "options": ["从", "玩具", "音乐", "雨水", "金属", "云朵"], "correct": 0 },
+    { "word": "fry", "options": ["煎", "烤肉", "电影", "火焰", "炸鸡", "炸薯条"], "correct": 0 },
+    { "word": "gain", "options": ["获得", "胜利", "赚钱", "增长", "优势", "进步"], "correct": 0 },
+    { "word": "game", "options": ["游戏", "棋盘", "操场", "运动", "娱乐", "竞技"], "correct": 0 },
+    { "word": "garden", "options": ["花园", "植物", "果园", "菜园", "庭院", "公园"], "correct": 0 },
+    { "word": "girl", "options": ["女孩", "女性", "妇女", "少女", "女士", "母亲"], "correct": 0 },
+    { "word": "glass", "options": ["玻璃", "杯子", "窗户", "瓶子", "眼镜", "放大镜"], "correct": 0 },
+    { "word": "goat", "options": ["山羊", "绵羊", "牛羊", "母羊", "公羊", "动物"], "correct": 0 },
+    { "word": "grab", "options": ["抓住", "搏斗", "拉扯", "争夺", "抢夺", "攫取"], "correct": 0 },
+    { "word": "grass", "options": ["草", "墨汁", "麦田", "草地", "草坪", "植物"], "correct": 0 },
+    { "word": "guess", "options": ["猜测", "预测", "揣测", "怀疑", "推测", "估计"], "correct": 0 },
+    { "word": "Hainan", "options": ["海南", "三亚", "海口", "岛屿", "中国", "热带"], "correct": 0 },
+    { "word": "Han", "options": ["汉族", "中国", "民族", "文化", "历史", "朝代"], "correct": 0 },
+    { "word": "hand", "options": ["手", "手指", "掌心", "手掌", "手臂", "手部"], "correct": 0 },
+    { "word": "happen", "options": ["发生", "事件", "事情", "结果", "发生了", "发展"], "correct": 0 },
+    { "word": "hate", "options": ["仇恨", "明白", "预览", "恶人", "火箭", "音乐"], "correct": 0 },
+  { "word": "have", "options": ["有", "无", "持有", "具有", "有的", "有些"], "correct": 0 },
+  { "word": "head", "options": ["头", "腿", "手", "眼睛", "脑袋", "脚"], "correct": 0 },
+  { "word": "hill", "options": ["山", "河", "湖", "海", "坡", "丘陵"], "correct": 0 },
+  { "word": "hit", "options": ["打", "扔", "踢", "拉", "敲击", "碰撞"], "correct": 0 },
+  { "word": "hold", "options": ["持有", "丢弃", "抓住", "扔掉", "落后", "平均"], "correct": 0 },
+  { "word": "home", "options": ["家", "学校", "超市", "医院", "公司", "酒店"], "correct": 0 },
+  { "word": "Hong Kong", "options": ["香港", "澳门", "台湾", "新加坡", "北京", "上海"], "correct": 0 },
+  { "word": "hope", "options": ["希望", "失望", "惊喜", "忧虑", "期待", "梦想"], "correct": 0 },
+  { "word": "horse", "options": ["马", "狗", "猫", "鸟", "猪", "牛"], "correct": 0 },
+  { "word": "house", "options": ["房子", "树屋", "楼房", "别墅", "公寓", "住房"], "correct": 0 },
+  { "word": "hurt", "options": ["受伤", "健康", "疼痛", "快乐", "伤害", "舒适"], "correct": 0 },
+  { "word": "imagine", "options": ["想象", "现实", "幻想", "真实", "虚构", "设想"], "correct": 0 },
+  { "word": "include", "options": ["包括", "排除", "添加", "删除", "取笑", "面容"], "correct": 0 },
+  { "word": "island", "options": ["岛", "湖", "海", "河流", "山", "平原"], "correct": 0 },
+  { "word": "jacket", "options": ["夹克", "外套", "裤子", "衬衫", "裙子", "帽子"], "correct": 0 },
+  { "word": "jam", "options": ["果酱", "果汁", "奶酪", "饼干", "牛奶", "面包"], "correct": 0 },
+  { "word": "join", "options": ["加入", "退出", "关节", "观察", "加盟", "合并"], "correct": 0 },
+  { "word": "judge", "options": ["法官", "医生", "老师", "警察", "工人", "学生"], "correct": 0 },
+  { "word": "jump", "options": ["跳", "走", "跑", "爬", "飞", "游泳"], "correct": 0 },
+  { "word": "just", "options": ["正义", "审判", "正确", "错误", "法治", "平等"], "correct": 0 },
+  { "word": "kick", "options": ["踢", "打", "拳击", "跳", "走", "跑"], "correct": 0 },
+  { "word": "kill", "options": ["杀", "救", "保护", "照顾", "抓", "抱"], "correct": 0 },
+  { "word": "king", "options": ["国王", "皇后", "王子", "公主", "皇帝", "王后"], "correct": 0 },
+  { "word": "kiss", "options": ["吻", "打", "踢", "握手", "拥抱", "摸"], "correct": 0 },
+  { "word": "kite", "options": ["风筝", "飞机", "火车", "汽车", "船", "潜水艇"], "correct": 0 },
+  { "word": "know", "options": ["知道", "不知道", "村落", "城市", "预览", "兰花"], "correct": 0 },
+  { "word": "Kung Fu", "options": ["功夫", "体操", "跆拳道", "拳击", "搏击", "击剑"], "correct": 0 },
+  { "word": "lake", "options": ["湖", "海", "河流", "池塘", "水库", "泉水"], "correct": 0 },
+  { "word": "lamp", "options": ["灯", "电视", "冰箱", "洗衣机", "电脑", "电话"], "correct": 0 },
+  { "word": "land", "options": ["土地", "海洋", "大陆", "洲", "国家", "地球"], "correct": 0 },
+  { "word": "lantern", "options": ["灯笼", "台灯", "吊灯", "手电筒", "路灯", "车灯"], "correct": 0 },
+  { "word": "last", "options": ["持续", "结束", "开始", "第一个", "最后", "第一次"], "correct": 0 },
+  { "word": "laugh", "options": ["笑", "哭", "生气", "害怕", "悲伤", "疼痛"], "correct": 0 },
+  { "word": "leaf", "options": ["叶子", "花", "果实", "枝干", "树皮", "树根"], "correct": 0 },
+  { "word": "learn", "options": ["学习", "教", "玩", "工作", "玩耍", "休息"], "correct": 0 },
+  { "word": "leave", "options": ["离开", "留下", "进入", "出发", "回来", "到达"], "correct": 0 },
+  { "word": "leg", "options": ["腿", "胳膊", "手", "脚", "头", "身体"], "correct": 0 },
+  { "word": "let", "options": ["让", "要求", "请求", "禁止", "阻止", "批准"], "correct": 0 },
+  { "word": "library", "options": ["图书馆", "超市", "商店", "学校", "医院", "公司"], "correct": 0 },
+  { word: "money", options: ["钞票", "金钱", "财富", "货币", "资金", "现金"], correct: 1 },
+  { word: "monkey", options: ["猴子", "蝴蝶", "大象", "老虎", "蚂蚁", "海豚"], correct: 0 },
+  { word: "moon", options: ["月球", "星星", "太阳", "地球", "火星", "水星"], correct: 0 },
+  { word: "mother", options: ["母亲", "父亲", "儿子", "女儿", "祖母", "祖父"], correct: 0 },
+  { word: "mouse", options: ["老鼠", "猫", "狗", "兔子", "乌龟", "蛇"], correct: 0 },
+  { word: "mouth", options: ["嘴巴", "耳朵", "鼻子", "眼睛", "手指", "脚趾"], correct: 0 },
+  { word: "neck", options: ["脖子", "腰", "手腕", "脚踝", "肩膀", "膝盖"], correct: 0 },
+  { word: "need", options: ["需要", "想要", "拥有", "掌握", "了解", "获得"], correct: 0 },
+  { word: "nest", options: ["鸟巢", "树木", "洞穴", "草丛", "河流", "山峰"], correct: 0 },
+  { word: "nice", options: ["美好", "美丽", "幸福", "温暖", "快乐", "和谐"], correct: 0 },
+  { word: "night", options: ["夜晚", "白天", "黎明", "黄昏", "清晨", "午夜"], correct: 0 },
+  { word: "noise", options: ["噪音", "音乐", "歌声", "风声", "雨声", "雷声"], correct: 0 },
+  { word: "noodle", options: ["面条", "米饭", "馒头", "包子", "粥", "饺子"], correct: 0 },
+  { word: "nose", options: ["鼻子", "耳朵", "嘴巴", "眼睛", "头发", "牙齿"], correct: 0 },
+  { word: "note", options: ["笔记", "书信", "日记", "便条", "通知", "记录"], correct: 0 },
+  { word: "notice", options: ["注意", "观察", "留意", "察觉", "发现", "查看"], correct: 0 },
+  { word: "offer", options: ["提供", "捐赠", "供应", "赠送", "出售", "交付"], correct: 0 },
+  { word: "office", options: ["办公室", "学校", "商店", "医院", "银行", "图书馆"], correct: 0 },
+  { word: "open", options: ["打开", "关闭", "锁定", "解锁", "盛装", "启动"], correct: 0 },
+  { word: "orange", options: ["橙子", "苹果", "香蕉", "梨子", "桃子", "葡萄"], correct: 0 },
+  { word: "order", options: ["订单", "请求", "安排", "指令", "规定", "决定"], correct: 0 },
+  { word: "ought", options: ["应该", "可能", "必须", "可以", "不可能", "可能"], correct: 0 },
+  { word: "oven", options: ["烤箱", "微波炉", "炉灶", "火炉", "欧文", "电磁感应"], correct: 0 },
+  { word: "own", options: ["拥有", "失去", "占有", "获得", "控制", "使用"], correct: 0 },
+  { word: "paint", options: ["油漆", "颜料", "墨水", "水彩", "水粉", "打印"], correct: 0 },
+  { word: "panda", options: ["熊猫", "大熊", "猩猩", "长颈鹿", "考拉", "袋鼠"], correct: 0 },
+  { word: "paper", options: ["纸", "木头", "金属", "塑料", "玻璃", "布料"], correct: 0 },
+  { word: "party", options: ["派对", "庆祝", "聚会", "集会", "党派", "政党"], correct: 0 },
+  { word: "pass", options: ["通过", "停止", "阻止", "超过", "绕过", "越过"], correct: 0 },
+  { word: "pay", options: ["支付", "收到", "赚取", "获得", "花费", "赔偿"], correct: 0 },
+  { word: "Peking", options: ["北京", "上海", "广州", "深圳", "天津", "南京"], correct: 0 },
+  { word: "pen", options: ["笔", "铅笔", "毛笔", "钢笔", "圆珠笔", "马克笔"], correct: 0 },
+  { word: "pencil", options: ["铅笔", "钢笔", "毛笔", "马克笔", "圆珠笔", "油画棒"], correct: 0 },
+  { word: "percent", options: ["百分之", "十分之一", "百分之五", "百分之十", "百分之一千", "千分之一"], correct: 0 },
+  { word: "phone", options: ["手机", "电视", "座机", "电脑", "通信设备", "对讲机"], correct: 0 },
+  { word: "pick", options: ["挑选", "选择", "捡起", "采摘", "挖掘", "挑剔"], correct: 0 },
+  { word: "picture", options: ["图片", "照片", "画", "图像", "图表", "图案"], correct: 0 },
+  { word: "pig", options: ["猪", "牛", "羊", "马", "狗", "鸡"], correct: 0 },
+  { word: "plan", options: ["计划", "想法", "打算", "规划", "安排", "设计"], correct: 0 },
+  { word: "plane", options: ["飞机", "船", "汽车", "火车", "自行车", "滑板"], correct: 0 },
+  { word: "plant", options: ["植物", "动物", "微生物", "细菌", "真菌", "人类"], correct: 0 },
+  { word: "plate", options: ["盘子", "碟子", "碟", "盘", "托盘", "餐具"], correct: 0 },
+  { word: "pleasant", options: ["愉快", "兴奋", "温和", "难过", "温暖"], correct: 0 },
+  { word: "pool", options: ["游泳池", "水池", "水塘", "水槽", "蓄水池", "温泉池"], correct: 0 },
+  { word: "post", options: ["邮件", "命令", "包裹", "邮政", "快递", "邮递"], correct: 0 },
+  { word: "pray", options: ["祈祷", "玩耍", "礼拜", "乞讨", "游戏", "宗教"], correct: 0 },
+  { word: "promise", "options": ["承诺", "麻烦", "马车", "围巾", "保证", "天气预报"], "correct": 0 },
+    { word: "provide", "options": ["提供", "过去", "破坏", "明白", "放弃", "修改"], "correct": 0 },
+    { word:  "Qinghai", "options": ["青海", "四川", "云南", "北京", "湖南", "福建"], "correct": 0 },
+    { word:  "queen", "options": ["皇后", "国王", "国王", "王妃", "女人", "王室"], "correct": 0 },
+    { word:  "question", "options": ["问题", "疑问", "回答", "质疑", "答案", "问号"], "correct": 0 },
+    { word:  "quick", "options": ["快", "军人", "慢", "漫游", "鳗鱼", "辐射"], "correct": 0 },
+    { word:  "quit", "options": ["退出", "辞职", "开始", "参加", "告别", "放弃"], "correct": 0 },
+    { word:  "quiz", "options": ["测验", "问答", "红色怪兽", "期末考试", "月考", "提问"], "correct": 0 },
+    { word:  "rail", "options": ["轨道", "铁路", "火车", "铁轨", "列车", "路线"], "correct": 0 },
+    { word:  "rain", "options": ["雨", "打雷", "闪电", "彩虹", "红色怪兽", "暴雨"], "correct": 0 },
+    { word:  "rainbow", "options": ["彩虹", "彩色", "颜色", "七彩", "光线", "天空"], "correct": 0 },
+    { word:  "raise", "options": ["抬高", "量子力学", "粒子对撞", "电磁感应", "电离辐射", "核磁共振"], "correct": 0 },
+    { word:  "rat", "options": ["老鼠", "鼠标", "老虎", "耗子", "猫", "宠物"], "correct": 0 },
+    { word:  "reach", "options": ["到达", "电离辐射", "速度", "默契", "到来", "预告"], "correct": 0 },
+    { word:  "read", "options": ["阅读", "辐射", "书籍", "读书", "读者", "书本"], "correct": 0 },
+    { word:  "realize", "options": ["实现", "认识", "体会", "感觉", "马夫", "了解"], "correct": 0 },
+    { word:  "receive", "options": ["接收", "辐射", "阻挡", "祖先", "马达", "得到"], "correct": 0 },
+    { word:  "reflect", "options": ["反射", "反映", "映射", "反馈", "思考", "表现"], "correct": 0 },
+    { word:  "remember", "options": ["记得", "平均", "忘记", "回忆", "脑子", "遗忘"], "correct": 0 },
+    { word:  "remind", "options": ["提醒", "警告", "告诉", "回忆", "闹钟", "记忆"], "correct": 0 },
+    { word:  "remove", "options": ["移除", "明天", "座右铭", "移动", "撤销", "杀虫剂"], "correct": 0 },
+    { word:  "repeat", "options": ["重复", "再次", "重启", "复述", "重写", "晴天"], "correct": 0 },
+    { word:  "reply", "options": ["回复", "答复", "答案", "明白", "反驳", "问候"], "correct": 0 },
+    { word:  "repo", "options": ["仓库", "回购", "库存", "储藏", "归还", "寄存"], "correct": 0 },
+    { word:  "report", "options": ["报告", "总结", "证据", "告诉", "证券", "提供"], "correct": 0 },
+    { word: "ride", options: ["骑", "驾驶", "坐车", "观光", "旅游", "路线"], correct: 0 },
+  { word: "ring", options: ["环", "铃", "日环食","手环", "手镯", "圆形"], correct: 0 },
+  { word: "rise", options: ["上升", "明白", "铭记", "污染", "观光", "欧美"], correct: 0 },
+  { word: "risk", options: ["风险", "卧底", "冒雨", "冒险", "危险", "风险投资"], correct: 0 },
+  { word: "river", options: ["河", "动物", "卧底", "青蛙", "长度", "河岸"], correct: 0 },
+  { word: "road", options: ["道路", "璐", "公鹿", "马陆", "是否", "分辨"], correct: 0 },
+  { word: "rock", options: ["岩石", "瑶滚", "屏幕", "摇晃", "摇摆", "生物圈"], correct: 0 },
+  { "word": "room", "options": ["房间", "汽车", "书本", "电视", "月亮", "水杯"], "correct": 0 },
+  { "word": "rope", "options": ["绳子", "电脑", "钥匙", "手表", "眼睛", "鼻子"], "correct": 0 },
+  { "word": "sandwich", "options": ["三明治", "鸟", "石头", "云彩", "星星", "风"], "correct": 0 },
+  { "word": "save", "options": ["救", "草", "树", "果实", "花园", "蔬菜"], "correct": 0 },
+  { "word": "school", "options": ["学校", "飞机", "轮船", "自行车", "摩托车", "直升机"], "correct": 0 },
+  { "word": "seed", "options": ["种子", "大海", "河流", "山峰", "草原", "沙漠"], "correct": 0 },
+  { "word": "seek", "options": ["寻找", "电影", "绘画", "舞蹈", "戏剧", "雕塑"], "correct": 0 },
+  { "word": "seem", "options": ["似乎", "夏天", "秋天", "冬天", "雨", "雪"], "correct": 0 },
+  { "word": "settle", "options": ["定居", "老虎", "大象", "长颈鹿", "猴子", "熊"], "correct": 0 },
+  { "word": "shake", "options": ["摇晃", "橙子", "香蕉", "西瓜", "草莓", "蓝莓"], "correct": 0 },
+  { "word": "tooth", "options": ["牙齿","风车", "水母", "蜡烛", "雨伞", "石头", "狗尾草"], "correct": 0 },
+  { "word": "town", "options": ["小镇","小船", "太阳", "月亮", "星星", "雨滴", "鱼儿"], "correct": 0 },
+  { "word": "toy", "options": ["玩具","梨", "菠萝", "西瓜", "草莓", "香蕉", "橘子"], "correct": 0 },
+  { "word": "tree", "options": ["树木","飞机", "火箭", "潜水艇", "摩托车", "自行车", "卡车"], "correct": 0 },
+  { "word": "truck", "options": ["卡车","音乐", "电影", "绘画", "舞蹈", "戏剧", "雕塑"], "correct": 0 },
+  { "word": "umbrella", "options": ["雨伞","大海", "湖泊", "河流", "山峰", "草原", "沙漠"], "correct": 0 },
+  { "word": "understand", "options": ["理解","火车", "飞机", "轮船", "自行车", "摩托车", "直升机"], "correct": 0 },
+  { "word": "use", "options": ["运用", "橙子", "香蕉", "西瓜", "草莓", "蓝莓"], "correct": 0 },
+  { "word": "usually", "options": ["经常", "花朵", "沙滩", "星星", "山峰", "树叶"], "correct": 0 },
+  { "word": "vase", "options": ["花瓶", "汽车", "书本", "电视", "月亮", "水杯"], "correct": 0 },
+  { "word": "vegetable", "options": ["蔬菜", "电脑", "钥匙", "手表", "眼睛", "鼻子"], "correct": 0 },
+  { "word": "voice", "options": ["嗓音", "声音", "噪声", "音频", "音高", "高音"], "correct": 0 },
+  { "word": "vote", "options": ["投票", "选举", "竞赛", "竞选", "宣布", "公布"], "correct": 0 },
+  { "word": "wait", "options": ["等待", "飞机", "汽车", "船只", "自行车", "摩托车"], "correct": 0 },
+  { "word": "wake", "options": ["苏醒", "电影", "小说", "绘画", "舞蹈", "雕塑"], "correct": 0 },
+  { "word": "wall", "options": ["墙壁", "夏天", "秋天", "冬天", "雨", "雪"], "correct": 0 },
+  { "word": "war", "options": ["战争", "老虎", "大象", "长颈鹿", "猴子", "熊"], "correct": 0 },
+  { "word": "warn", "options": ["警告", "橙子", "香蕉", "西瓜", "草莓", "蓝莓"], "correct": 0 },
+  { "word": "watch", "options": ["手表", "黄河", "珠江", "长江的", "长江上", "长江流域"], "correct": 0 },
+  { "word": "watch", "options": ["观看", "瞥", "场地", "庭院", "码长", "后院"], "correct": 0 },
+  { "word": "water", "options": ["水", "一年", "岁", "年份", "年代", "年的"], "correct": 0 },
+  { "word": "wave", "options": ["波浪", "叫喊", "大喊", "吼叫", "喊", "大声喊"], "correct": 0 },
+  { "word": "welcome", "options": ["欢迎", "黄", "金黄色", "淡黄色", "浅黄色", "黄的"], "correct": 0 },
+  { "word": "wheel", "options": ["轮子", "四川", "贵州", "广西", "云南省", "云南的"], "correct": 0 },
+  { "word": "window", "options": ["窗户", "动物园", "动物", "动物馆", "动物栏", "野生动物园"], "correct": 0 },
+  { "word": "wing", "options": ["翅膀", "放大", "缩放", "变焦镜头", "变焦的", "变焦器"], "correct": 0 },
+  { "word": "winter", "options": ["冬天", "窗", "窗口", "窗户的", "窗台", "窗外"], "correct": 0 },
+  
+        ]
+     
+      // Define medium, hard, and expert words similarly
+    };
+    const nextBtn = document.getElementById('nextBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+    const correctDiv = document.getElementById('correct');
+    const timerDiv = document.getElementById('timer');
+    const questionNumberDiv = document.getElementById('questionNumber');
+    let cor=0;
+    let q=0;
+    nextBtn.addEventListener('click', askQuestion);
+    function startGame() {
+      //score = 0;
+      //correctCount = 0;
+      backgroundColorLevellvp = localStorage.getItem('backgroundColorLevellvp');
+      document.body.style.backgroundColor = backgroundColorLevellvp;
+      score = parseInt(localStorage.getItem('score')) || 0;
+      correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
+      totalQuestions = parseInt(localStorage.getItem('totalQuestions')) || 0;
+      resultDiv.textContent = '';
+      nextBtn.style.display = 'block';
+      currentQuestionIndex = 0;
+      cor = 0;
+      q = 0;
+      currentDifficulty = 'expert';
+      shuffledWords = shuffle(words[currentDifficulty].slice());
+      askQuestion();
+      nextBtn.style.display = 'none';
+   
+    }
+    
+    function checkAnswer(isCorrectOption) {
+      totalQuestions++;
+      q++;
+      clearTimeout(timer);
+      nextBtn.style.display = 'block';
+      if (isCorrectOption) {
+        const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
+        score += timeLeft;
+        correctCount++;
+        cor++;
+    
+      } else {
+        resultDiv.textContent = 'Incorrect!';
+      }
+      correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
+        scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
+      // Disable all options after a choice is made
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.pointerEvents = 'none';
+      });
+       // Set background color based on score
+       let body = document.querySelector('body');
+       updateBackground(score, totalQuestions)
+      nextBtn.disabled = false;
+      currentQuestionIndex++;
+      if (q==6) {
+       
+        scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
+    hideButton();
+
+      }
+    }
+    let currentVideo; // To keep track of the current video element
+    let currentVideoSrc; // To keep track of the current video source
+
+function updateBackground(score, totalQuestions) {
+    let normalizedScore = score / (0.2 * totalQuestions);
+
+    // Remove existing background image and color
+    document.body.style.backgroundImage = '';
+    document.body.style.backgroundColor = '';
+
+    // Handle the range for videos
+    if (normalizedScore > 120) {
+        let newVideoSrc = 'Images/113.mp4';
+
+        if (!currentVideo || currentVideoSrc !== newVideoSrc) {
+            // Remove any existing video if it exists
+            if (currentVideo) {
+                currentVideo.parentNode.removeChild(currentVideo);
+            }
+
+            // Create a new video element
+            currentVideo = document.createElement('video');
+            currentVideo.setAttribute('autoplay', 'true');
+            currentVideo.setAttribute('loop', 'true');
+            currentVideo.classList.add('bg-video');
+
+            let sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', newVideoSrc);
+            sourceElement.setAttribute('type', 'video/mp4');
+
+            currentVideo.appendChild(sourceElement);
+            document.body.appendChild(currentVideo);
+
+            // Play the video and handle any errors
+            currentVideo.play().catch(function (error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+
+            // Update the current video source
+            currentVideoSrc = newVideoSrc;
+        }
+    } else if (normalizedScore > 118) {
+        let newVideoSrc = 'Images/117.mp4';
+
+        if (!currentVideo || currentVideoSrc !== newVideoSrc) {
+            if (currentVideo) {
+                currentVideo.parentNode.removeChild(currentVideo);
+            }
+            currentVideo = document.createElement('video');
+            currentVideo.setAttribute('autoplay', 'true');
+            currentVideo.setAttribute('loop', 'true');
+            currentVideo.classList.add('bg-video');
+            let sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', newVideoSrc);
+            sourceElement.setAttribute('type', 'video/mp4');
+            currentVideo.appendChild(sourceElement);
+            document.body.appendChild(currentVideo);
+            currentVideo.play().catch(function (error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+            currentVideoSrc = newVideoSrc;
+        }
+    } else if (normalizedScore > 116) {
+        let newVideoSrc = 'Images/116.mp4';
+
+        if (!currentVideo || currentVideoSrc !== newVideoSrc) {
+            if (currentVideo) {
+                currentVideo.parentNode.removeChild(currentVideo);
+            }
+            currentVideo = document.createElement('video');
+            currentVideo.setAttribute('autoplay', 'true');
+            currentVideo.setAttribute('loop', 'true');
+            currentVideo.classList.add('bg-video');
+            let sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', newVideoSrc);
+            sourceElement.setAttribute('type', 'video/mp4');
+            currentVideo.appendChild(sourceElement);
+            document.body.appendChild(currentVideo);
+            currentVideo.play().catch(function (error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+            currentVideoSrc = newVideoSrc;
+        }
+    } else if (normalizedScore > 114) {
+        let newVideoSrc = 'Images/115.mp4';
+
+        if (!currentVideo || currentVideoSrc !== newVideoSrc) {
+            if (currentVideo) {
+                currentVideo.parentNode.removeChild(currentVideo);
+            }
+            currentVideo = document.createElement('video');
+            currentVideo.setAttribute('autoplay', 'true');
+            currentVideo.setAttribute('loop', 'true');
+            currentVideo.classList.add('bg-video');
+            let sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', newVideoSrc);
+            sourceElement.setAttribute('type', 'video/mp4');
+            currentVideo.appendChild(sourceElement);
+            document.body.appendChild(currentVideo);
+            currentVideo.play().catch(function (error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+            currentVideoSrc = newVideoSrc;
+        }
+    } else if (normalizedScore > 112) {
+        let newVideoSrc = 'Images/114.mp4';
+
+        if (!currentVideo || currentVideoSrc !== newVideoSrc) {
+            if (currentVideo) {
+                currentVideo.parentNode.removeChild(currentVideo);
+            }
+            currentVideo = document.createElement('video');
+            currentVideo.setAttribute('autoplay', 'true');
+            currentVideo.setAttribute('loop', 'true');
+            currentVideo.classList.add('bg-video');
+            let sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', newVideoSrc);
+            sourceElement.setAttribute('type', 'video/mp4');
+            currentVideo.appendChild(sourceElement);
+            document.body.appendChild(currentVideo);
+            currentVideo.play().catch(function (error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+            currentVideoSrc = newVideoSrc;
+        }
+    } else {
+        // Remove any existing video if the score drops below the video threshold
+        if (currentVideo) {
+            currentVideo.parentNode.removeChild(currentVideo);
+            currentVideo = null;
+            currentVideoSrc = null;
+        }
+
+        // Set background images
+        if (normalizedScore > 111) {
+            document.body.style.backgroundImage = "url('Images/112.jpg')";
+        } else if (normalizedScore > 110) {
+            document.body.style.backgroundImage = "url('Images/111.jpg')";
+        } else if (normalizedScore > 109) {
+            document.body.style.backgroundImage = "url('Images/110.jpg')";
+        } else if (normalizedScore > 108) {
+            document.body.style.backgroundImage = "url('Images/109.jpg')";
+        } else if (normalizedScore > 107) {
+            document.body.style.backgroundImage = "url('Images/108.jpg')";
+        } else if (normalizedScore > 106) {
+            document.body.style.backgroundImage = "url('Images/107.jpg')";
+        } else if (normalizedScore > 105) {
+            document.body.style.backgroundImage = "url('Images/106.jpg')";
+        } else if (normalizedScore > 104) {
+            document.body.style.backgroundImage = "url('Images/105.jpg')";
+        } else if (normalizedScore > 103) {
+            document.body.style.backgroundImage = "url('Images/104.jpg')";
+        } else if (normalizedScore > 102) {
+            document.body.style.backgroundImage = "url('Images/103.jpg')";
+        } else if (normalizedScore > 101) {
+            document.body.style.backgroundImage = "url('Images/102.jpg')";
+        } else if (normalizedScore > 100) {
+            document.body.style.backgroundImage = "url('Images/101.jpg')";
+        } else {
+            document.body.style.backgroundImage = '';
+        }
+
+        // Set background colors for scores below 100
+        if (normalizedScore >= 95) {
+            document.body.style.backgroundColor = '#00ccff';
+        } else if (normalizedScore >= 90) {
+            document.body.style.backgroundColor = '#3cf5c7';
+        } else if (normalizedScore >= 85) {
+            document.body.style.backgroundColor = '#70fd8f';
+        } else if (normalizedScore >= 80) {
+            document.body.style.backgroundColor = '#c1f504';
+        } else if (normalizedScore >= 75) {
+            document.body.style.backgroundColor = '#f4f748';
+        } else if (normalizedScore >= 70) {
+            document.body.style.backgroundColor = '#f5c833';
+        } else if (normalizedScore >= 65) {
+            document.body.style.backgroundColor = '#f7a961';
+        } else if (normalizedScore >= 60) {
+            document.body.style.backgroundColor = '#FF5D13';
+        } else if (normalizedScore >= 55) {
+            document.body.style.backgroundColor = '#fd5d5d';
+        } else if (normalizedScore >= 50) {
+            document.body.style.backgroundColor = '#F82E7B';
+        } else if (normalizedScore >= 40) {
+            document.body.style.backgroundColor = 'red';
+        } else if (normalizedScore >= 30) {
+            document.body.style.backgroundColor = '#6e0101';
+        } else if (normalizedScore >= 20) {
+            document.body.style.backgroundColor = '#2a0241';
+        } else {
+            document.body.style.backgroundColor = '#000000';
+        }
+    }
+
+    document.body.style.backgroundSize = "cover";
+}
+    function hideButton() {
+            document.getElementById("nextBtn").style.display = "none";
+        }
+    function handleOptionClick(event) {
+      const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
+      const isCorrectOption = optionIndex === correctOptionIndex;
+      checkAnswer(isCorrectOption);
+
+      // Highlight the clicked option
+      event.currentTarget.classList.add(isCorrectOption ? 'correct' : 'incorrect');
+
+      // Disable all options
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.pointerEvents = 'none';
+      });
+
+      // Enable next button
+      nextBtn.style.display = 'block';
+    }
+
+   // function getDifficulty() {
+    //  if (currentQuestionIndex === 15 || currentQuestionIndex === 30) {
+    //    if (currentQuestionIndex === 15) {
+    //      currentDifficulty = 'medium';
+    //    }
+    //    shuffledWords = shuffle(words[currentDifficulty].slice());
+    //  }
+  //  }
+
+    function askQuestion() {
+        nextBtn.style.display = 'none';
+  //getDifficulty();
+  if (q<6) {
+    const questionData = shuffledWords[currentQuestionIndex];
+    currentWordIndex = questionData.correct;
+    const currentWord = questionData.word;
+    questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
+    questionDiv.textContent = currentWord;
+
+    const shuffledOptions = shuffle(questionData.options.slice());
+    correctOptionIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
+
+    optionsDiv.innerHTML = '';
+    for (let i = 0; i < shuffledOptions.length; i++) {
+      const option = document.createElement('div');
+      option.className = 'option';
+      option.textContent = shuffledOptions[i];
+      option.addEventListener('click', handleOptionClick);
+      optionsDiv.appendChild(option);
+    }
+
+    resultDiv.textContent = '';
+    startTimer();
+  } 
+}
+    function startTimer() {
+      let timeLeft = 34;
+      timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+        if (timeLeft === 0) {
+          clearTimeout(timer);
+          checkAnswer(false); // Timeout, passing false as the answer is incorrect
+        }
+      }, 850);
+    }
+
+    function shuffle(array) {
+      let currentIndex = array.length, temporaryValue, randomIndex;
+      while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    }
+    startGame();
+  </script>
+</body>
+</html>

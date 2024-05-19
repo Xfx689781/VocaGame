@@ -1132,7 +1132,9 @@
     const timerDiv = document.getElementById('timer');
     const questionNumberDiv = document.getElementById('questionNumber');
     let cor=0;
+    let q=0;
     nextBtn.addEventListener('click', askQuestion);
+    let randomNumber1 = Math.floor(Math.random() * (16 - 12 + 1)) + 12;
     function startGame() {
       //score = 0;
       //correctCount = 0;
@@ -1153,6 +1155,7 @@
     
     function checkAnswer(isCorrectOption) {
       totalQuestions++;
+      q++;
       clearTimeout(timer);
       nextBtn.style.display = 'block';
       if (isCorrectOption) {
@@ -1200,9 +1203,23 @@ else if ((score / (0.2 * totalQuestions)) >= 0) {
 }
       nextBtn.disabled = false;
       currentQuestionIndex++;
-      if (cor==10) {
-        scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
-    hideButton();
+      if (q==randomNumber1) {
+        let randomNumber2 = Math.floor(Math.random() * (10 - 2 + 1)) + 2;
+        let randomNumber3 = Math.floor(Math.random() * (12 - 6 + 1)) + 6;
+        if (cor>=randomNumber2&&cor<=randomNumber3){
+        nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', (score-(3*cor)));
+          backgroundColorLevellvp = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevellvp', backgroundColorLevellvp);
+          localStorage.setItem('correctCount', correctCount);
+          localStorage.setItem('totalQuestions', totalQuestions)
+          window.location.href = '5.2.1s.html';
+        });
+       }
+        else {
+            scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
+            hideButton();
+        }
 
       }
     }
@@ -1240,7 +1257,7 @@ else if ((score / (0.2 * totalQuestions)) >= 0) {
     function askQuestion() {
         nextBtn.style.display = 'none';
   //getDifficulty();
-  if (cor<10) {
+  if (q<randomNumber1) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;
     const currentWord = questionData.word;

@@ -433,7 +433,17 @@
        updateBackground(score, totalQuestions)
       nextBtn.disabled = false;
       currentQuestionIndex++;
-      if (cor==8) {
+      if (cor==6) {
+        if (totalQuestions<=53) {
+          nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', (score));
+          backgroundColorLevellvp = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevellvp', backgroundColorLevellvp);
+          localStorage.setItem('correctCount', correctCount);
+          localStorage.setItem('totalQuestions', totalQuestions)
+          window.location.href = '5.2.1t.html';
+        });
+        }
         scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
     hideButton();
 
@@ -670,7 +680,7 @@ function updateBackground(score, totalQuestions) {
     function askQuestion() {
   //getDifficulty();
   nextBtn.style.display = 'none';
-  if (cor<8) {
+  if (cor<6) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;
     const currentWord = questionData.word;
