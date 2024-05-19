@@ -1317,9 +1317,9 @@ if ((score / (0.2 * totalQuestions)) >= 95) {
         let randomNumber2 = Math.floor(Math.random() * (10 - 5 + 1)) + 5;
         let randomNumber3 = Math.floor(Math.random() * (8 - 3 + 1)) + 3;
         // Redirect to 3.html after question 30
-        if (cor==13||cor==14||cor==15){
+        if (cor==12||cor==13||cor==14||cor==15){
             nextBtn.addEventListener('click', function() {
-          localStorage.setItem('score', (score+((cor-11)*20)));
+          localStorage.setItem('score', (score+((cor-12)*33)));
           backgroundColorLevel45 = document.body.style.backgroundColor;
           localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
           localStorage.setItem('correctCount', correctCount);
