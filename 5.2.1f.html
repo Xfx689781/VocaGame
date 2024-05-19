@@ -1066,80 +1066,75 @@
       });
        // Set background color based on score
        let body = document.querySelector('body');
+     
        if ((score / (0.2 * totalQuestions)) > 114) {
-            var videoElement = document.createElement('video');
-            videoElement.setAttribute('autoplay', 'true');
-            //videoElement.setAttribute('muted', 'true');
-            videoElement.setAttribute('loop', 'true');
-            videoElement.classList.add('bg-video');
+    var existingVideo = document.querySelector('.bg-video');
+    if (existingVideo) {
+        existingVideo.parentNode.removeChild(existingVideo);
+    }
 
-            var sourceElement = document.createElement('source');
-            sourceElement.setAttribute('src', 'Images/115.mp4');
-            sourceElement.setAttribute('type', 'video/mp4');
+    var videoElement = document.createElement('video');
+    videoElement.setAttribute('autoplay', 'true');
+    // videoElement.setAttribute('muted', 'false');
+    videoElement.setAttribute('loop', 'true');
+    videoElement.classList.add('bg-video');
 
-            videoElement.appendChild(sourceElement);
-            document.body.appendChild(videoElement);
-            videoElement.play().catch(function(error) {
-                console.log('Error attempting to play the video: ', error);
-            });
-        }else if ((score / (0.2 * totalQuestions)) > 113) {
-  document.body.style.backgroundImage = "url('Images/114.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 112) {
-  document.body.style.backgroundImage = "url('Images/113.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 111) {
-  document.body.style.backgroundImage = "url('Images/112.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 110) {
-  document.body.style.backgroundImage = "url('Images/111.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 109) {
-  document.body.style.backgroundImage = "url('Images/110.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 108) {
-  document.body.style.backgroundImage = "url('Images/109.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 107) {
-  document.body.style.backgroundImage = "url('Images/108.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 106) {
-  document.body.style.backgroundImage = "url('Images/107.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 105) {
-  document.body.style.backgroundImage = "url('Images/106.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 104) {
-  document.body.style.backgroundImage = "url('Images/105.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 103) {
-  document.body.style.backgroundImage = "url('Images/104.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 102) {
-  document.body.style.backgroundImage = "url('Images/103.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 101) {
-  document.body.style.backgroundImage = "url('Images/102.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 100) {
-  document.body.style.backgroundImage = "url('Images/101.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
+    var sourceElement = document.createElement('source');
+    sourceElement.setAttribute('src', 'Images/115.mp4');
+    sourceElement.setAttribute('type', 'video/mp4');
 
-else if ((score / (0.2 * totalQuestions)) >= 95) {
+    videoElement.appendChild(sourceElement);
+    document.body.appendChild(videoElement);
+    videoElement.play().catch(function(error) {
+        console.log('Error attempting to play the video: ', error);
+    });
+    // Remove any existing background image
+    document.body.style.backgroundImage = '';
+    // Remove any existing background color
+    document.body.style.backgroundColor = '';
+} else {
+    // Remove any existing video
+    var existingVideo = document.querySelector('.bg-video');
+    if (existingVideo) {
+        existingVideo.parentNode.removeChild(existingVideo);
+    }
+
+    // Set background image
+    if ((score / (0.2 * totalQuestions)) > 113) {
+        document.body.style.backgroundImage = "url('Images/114.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 112) {
+        document.body.style.backgroundImage = "url('Images/113.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 111) {
+        document.body.style.backgroundImage = "url('Images/112.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 110) {
+        document.body.style.backgroundImage = "url('Images/111.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 109) {
+        document.body.style.backgroundImage = "url('Images/110.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 108) {
+        document.body.style.backgroundImage = "url('Images/109.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 107) {
+        document.body.style.backgroundImage = "url('Images/108.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 106) {
+        document.body.style.backgroundImage = "url('Images/107.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 105) {
+        document.body.style.backgroundImage = "url('Images/106.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 104) {
+        document.body.style.backgroundImage = "url('Images/105.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 103) {
+        document.body.style.backgroundImage = "url('Images/104.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 102) {
+        document.body.style.backgroundImage = "url('Images/103.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 101) {
+        document.body.style.backgroundImage = "url('Images/102.jpg')";
+    } else if ((score / (0.2 * totalQuestions)) > 100) {
+        document.body.style.backgroundImage = "url('Images/101.jpg')";
+    } else {
+        document.body.style.backgroundImage = '';
+    }
+
+    // Set background color
+    
+if ((score / (0.2 * totalQuestions)) >= 95) {
   body.style.backgroundColor = '#00ccff';
 }  else if ((score / (0.2 * totalQuestions)) >= 90) {
   body.style.backgroundColor = '#3cf5c7';
@@ -1167,6 +1162,9 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
     body.style.backgroundColor = '#2a0241';
 }else if ((score / (0.2 * totalQuestions))<20) {
     body.style.backgroundColor = '#000000';
+}
+
+    document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
       nextBtn.disabled = false;
       currentQuestionIndex++;
