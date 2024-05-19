@@ -40,7 +40,15 @@
       flex-wrap: wrap;
       justify-content: center;
     }
-
+    #level {
+      position: absolute;
+      left: 12px;
+      top: 5px;
+      font-size:15px;
+      font-family:'Times New Roman', Times, serif;
+   
+      
+    }
     .option {
       padding: 10px 20px;
       margin: 10px;
@@ -69,7 +77,6 @@
       margin-top: 20px;
       font-size: 18px;
       display: none;
-
     }
 
     #correct {
@@ -101,22 +108,13 @@
         font-size: 22px;
     
     }
-    #level {
-      position: absolute;
-      left: 12px;
-      top: 5px;
-      font-size:15px;
-      font-family:'Times New Roman', Times, serif;
-     
-     
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>English Word Game</h1>
-    <div id="level">爆难模式</div>
     <div id="questionNumber"></div>
+    <div id="level">神秘模式</div>
     <div id="question"></div>
     <div id="options"></div>
     <div id="result"></div>
@@ -128,10 +126,9 @@
 
   <script>
     const words = {
-      expert: [
-       //8个选项
-       //A
-  { word: "aberrant", options: ["不规则的", "奇怪的", "神秘的", "隐藏的", "深刻的", "异常的", "现实的", "未来的"], correct: 0 },
+        expert: [
+          //7个选项
+          { word: "aberrant", options: ["不规则的", "奇怪的", "神秘的", "隐藏的", "深刻的", "异常的", "现实的", "未来的"], correct: 0 },
   { word: "aberration", options: ["偏差", "环绕", "变形", "扭曲", "变异", "隔离", "深刻", "神秘"], correct: 0 },
   { word: "abhorrent", options: ["可恶的", "大度的", "克制的", "虔诚的", "无理的", "有准备的", "具象的", "抽象的"], correct: 0 },
   { word: "abnegation", options: ["否认", "放弃", "控制", "信心", "喜悦", "抛射", "喷发", "阻尼"], correct: 0 },
@@ -341,32 +338,11 @@
   { word: "dulcet", options: ["美妙", "刺耳", "精灵", "图层", "屠杀", "保留", "释放", "甜蜜"], correct: 0 },
   { word: "duplicity", options: ["口是心非", "体细胞", "复杂性", "双重性", "复制", "双倍的", "奸诈", "极权主义"], correct: 0 },
   { word: "dystopia", options: ["反乌托邦", "屏风", "追悼会", "耳鸣", "理想国", "极权主义", "草履虫", "十四行诗"], correct: 0 }
-       //E
-       
-        // Add more expert words and options
-
-
-
-
-          //IMPORTANT WORDS - 英语词汇2-40的lhh错词!!!!!
-
-          //meiosis
-          //mitosis
-          //miosis
-          //amoeba
+     
       ]
+     
       // Define medium, hard, and expert words similarly
     };
-
-    //let currentWordIndex;
-    //let score = 0;
-    //let correctCount = 0;
-    //let totalQuestions = 0;
-    //let timer;
-    //let currentQuestionIndex = 0;
-    //let currentDifficulty = 'easy';
-    //let shuffledWords = [];
-
     const nextBtn = document.getElementById('nextBtn');
     const questionDiv = document.getElementById('question');
     const optionsDiv = document.getElementById('options');
@@ -377,19 +353,18 @@
     const questionNumberDiv = document.getElementById('questionNumber');
     let cor=0;
     nextBtn.addEventListener('click', askQuestion);
-
     function startGame() {
       //score = 0;
       //correctCount = 0;
-      backgroundColorLevel45 = localStorage.getItem('backgroundColorLevel45');
-      document.body.style.backgroundColor = backgroundColorLevel45;
+      backgroundColorLevel58 = localStorage.getItem('backgroundColorLevel58');
+      document.body.style.backgroundColor = backgroundColorLevel58;
       score = parseInt(localStorage.getItem('score')) || 0;
       correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
-      totalQuestions = 45;
+      totalQuestions = 58;
       resultDiv.textContent = '';
       nextBtn.style.display = 'block';
       currentQuestionIndex = 0;
-      cor=0;
+      cor = 0;
       currentDifficulty = 'expert';
       shuffledWords = shuffle(words[currentDifficulty].slice());
       askQuestion();
@@ -402,12 +377,13 @@
       nextBtn.style.display = 'block';
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-        score += (timeLeft >= 16 ? 20 : (timeLeft + 4));
         correctCount++;
         cor++;
         resultDiv.textContent = 'Correct!';
       } else {
         resultDiv.textContent = 'Incorrect!';
+        score -= 40;
+        if (score<=0) score==0;
       }
       correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
         scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
@@ -419,6 +395,8 @@
       });
        // Set background color based on score
        let body = document.querySelector('body');
+
+
        if ((score / (0.2 * totalQuestions)) > 108) {
   document.body.style.backgroundImage = "url('Images/109.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
@@ -455,7 +433,6 @@ else if ((score / (0.2 * totalQuestions)) > 100) {
   document.body.style.backgroundImage = "url('Images/101.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
-
 else if ((score / (0.2 * totalQuestions)) >= 95) {
   body.style.backgroundColor = '#00ccff';
 }  else if ((score / (0.2 * totalQuestions)) >= 90) {
@@ -485,17 +462,19 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
 }else if ((score / (0.2 * totalQuestions))<20) {
     body.style.backgroundColor = '#000000';
 }
+
       nextBtn.disabled = false;
       currentQuestionIndex++;
-      if (cor==8) {
-        scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
-    hideButton();
+        if (cor==1){ 
+           scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
+           hideButton();
+        }
 
-}
-}
-function hideButton() {
-      document.getElementById("nextBtn").style.display = "none";
-  }
+      }
+    
+    function hideButton() {
+            document.getElementById("nextBtn").style.display = "none";
+        }
     function handleOptionClick(event) {
       const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
       const isCorrectOption = optionIndex === correctOptionIndex;
@@ -516,18 +495,18 @@ function hideButton() {
     }
 
    // function getDifficulty() {
-     // if (currentQuestionIndex === 15 || currentQuestionIndex === 30) {
-     //   if (currentQuestionIndex === 15) {
-     //     currentDifficulty = 'medium';
-     //   }
+    //  if (currentQuestionIndex === 15 || currentQuestionIndex === 30) {
+    //    if (currentQuestionIndex === 15) {
+    //      currentDifficulty = 'medium';
+    //    }
     //    shuffledWords = shuffle(words[currentDifficulty].slice());
-   //   }
-   // }
+    //  }
+  //  }
 
     function askQuestion() {
+        nextBtn.style.display = 'none';
   //getDifficulty();
-  nextBtn.style.display = 'none';
-  if (cor<8) {
+  if (cor==0) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;
     const currentWord = questionData.word;
@@ -554,13 +533,13 @@ function hideButton() {
       let timeLeft = 20;
       timerDiv.textContent = 'Time left: ' + timeLeft + 's';
       timer = setInterval(() => {
-        timeLeft--;
+        timeLeft-=1;
         timerDiv.textContent = 'Time left: ' + timeLeft + 's';
         if (timeLeft === 0) {
           clearTimeout(timer);
           checkAnswer(false); // Timeout, passing false as the answer is incorrect
         }
-      }, 750);
+      }, 1000);
     }
 
     function shuffle(array) {
@@ -575,7 +554,6 @@ function hideButton() {
       return array;
     }
     startGame();
-
   </script>
 </body>
 </html>

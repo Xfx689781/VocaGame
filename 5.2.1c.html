@@ -1257,13 +1257,14 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
         // Redirect to 3.html after question 30
         if (cor==12||cor==13||cor==14||cor==15){
             nextBtn.addEventListener('click', function() {
-          localStorage.setItem('score', score);
+          localStorage.setItem('score', (score+((cor-11)*20)));
           backgroundColorLevel45 = document.body.style.backgroundColor;
           localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
           localStorage.setItem('correctCount', correctCount);
           window.location.href = '5.2.1g.html';
         });
         }
+      
         else if ((score / (0.2 * totalQuestions))<53){
             nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
@@ -1352,7 +1353,7 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
           clearTimeout(timer);
           checkAnswer(false); // Timeout, passing false as the answer is incorrect
         }
-      }, 1000);
+      }, 875);
     }
 
     function shuffle(array) {

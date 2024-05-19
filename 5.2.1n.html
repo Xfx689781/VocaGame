@@ -608,6 +608,7 @@
   { word: "mark", options: ["马克", "马克笔", "马斯克", "批判", "沉浮", "记录"], correct: 0 },
   { word: "mark", options: ["符号", "马克思", "马克笔", "马斯克", "年级", "记录"], correct: 0 },
   { word: "mark", options: ["分数",  "记录", "批判", "马克笔", "标本", "年级"], correct: 0 },
+   
       ]
      
       // Define medium, hard, and expert words similarly
@@ -625,11 +626,11 @@
     function startGame() {
       //score = 0;
       //correctCount = 0;
-      backgroundColorLevel45 = localStorage.getItem('backgroundColorLevel45');
-      document.body.style.backgroundColor = backgroundColorLevel45;
+      backgroundColorLevel58 = localStorage.getItem('backgroundColorLevel58');
+      document.body.style.backgroundColor = backgroundColorLevel58;
       score = parseInt(localStorage.getItem('score')) || 0;
       correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
-      totalQuestions = 45;
+      totalQuestions = 58;
       resultDiv.textContent = '';
       nextBtn.style.display = 'block';
       currentQuestionIndex = 0;
@@ -646,9 +647,12 @@
       nextBtn.style.display = 'block';
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-        score += (timeLeft >= 16 ? 20 : (timeLeft + 4));
+        score += 120;
         correctCount++;
         cor++;
+        if ((score/(0.2*totalQuestions))>=89) {
+           score=89*(0.2*totalQuestions)
+        }
         resultDiv.textContent = 'Correct!';
       } else {
         resultDiv.textContent = 'Incorrect!';
@@ -663,6 +667,8 @@
       });
        // Set background color based on score
        let body = document.querySelector('body');
+
+
        if ((score / (0.2 * totalQuestions)) > 108) {
   document.body.style.backgroundImage = "url('Images/109.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
@@ -699,7 +705,6 @@ else if ((score / (0.2 * totalQuestions)) > 100) {
   document.body.style.backgroundImage = "url('Images/101.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
-
 else if ((score / (0.2 * totalQuestions)) >= 95) {
   body.style.backgroundColor = '#00ccff';
 }  else if ((score / (0.2 * totalQuestions)) >= 90) {
@@ -729,14 +734,16 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
 }else if ((score / (0.2 * totalQuestions))<20) {
     body.style.backgroundColor = '#000000';
 }
+
       nextBtn.disabled = false;
       currentQuestionIndex++;
-      if (cor==18) {
-        scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
-    hideButton();
+        if (cor==1){ 
+           scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
+           hideButton();
+        }
 
       }
-    }
+    
     function hideButton() {
             document.getElementById("nextBtn").style.display = "none";
         }
@@ -771,7 +778,7 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
     function askQuestion() {
         nextBtn.style.display = 'none';
   //getDifficulty();
-  if (cor<18) {
+  if (cor==0) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;
     const currentWord = questionData.word;
@@ -798,13 +805,13 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
       let timeLeft = 20;
       timerDiv.textContent = 'Time left: ' + timeLeft + 's';
       timer = setInterval(() => {
-        timeLeft--;
+        timeLeft-=1;
         timerDiv.textContent = 'Time left: ' + timeLeft + 's';
         if (timeLeft === 0) {
           clearTimeout(timer);
           checkAnswer(false); // Timeout, passing false as the answer is incorrect
         }
-      }, 1500);
+      }, 1000);
     }
 
     function shuffle(array) {

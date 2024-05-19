@@ -114,7 +114,7 @@
   <div class="container">
     <h1>English Word Game</h1>
     <div id="questionNumber"></div>
-    <div id="level">奖励模式</div>
+    <div id="level">神秘模式</div>
     <div id="question"></div>
     <div id="options"></div>
     <div id="result"></div>
@@ -646,12 +646,16 @@
       nextBtn.style.display = 'block';
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-        score += (timeLeft >= 16 ? 20 : (timeLeft + 4));
+        score += 20;
         correctCount++;
         cor++;
         resultDiv.textContent = 'Correct!';
       } else {
         resultDiv.textContent = 'Incorrect!';
+        score -= 40;
+        if (score<=0){
+            score=0;
+        }
       }
       correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
         scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
@@ -663,44 +667,9 @@
       });
        // Set background color based on score
        let body = document.querySelector('body');
-       if ((score / (0.2 * totalQuestions)) > 108) {
-  document.body.style.backgroundImage = "url('Images/109.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 107) {
-  document.body.style.backgroundImage = "url('Images/108.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 106) {
-  document.body.style.backgroundImage = "url('Images/107.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 105) {
-  document.body.style.backgroundImage = "url('Images/106.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 104) {
-  document.body.style.backgroundImage = "url('Images/105.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 103) {
-  document.body.style.backgroundImage = "url('Images/104.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 102) {
-  document.body.style.backgroundImage = "url('Images/103.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 101) {
-  document.body.style.backgroundImage = "url('Images/102.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 100) {
-  document.body.style.backgroundImage = "url('Images/101.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
 
-else if ((score / (0.2 * totalQuestions)) >= 95) {
+
+ if ((score / (0.2 * totalQuestions)) >= 95) {
   body.style.backgroundColor = '#00ccff';
 }  else if ((score / (0.2 * totalQuestions)) >= 90) {
   body.style.backgroundColor = '#3cf5c7';
@@ -708,30 +677,14 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
     body.style.backgroundColor = '#70fd8f';
 } else if ((score / (0.2 * totalQuestions)) >= 80) {
     body.style.backgroundColor = '#c1f504';
-} else if ((score / (0.2 * totalQuestions)) >= 75) {
-    body.style.backgroundColor = '#f4f748';
-}else if ((score / (0.2 * totalQuestions)) >= 70) {
-    body.style.backgroundColor = '#f5c833';
-} else if ((score / (0.2 * totalQuestions)) >= 65) {
-    body.style.backgroundColor = '#f7a961';
-}else if ((score / (0.2 * totalQuestions)) >= 60) {
-    body.style.backgroundColor = '#FF5D13';
-} else if ((score / (0.2 * totalQuestions)) >= 55) {
-    body.style.backgroundColor = '#fd5d5d';
-} else if ((score / (0.2 * totalQuestions)) >= 50) {
-    body.style.backgroundColor = '#F82E7B';
-} else if ((score / (0.2 * totalQuestions))>=40) {
-    body.style.backgroundColor = 'red';
-}else if ((score / (0.2 * totalQuestions))>=30) {
-    body.style.backgroundColor = '#6e0101';
-}else if ((score / (0.2 * totalQuestions))>=20) {
-    body.style.backgroundColor = '#2a0241';
-}else if ((score / (0.2 * totalQuestions))<20) {
-    body.style.backgroundColor = '#000000';
+} else if ((score / (0.2 * totalQuestions)) >= 0) {
+    document.body.style.backgroundImage = "url('Images/Version-J.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
+
       nextBtn.disabled = false;
       currentQuestionIndex++;
-      if (cor==18) {
+      if (cor==10) {
         scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
     hideButton();
 
@@ -771,7 +724,7 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
     function askQuestion() {
         nextBtn.style.display = 'none';
   //getDifficulty();
-  if (cor<18) {
+  if (cor<10) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;
     const currentWord = questionData.word;
@@ -795,7 +748,7 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
   } 
 }
     function startTimer() {
-      let timeLeft = 20;
+      let timeLeft = 2;
       timerDiv.textContent = 'Time left: ' + timeLeft + 's';
       timer = setInterval(() => {
         timeLeft--;
@@ -804,7 +757,7 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
           clearTimeout(timer);
           checkAnswer(false); // Timeout, passing false as the answer is incorrect
         }
-      }, 1500);
+      }, 750);
     }
 
     function shuffle(array) {

@@ -1137,6 +1137,8 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
       currentQuestionIndex++;
       if (totalQuestions === 45) {
         // Redirect to 3.html after question 30
+        let randomNumber1 = Math.floor(Math.random() * (11 - 7 + 1)) + 7;
+        let randomNumber2 = Math.floor(Math.random() * (14 - 11 + 1)) + 11;
         if (cor==15){
             nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
@@ -1144,6 +1146,24 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
           localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
           localStorage.setItem('correctCount', correctCount);
           window.location.href = '5.2.1g.html';
+        });
+        }
+        else if (cor==randomNumber1){
+            nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', score);
+          backgroundColorLevel45 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '5.2.1j.html';
+        });
+        }
+        else if (cor==randomNumber2){
+            nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', score);
+          backgroundColorLevel45 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '5.2.1k.html';
         });
         }
         else if (((score / (0.2 * totalQuestions)))<60){
@@ -1234,7 +1254,7 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
           clearTimeout(timer);
           checkAnswer(false); // Timeout, passing false as the answer is incorrect
         }
-      }, 1000);
+      }, 875);
     }
 
     function shuffle(array) {

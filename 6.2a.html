@@ -1615,6 +1615,8 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
       currentQuestionIndex++;
       let randomNumber1 = Math.floor(Math.random() * (29 - 18 + 1)) + 18;
       let randomNumber2 = Math.floor(Math.random() * (27 - 16 + 1)) + 16;
+      let randomNumber3 = Math.floor(Math.random() * (50 - 20 + 1)) + 20;
+      let randomNumber4 = Math.floor(Math.random() * (70 - 50 + 1)) + 50;
       if (totalQuestions === 30) {
         // Redirect to 3.html after question 30
           if (correctCount==randomNumber1||correctCount==randomNumber2){
@@ -1637,7 +1639,16 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
       }
         else if (correctCount==30){
             nextBtn.addEventListener('click', function() {
-          localStorage.setItem('score', score+60);
+          localStorage.setItem('score', (score+randomNumber4));
+          backgroundColorLevel30 = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel30', backgroundColorLevel30);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '5.2.1c.html';
+        });
+        }
+        else if (correctCount==29){
+            nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', (score+randomNumber3));
           backgroundColorLevel30 = document.body.style.backgroundColor;
           localStorage.setItem('backgroundColorLevel30', backgroundColorLevel30);
           localStorage.setItem('correctCount', correctCount);
