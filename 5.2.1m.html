@@ -407,121 +407,7 @@
        // Set background color based on score
        let body = document.querySelector('body');
 
-
-   
-       if ((score / (0.2 * totalQuestions)) > 114) {
-    var existingVideo = document.querySelector('.bg-video');
-    if (existingVideo) {
-        existingVideo.parentNode.removeChild(existingVideo);
-    }
-
-    var videoElement = document.createElement('video');
-    videoElement.setAttribute('autoplay', 'true');
-    // videoElement.setAttribute('muted', 'false');
-    videoElement.setAttribute('loop', 'true');
-    videoElement.classList.add('bg-video');
-
-    var sourceElement = document.createElement('source');
-    sourceElement.setAttribute('src', 'Images/115.mp4');
-    sourceElement.setAttribute('type', 'video/mp4');
-
-    videoElement.appendChild(sourceElement);
-    document.body.appendChild(videoElement);
-    videoElement.play().catch(function(error) {
-        console.log('Error attempting to play the video: ', error);
-    });
-    // Remove any existing background image
-    document.body.style.backgroundImage = '';
-    // Remove any existing background color
-    document.body.style.backgroundColor = '';
-} else {
-    // Remove any existing video
-    var existingVideo = document.querySelector('.bg-video');
-    if (existingVideo) {
-        existingVideo.parentNode.removeChild(existingVideo);
-    }
-
-    // Set background image
-    if ((score / (0.2 * totalQuestions)) > 113) {
-        document.body.style.backgroundImage = "url('Images/114.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 112) {
-        document.body.style.backgroundImage = "url('Images/113.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 111) {
-        document.body.style.backgroundImage = "url('Images/112.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 110) {
-        document.body.style.backgroundImage = "url('Images/111.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 109) {
-        document.body.style.backgroundImage = "url('Images/110.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 108) {
-        document.body.style.backgroundImage = "url('Images/109.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 107) {
-        document.body.style.backgroundImage = "url('Images/108.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 106) {
-        document.body.style.backgroundImage = "url('Images/107.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 105) {
-        document.body.style.backgroundImage = "url('Images/106.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 104) {
-        document.body.style.backgroundImage = "url('Images/105.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 103) {
-        document.body.style.backgroundImage = "url('Images/104.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 102) {
-        document.body.style.backgroundImage = "url('Images/103.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 101) {
-        document.body.style.backgroundImage = "url('Images/102.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else if ((score / (0.2 * totalQuestions)) > 100) {
-        document.body.style.backgroundImage = "url('Images/101.jpg')";
-        document.body.style.backgroundSize = "cover"; 
-    } else {
-        document.body.style.backgroundImage = '';
-    }
-
-    // Set background color
-    
-if ((score / (0.2 * totalQuestions)) >= 95) {
-  body.style.backgroundColor = '#00ccff';
-}  else if ((score / (0.2 * totalQuestions)) >= 90) {
-  body.style.backgroundColor = '#3cf5c7';
-} else if ((score / (0.2 * totalQuestions)) >= 85) {
-    body.style.backgroundColor = '#70fd8f';
-} else if ((score / (0.2 * totalQuestions)) >= 80) {
-    body.style.backgroundColor = '#c1f504';
-} else if ((score / (0.2 * totalQuestions)) >= 75) {
-    body.style.backgroundColor = '#f4f748';
-}else if ((score / (0.2 * totalQuestions)) >= 70) {
-    body.style.backgroundColor = '#f5c833';
-} else if ((score / (0.2 * totalQuestions)) >= 65) {
-    body.style.backgroundColor = '#f7a961';
-}else if ((score / (0.2 * totalQuestions)) >= 60) {
-    body.style.backgroundColor = '#FF5D13';
-} else if ((score / (0.2 * totalQuestions)) >= 55) {
-    body.style.backgroundColor = '#fd5d5d';
-} else if ((score / (0.2 * totalQuestions)) >= 50) {
-    body.style.backgroundColor = '#F82E7B';
-} else if ((score / (0.2 * totalQuestions))>=40) {
-    body.style.backgroundColor = 'red';
-}else if ((score / (0.2 * totalQuestions))>=30) {
-    body.style.backgroundColor = '#6e0101';
-}else if ((score / (0.2 * totalQuestions))>=20) {
-    body.style.backgroundColor = '#2a0241';
-}else if ((score / (0.2 * totalQuestions))<20) {
-    body.style.backgroundColor = '#000000';
-}
-
-    document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
+       updateBackground(score, totalQuestions)
       nextBtn.disabled = false;
       currentQuestionIndex++;
         if (cor==1){ 
@@ -531,6 +417,199 @@ if ((score / (0.2 * totalQuestions)) >= 95) {
 
       }
     
+function updateBackground(score, totalQuestions) {
+    let normalizedScore = score / (0.2 * totalQuestions);
+
+    // Remove existing background image and color
+    document.body.style.backgroundImage = '';
+    document.body.style.backgroundColor = '';
+
+    // Handle the range for videos
+    if (normalizedScore > 120) {
+        let newVideoSrc = 'Images/113.mp4';
+
+        if (!currentVideo || currentVideoSrc !== newVideoSrc) {
+            // Remove any existing video if it exists
+            if (currentVideo) {
+                currentVideo.parentNode.removeChild(currentVideo);
+            }
+
+            // Create a new video element
+            currentVideo = document.createElement('video');
+            currentVideo.setAttribute('autoplay', 'true');
+            currentVideo.setAttribute('loop', 'true');
+            currentVideo.classList.add('bg-video');
+
+            let sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', newVideoSrc);
+            sourceElement.setAttribute('type', 'video/mp4');
+
+            currentVideo.appendChild(sourceElement);
+            document.body.appendChild(currentVideo);
+
+            // Play the video and handle any errors
+            currentVideo.play().catch(function (error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+
+            // Update the current video source
+            currentVideoSrc = newVideoSrc;
+        }
+    } else if (normalizedScore > 118) {
+        let newVideoSrc = 'Images/117.mp4';
+
+        if (!currentVideo || currentVideoSrc !== newVideoSrc) {
+            if (currentVideo) {
+                currentVideo.parentNode.removeChild(currentVideo);
+            }
+            currentVideo = document.createElement('video');
+            currentVideo.setAttribute('autoplay', 'true');
+            currentVideo.setAttribute('loop', 'true');
+            currentVideo.classList.add('bg-video');
+            let sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', newVideoSrc);
+            sourceElement.setAttribute('type', 'video/mp4');
+            currentVideo.appendChild(sourceElement);
+            document.body.appendChild(currentVideo);
+            currentVideo.play().catch(function (error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+            currentVideoSrc = newVideoSrc;
+        }
+    } else if (normalizedScore > 116) {
+        let newVideoSrc = 'Images/116.mp4';
+
+        if (!currentVideo || currentVideoSrc !== newVideoSrc) {
+            if (currentVideo) {
+                currentVideo.parentNode.removeChild(currentVideo);
+            }
+            currentVideo = document.createElement('video');
+            currentVideo.setAttribute('autoplay', 'true');
+            currentVideo.setAttribute('loop', 'true');
+            currentVideo.classList.add('bg-video');
+            let sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', newVideoSrc);
+            sourceElement.setAttribute('type', 'video/mp4');
+            currentVideo.appendChild(sourceElement);
+            document.body.appendChild(currentVideo);
+            currentVideo.play().catch(function (error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+            currentVideoSrc = newVideoSrc;
+        }
+    } else if (normalizedScore > 114) {
+        let newVideoSrc = 'Images/115.mp4';
+
+        if (!currentVideo || currentVideoSrc !== newVideoSrc) {
+            if (currentVideo) {
+                currentVideo.parentNode.removeChild(currentVideo);
+            }
+            currentVideo = document.createElement('video');
+            currentVideo.setAttribute('autoplay', 'true');
+            currentVideo.setAttribute('loop', 'true');
+            currentVideo.classList.add('bg-video');
+            let sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', newVideoSrc);
+            sourceElement.setAttribute('type', 'video/mp4');
+            currentVideo.appendChild(sourceElement);
+            document.body.appendChild(currentVideo);
+            currentVideo.play().catch(function (error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+            currentVideoSrc = newVideoSrc;
+        }
+    } else if (normalizedScore > 112) {
+        let newVideoSrc = 'Images/114.mp4';
+
+        if (!currentVideo || currentVideoSrc !== newVideoSrc) {
+            if (currentVideo) {
+                currentVideo.parentNode.removeChild(currentVideo);
+            }
+            currentVideo = document.createElement('video');
+            currentVideo.setAttribute('autoplay', 'true');
+            currentVideo.setAttribute('loop', 'true');
+            currentVideo.classList.add('bg-video');
+            let sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', newVideoSrc);
+            sourceElement.setAttribute('type', 'video/mp4');
+            currentVideo.appendChild(sourceElement);
+            document.body.appendChild(currentVideo);
+            currentVideo.play().catch(function (error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+            currentVideoSrc = newVideoSrc;
+        }
+    } else {
+        // Remove any existing video if the score drops below the video threshold
+        if (currentVideo) {
+            currentVideo.parentNode.removeChild(currentVideo);
+            currentVideo = null;
+            currentVideoSrc = null;
+        }
+
+        // Set background images
+        if (normalizedScore > 111) {
+            document.body.style.backgroundImage = "url('Images/112.jpg')";
+        } else if (normalizedScore > 110) {
+            document.body.style.backgroundImage = "url('Images/111.jpg')";
+        } else if (normalizedScore > 109) {
+            document.body.style.backgroundImage = "url('Images/110.jpg')";
+        } else if (normalizedScore > 108) {
+            document.body.style.backgroundImage = "url('Images/109.jpg')";
+        } else if (normalizedScore > 107) {
+            document.body.style.backgroundImage = "url('Images/108.jpg')";
+        } else if (normalizedScore > 106) {
+            document.body.style.backgroundImage = "url('Images/107.jpg')";
+        } else if (normalizedScore > 105) {
+            document.body.style.backgroundImage = "url('Images/106.jpg')";
+        } else if (normalizedScore > 104) {
+            document.body.style.backgroundImage = "url('Images/105.jpg')";
+        } else if (normalizedScore > 103) {
+            document.body.style.backgroundImage = "url('Images/104.jpg')";
+        } else if (normalizedScore > 102) {
+            document.body.style.backgroundImage = "url('Images/103.jpg')";
+        } else if (normalizedScore > 101) {
+            document.body.style.backgroundImage = "url('Images/102.jpg')";
+        } else if (normalizedScore > 100) {
+            document.body.style.backgroundImage = "url('Images/101.jpg')";
+        } else {
+            document.body.style.backgroundImage = '';
+        }
+
+        // Set background colors for scores below 100
+        if (normalizedScore >= 95) {
+            document.body.style.backgroundColor = '#00ccff';
+        } else if (normalizedScore >= 90) {
+            document.body.style.backgroundColor = '#3cf5c7';
+        } else if (normalizedScore >= 85) {
+            document.body.style.backgroundColor = '#70fd8f';
+        } else if (normalizedScore >= 80) {
+            document.body.style.backgroundColor = '#c1f504';
+        } else if (normalizedScore >= 75) {
+            document.body.style.backgroundColor = '#f4f748';
+        } else if (normalizedScore >= 70) {
+            document.body.style.backgroundColor = '#f5c833';
+        } else if (normalizedScore >= 65) {
+            document.body.style.backgroundColor = '#f7a961';
+        } else if (normalizedScore >= 60) {
+            document.body.style.backgroundColor = '#FF5D13';
+        } else if (normalizedScore >= 55) {
+            document.body.style.backgroundColor = '#fd5d5d';
+        } else if (normalizedScore >= 50) {
+            document.body.style.backgroundColor = '#F82E7B';
+        } else if (normalizedScore >= 40) {
+            document.body.style.backgroundColor = 'red';
+        } else if (normalizedScore >= 30) {
+            document.body.style.backgroundColor = '#6e0101';
+        } else if (normalizedScore >= 20) {
+            document.body.style.backgroundColor = '#2a0241';
+        } else {
+            document.body.style.backgroundColor = '#000000';
+        }
+    }
+
+    document.body.style.backgroundSize = "cover";
+}
     function hideButton() {
             document.getElementById("nextBtn").style.display = "none";
         }
