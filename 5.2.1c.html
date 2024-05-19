@@ -1185,39 +1185,39 @@
       });
        // Set background color based on score
        let body = document.querySelector('body');
-       if (score > 108) {
+       if ((score / (0.2 * totalQuestions)) > 108) {
   document.body.style.backgroundImage = "url('Images/109.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
-else if (score > 107) {
+else if ((score / (0.2 * totalQuestions)) > 107) {
   document.body.style.backgroundImage = "url('Images/108.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
-else if (score > 106) {
+else if ((score / (0.2 * totalQuestions)) > 106) {
   document.body.style.backgroundImage = "url('Images/107.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
-else if (score > 105) {
+else if ((score / (0.2 * totalQuestions)) > 105) {
   document.body.style.backgroundImage = "url('Images/106.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
-else if (score > 104) {
+else if ((score / (0.2 * totalQuestions)) > 104) {
   document.body.style.backgroundImage = "url('Images/105.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
-else if (score > 103) {
+else if ((score / (0.2 * totalQuestions)) > 103) {
   document.body.style.backgroundImage = "url('Images/104.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
-else if (score > 102) {
+else if ((score / (0.2 * totalQuestions)) > 102) {
   document.body.style.backgroundImage = "url('Images/103.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
-else if (score > 101) {
+else if ((score / (0.2 * totalQuestions)) > 101) {
   document.body.style.backgroundImage = "url('Images/102.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
-else if (score > 100) {
+else if ((score / (0.2 * totalQuestions)) > 100) {
   document.body.style.backgroundImage = "url('Images/101.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
@@ -1255,7 +1255,7 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
       currentQuestionIndex++;
       if (totalQuestions === 45) {
         // Redirect to 3.html after question 30
-        if (cor==13||cor==14||cor==15){
+        if (cor==12||cor==13||cor==14||cor==15){
             nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
           backgroundColorLevel45 = document.body.style.backgroundColor;
