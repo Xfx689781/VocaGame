@@ -9,7 +9,18 @@
       font-family: Arial, sans-serif;
       background-color: #f0f0f0;
     }
-
+    .bg-video {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -1000;
+        transform: translateX(-50%) translateY(-50%);
+        background-size: cover;
+    }
     .container {
       max-width: 600px;
       margin: 0 auto;
@@ -2736,7 +2747,43 @@
       });
        // Set background color based on score
        let body = document.querySelector('body');
-       if ((score / (0.2 * totalQuestions)) > 108) {
+       if ((score / (0.2 * totalQuestions)) > 114) {
+            var videoElement = document.createElement('video');
+            videoElement.setAttribute('autoplay', 'true');
+           // videoElement.setAttribute('muted', 'true');
+            videoElement.setAttribute('loop', 'true');
+            videoElement.classList.add('bg-video');
+
+            var sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', 'Images/115.mp4');
+            sourceElement.setAttribute('type', 'video/mp4');
+
+            videoElement.appendChild(sourceElement);
+            document.body.appendChild(videoElement);
+            videoElement.play().catch(function(error) {
+                console.log('Error attempting to play the video: ', error);
+            });
+        }else if ((score / (0.2 * totalQuestions)) > 113) {
+  document.body.style.backgroundImage = "url('Images/114.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if ((score / (0.2 * totalQuestions)) > 112) {
+  document.body.style.backgroundImage = "url('Images/113.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if ((score / (0.2 * totalQuestions)) > 111) {
+  document.body.style.backgroundImage = "url('Images/112.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if ((score / (0.2 * totalQuestions)) > 110) {
+  document.body.style.backgroundImage = "url('Images/111.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if ((score / (0.2 * totalQuestions)) > 109) {
+  document.body.style.backgroundImage = "url('Images/110.jpg')";
+  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+}
+else if ((score / (0.2 * totalQuestions)) > 108) {
   document.body.style.backgroundImage = "url('Images/109.jpg')";
   document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
 }
