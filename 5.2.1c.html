@@ -1319,7 +1319,7 @@ if ((score / (0.2 * totalQuestions)) >= 95) {
         // Redirect to 3.html after question 30
         if (cor==12||cor==13||cor==14||cor==15){
             nextBtn.addEventListener('click', function() {
-          localStorage.setItem('score', (score+((cor-10)*20)));
+          localStorage.setItem('score', (score+((cor-11)*20)));
           backgroundColorLevel45 = document.body.style.backgroundColor;
           localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
           localStorage.setItem('correctCount', correctCount);

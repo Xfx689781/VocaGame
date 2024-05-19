@@ -657,7 +657,7 @@
       nextBtn.style.display = 'block';
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-        score += (timeLeft >= 24 ? 25 : (timeLeft + 1));
+        score += (timeLeft >= 29 ? 30 : (timeLeft + 1));
         correctCount++;
         cor++;
         resultDiv.textContent = 'Correct!';
@@ -776,7 +776,7 @@ if ((score / (0.2 * totalQuestions)) >= 95) {
 }
       nextBtn.disabled = false;
       currentQuestionIndex++;
-      if (cor==15) {
+      if (cor==16) {
         scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
     hideButton();
 
@@ -816,7 +816,7 @@ if ((score / (0.2 * totalQuestions)) >= 95) {
     function askQuestion() {
         nextBtn.style.display = 'none';
   //getDifficulty();
-  if (cor<15) {
+  if (cor<16) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;
     const currentWord = questionData.word;
@@ -840,7 +840,7 @@ if ((score / (0.2 * totalQuestions)) >= 95) {
   } 
 }
     function startTimer() {
-      let timeLeft = 25;
+      let timeLeft = 30;
       timerDiv.textContent = 'Time left: ' + timeLeft + 's';
       timer = setInterval(() => {
         timeLeft--;
@@ -849,7 +849,7 @@ if ((score / (0.2 * totalQuestions)) >= 95) {
           clearTimeout(timer);
           checkAnswer(false); // Timeout, passing false as the answer is incorrect
         }
-      }, 1000);
+      }, 375);
     }
 
     function shuffle(array) {
