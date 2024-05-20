@@ -1237,6 +1237,7 @@
         }
       } else {
         resultDiv.textContent = 'Incorrect!';
+        score -= 40;
         if (score<=0){
             score=0;
         }
@@ -1244,29 +1245,47 @@
            score=100*(0.2*totalQuestions)
         }
       }
-      correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
-        scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);
+      correctDiv.textContent = 'Correct: ' + correctCount + "/" + (totalQuestions);
+        scoreDiv.textContent = 'Score: ' + ((score / (20* (totalQuestions)))*100).toFixed(0);
       // Disable all options after a choice is made
       const options = document.querySelectorAll('.option');
       options.forEach(option => {
         option.removeEventListener('click', handleOptionClick);
         option.style.pointerEvents = 'none';
+        option.style.pointerEvents.display = 'none';
       });
        // Set background color based on score
        let body = document.querySelector('body');
 
-
- if ((score / (0.2 * totalQuestions)) >= 95) {
+     let finalscore =  (score / (0.2 * totalQuestions))
+       if (finalscore >= 95) {
   body.style.backgroundColor = '#00ccff';
-}  else if ((score / (0.2 * totalQuestions)) >= 90) {
+}  else if (finalscore >= 90) {
   body.style.backgroundColor = '#3cf5c7';
-} else if ((score / (0.2 * totalQuestions)) >= 85) {
+} else if (finalscore >= 85) {
     body.style.backgroundColor = '#70fd8f';
-} else if ((score / (0.2 * totalQuestions)) >= 80) {
+} else if (finalscore >= 80) {
     body.style.backgroundColor = '#c1f504';
-} else if ((score / (0.2 * totalQuestions)) >= 0) {
-    document.body.style.backgroundImage = "url('Images/Version-J.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
+} else if (finalscore >= 75) {
+    body.style.backgroundColor = '#f4f748';
+}else if (finalscore >= 70) {
+    body.style.backgroundColor = '#f5c833';
+} else if (finalscore >= 65) {
+    body.style.backgroundColor = '#f7a961';
+}else if (finalscore >= 60) {
+    body.style.backgroundColor = '#FF5D13';
+} else if (finalscore >= 55) {
+    body.style.backgroundColor = '#fd5d5d';
+} else if (finalscore >= 50) {
+    body.style.backgroundColor = '#F82E7B';
+} else if (finalscore >= 40) {
+    body.style.backgroundColor = 'red';
+}else if (finalscore >= 30) {
+    body.style.backgroundColor = '#6e0101';
+}else if (finalscore >= 20) {
+    body.style.backgroundColor = '#2a0241';
+}else if (finalscore < 20) {
+    body.style.backgroundColor = '#000000';
 }
 
       nextBtn.disabled = false;
@@ -1279,7 +1298,38 @@
        option.style.pointerEvents = 'none';
      });
      nextBtn.style.display = 'block';
-     scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);  
+     correctDiv.textContent = 'Correct: ' + correctCount + "/" + (totalQuestions-1);
+    let finalfinishscore = ((((score+40) / (0.2 * (totalQuestions-1))))+(cor/2)).toFixed(1);  
+    if (finalfinishscore >= 95) {
+  body.style.backgroundColor = '#00ccff';
+}  else if (finalfinishscore >= 90) {
+  body.style.backgroundColor = '#3cf5c7';
+} else if (finalfinishscore >= 85) {
+    body.style.backgroundColor = '#70fd8f';
+} else if (finalfinishscore >= 80) {
+    body.style.backgroundColor = '#c1f504';
+} else if (finalfinishscore >= 75) {
+    body.style.backgroundColor = '#f4f748';
+}else if (finalfinishscore >= 70) {
+    body.style.backgroundColor = '#f5c833';
+} else if (finalfinishscore >= 65) {
+    body.style.backgroundColor = '#f7a961';
+}else if (finalfinishscore >= 60) {
+    body.style.backgroundColor = '#FF5D13';
+} else if (finalfinishscore >= 55) {
+    body.style.backgroundColor = '#fd5d5d';
+} else if (finalfinishscore >= 50) {
+    body.style.backgroundColor = '#F82E7B';
+} else if (finalfinishscore >= 40) {
+    body.style.backgroundColor = 'red';
+}else if (finalfinishscore >= 30) {
+    body.style.backgroundColor = '#6e0101';
+}else if (finalfinishscore >= 20) {
+    body.style.backgroundColor = '#2a0241';
+}else if (finalfinishscore < 20) {
+    body.style.backgroundColor = '#000000';
+}
+scoreDiv.textContent = 'Your final score is: ' + finalfinishscore;
      document.getElementById("nextBtn").style.display = "none";
    
    
@@ -1345,7 +1395,7 @@
     //startTimer();
   } 
 }
-let timeLeft = 60;
+let timeLeft = 10;
     function startTimer() {
       timerDiv.textContent = 'Time left: ' + timeLeft + 's';
       timer = setInterval(() => {
