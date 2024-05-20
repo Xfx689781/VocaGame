@@ -1072,7 +1072,7 @@
       nextBtn.disabled = false;
       currentQuestionIndex++;
       if (cor==6) {
-        if ((score/(0.2*totalQuestions))<55){
+        if ((score/(0.2*totalQuestions))<50){
           nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', (score));
           backgroundColorLevellvp = document.body.style.backgroundColor;

@@ -682,7 +682,7 @@
 
         resultDiv.textContent = '';
         startTimer();
-        shuffleInterval = setInterval(shuffleOptions, 900);
+        shuffleInterval = setInterval(shuffleOptions, 750);
       }
     }
 
@@ -696,7 +696,7 @@
           clearTimeout(timer);
           checkAnswer(false);
         }
-      }, 900);
+      }, 1000);
     }
 
     function shuffleOptions() {
