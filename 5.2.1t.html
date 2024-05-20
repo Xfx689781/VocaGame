@@ -125,7 +125,7 @@
   <div class="container">
     <h1>English Word Game</h1>
     <div id="questionNumber"></div>
-    <div id="level">奖励模式</div>
+    <div id="level">奖励模式T</div>
     <div id="question"></div>
     <div id="options"></div>
     <div id="result"></div>
@@ -602,8 +602,8 @@
     function startGame() {
       //score = 0;
       //correctCount = 0;
-      backgroundColorLevellvp = localStorage.getItem('backgroundColorLevellvp');
-      document.body.style.backgroundColor = backgroundColorLevellvp;
+      backgroundColorLevel = localStorage.getItem('backgroundColorLevel');
+      document.body.style.backgroundColor = backgroundColorLevel;
       score = parseInt(localStorage.getItem('score')) || 0;
       correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
       totalQuestions = parseInt(localStorage.getItem('totalQuestions')) || 0;

@@ -126,7 +126,7 @@
 <body>
   <div class="container">
     <h1>English Word Game</h1>
-    <div id="level">爆难模式</div>
+    <div id="level">爆难模式E</div>
     <div id="questionNumber"></div>
     <div id="question"></div>
     <div id="options"></div>
@@ -437,8 +437,8 @@
         if (totalQuestions<=53) {
           nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', (score));
-          backgroundColorLevellvp = document.body.style.backgroundColor;
-          localStorage.setItem('backgroundColorLevellvp', backgroundColorLevellvp);
+          backgroundColorLevel = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel', backgroundColorLevel);
           localStorage.setItem('correctCount', correctCount);
           localStorage.setItem('totalQuestions', totalQuestions)
           window.location.href = '5.2.1t.html';

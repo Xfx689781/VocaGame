@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+   
+
+    h1 {
+      color: #333;
+    }
+
+    #questionNumber {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #options {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      overflow: hidden;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    .option {
+      position: absolute;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #level {
+      position: absolute;
+      left: 12px;
+      top: 5px;
+      font-size: 15px;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #dc3545;
+    }
+
+    #score, #correct {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: black;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    #nextBtn {
+      font-size: 22px;
+      background-color: transparent;
+      border: transparent;
+      margin-top: 20px;
+      display: block;
+      margin: 0 auto;
+      display: none;
+    }
+
+    #startBtn {
+      background-color: rgb(145, 248, 243);
+      border: transparent;
+      margin-top: 20px;
+      display: block;
+      margin: 0 auto;
+      font-size: 22px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Word Game</h1>
+    <div id="questionNumber"></div>
+    <div id="level">神秘模式V</div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <div id="correct">Correct:</div>
+    <div id="score">Score:</div>
+    <div id="timer">Time left:</div>
+    <button id="nextBtn">Next</button>
+  </div>
+
+  <script>
+    const words = {
+      expert: [
+        // Example data
+        { "word": "gaseous", "options": ["气态", "气体", "气态的", "气体的", "气态物质", "气态分子"], "correct": 0 },
+    { "word": "gene", "options": ["基因", "遗传", "染色体", "生物学", "神经细胞", "染色质"], "correct": 0 },
+    { "word": "gentleness", "options": ["温柔", "柔和", "温和", "温顺", "和善", "柔软"], "correct": 0 },
+    { "word": "glacier", "options": ["冰川", "高山", "高原", "融化", "玻璃", "无线电波"], "correct": 0 },
+    { "word": "gladness", "options": ["喜悦", "运动", "强迫", "才华", "愿意", "糟糕"], "correct": 0 },
+    { "word": "glimpse", "options": ["一瞥", "日食", "冰凌", "蜡像", "碎片", "微观"], "correct": 0 },
+    { "word": "globe", "options": ["地球仪", "手套", "全球", "连指手套", "光荣", "荣耀"], "correct": 0 },
+    { "word": "glorious", "options": ["光荣", "地球仪", "手套", "黑暗", "恐怖", "美好"], "correct": 0 },
+    { "word": "glow", "options": ["发光", "灼热", "生长", "滋润", "黑暗", "恐怖"], "correct": 0 },
+    { "word": "goddess", "options": ["女神", "男神", "神话", "神", "祭坛", "神社"], "correct": 0 },
+    { "word": "golf", "options": ["高尔夫", "巴黎", "里斯本", "保龄球", "马德里", "新德里"], "correct": 0 },
+    { "word": "goose", "options": ["鹅", "牙齿", "鹤", "大雁", "天鹅", "故事"], "correct": 0 },
+    { "word": "gorge", "options": ["峡谷", "车库", "画廊", "水渠", "天体", "远古"], "correct": 0 },
+    { "word": "gorilla", "options": ["大猩猩", "黑人", "黑猩猩", "非洲人", "非洲猩猩", "红薯"], "correct": 0 },
+    { "word": "grace", "options": ["优雅", "格蕾丝", "恩雅", "感恩", "雅尼", "赐予"], "correct": 0 },
+    { "word": "graceful", "options": ["优美", "恩雅", "感恩", "雅尼", "赐予", "虔诚"], "correct": 0 },
+    { "word": "gratitude", "options": ["感激", "测量", "毕业", "尽量", "泥沙", "逐渐"], "correct": 0 },
+    { "word": "guidebook", "options": ["指南", "导游", "小说", "书店", "索引", "领导"], "correct": 0 },
+  { word: "gymnastics", options: ["体操", "体育馆", "健身房", "游泳馆", "单杠运动", "引体向上"], correct: 0 },
+  { word: "habitat", options: ["栖息地", "办公室", "公园", "森林", "湖", "习惯"], correct: 0 },
+  { word: "haddock", options: ["鳕鱼", "鲑鱼", "金枪鱼", "鳟鱼", "鲱鱼", "鲱鱼"], correct: 0 },
+  { word: "hallelujah", options: ["哈利路亚", "阿门", "赞美", "崇拜", "唱歌", "祈祷"], correct: 0 },
+  { word: "halo", options: ["光环", "冠冕", "你好", "圆圈", "环路", "卤素"], correct: 0 },
+  { word: "hammer", options: ["锤子", "铁耙", "叉子", "钻头", "铁锥", "锄头"], correct: 0 },
+  { word: "happiness", options: ["喜悦", "愤怒", "恐惧", "幸福", "兴奋", "悲伤"], correct: 0 },
+  { word: "harmonious", options: ["和谐", "刺耳", "旋律", "节奏", "顺畅", "丰富"], correct: 0 },
+  { word: "harmony", options: ["和谐", "和平", "协议", "团结", "和约", "和"], correct: 0 },
+  { word: "harp", options: ["钢琴", "小提琴", "吉他", "鼓", "长笛", "竖琴"], correct: 5 },
+  { word: "hawk", options: ["鸽子", "隼", "秃鹰", "苍鹭", "麻雀", "鹰"], correct: 5 },
+  { word: "heaven", options: ["地球", "天空", "海洋", "沙漠", "地狱", "天堂"], correct: 5 },
+  { word: "heroine", options: ["英雄", "恶棍", "配角", "主角", "反派", "女英雄"], correct: 5 },
+  { word: "heron", options: ["男低音", "男中音", "男高音", "隼", "秃鹰", "苍鹭"], correct: 5 },
+  { word: "hockey", options: ["足球", "篮球", "棒球", "橄榄球", "曲棍球", "网球"], correct: 4 },
+  { word: "holy", options: ["祈祷", "神圣", "圣旨", "祝福", "洁白", "耶稣"], correct: 1 },
+  { word: "honest", options: ["诚实", "说谎", "欧内斯特", "信赖", "海明威", "值得"], correct: 0 },
+  { word: "honorable", options: ["可耻", "体面", "高贵", "尊重", "尊严", "可敬"], correct: 5 },
+  { word: "hook", options: ["线", "打击", "连衣帽", "诱饵", "竿", "钩子"], correct: 5 },
+  { word: "hostel", options: ["酒店", "汽车旅馆", "客栈", "饭店", "宿舍", "招待所"], correct: 5 },
+  { word: "humanity", options: ["人类", "诚实", "善良", "同情", "人性", "谦虚"], correct: 4 },
+  { word: "humble", options: ["固执", "傲慢", "轰隆声", "温顺", "嗡嗡声", "谦卑"], correct: 5 },
+  { word: "humility", options: ["人品", "诚实", "善良", "同情", "人性", "谦虚"], correct: 5 },
+  { word: "hummingbird", options: ["鹰", "鹞", "麻雀", "知更鸟", "蜂鸟", "猫头鹰"], correct: 4 },
+  { word: "hurdles", options: ["短跑", "马拉松", "跨栏", "接力赛", "跳远", "跳高"], correct: 2 },
+  { word: "hydrate", options: ["脱水", "水", "饮料", "润肤", "液体", "水合物"], correct: 5 },
+  { word: "hydro", options: ["水", "水电", "水合物", "海洋", "液体", "脱水"], correct: 1 },
+  { word: "hydrogen", options: ["氧", "氮", "碳", "氢", "氦", "氖"], correct: 3 },
+  { word: "iconic", options: ["著名的", "无名的", "未知的", "流行的", "标志性的", "明显的"], correct: 4 },
+  { word: "imagery", options: ["想象力", "视觉", "倒影", "图像", "照片", "意象"], correct: 5 },
+  { word: "impression", options: ["意见", "情况", "敏锐", "感觉", "印象", "直觉"], correct: 4 },
+  { word: "improve", options: ["平缓", "下降", "帮助", "更新", "升级", "改善"], correct: 5 },
+  { word: "indigenous", options: ["本地", "因纽特", "移民", "迁徙", "土著", "印第安"], correct: 4 },
+  { word: "inert", options: ["活跃", "动态", "力量", "理论", "静止", "惰性"], correct: 5 },
+  { word: "infinite", options: ["有限", "界面", "尽头", "边界", "终点", "无限"], correct: 5 },
+  { word: "influence", options: ["影响", "效果", "分析", "摇摆", "控制", "场合"], correct: 0 },
+  { word: "innovate", options: ["复制", "模仿", "传统", "跟随", "创新", "沙丘"], correct: 4 },
+  { word: "innovation", options: ["传统", "遵从", "保守", "创新", "溯源", "平息"], correct: 3 },
+  { word: "insert", options: ["移除", "提取", "弹出", "推进", "插入", "放置"], correct: 4 },
+  { word: "insight", options: ["远见", "事后诸葛亮", "监督", "洞察力", "理解", "看法"], correct: 0 },
+  { word: "insoluble", options: ["可溶", "不可溶", "易碎", "熔化", "凝固", "解释"], correct: 1 },
+  { word: "inspect", options: ["忽视", "尊重", "马虎", "检查", "观察", "陈述"], correct: 3 },
+  { word: "inspiration", options: ["气馁", "绝望", "希望", "灵感", "情况", "鼓励"], correct: 3 },
+  { word: "instrumentalist", options: ["歌手", "歌声", "演奏者", "音乐家", "人声", "表演者"], correct: 2 },
+  { word: "intense", options: ["温和", "企图", "强烈", "极端", "谋划", "严重"], correct: 2 },
+  { word: "invent", options: ["发明", "邀请", "设计", "发现", "制造", "创新"], correct: 0 },
+  { word: "ionic", options: ["离子的", "分子的", "原子的", "电子的", "阳离子", "阴离子"], correct: 0 },
+  { word: "ionize", options: ["离子化", "化合物", "氧化还原", "抗氧化剂", "宇宙射线", "电离辐射"], correct: 0 },
+  { word: "gallop", options: ["狂奔", "扇贝", "车库", "速度", "放弃", "分配", "强调"], correct: 0 },
+  { word: "gamete", options: ["配子", "生殖细胞", "精子", "卵子", "受精卵", "胚胎", "发育"], correct: 0 },
+  { word: "gangster", options: ["匪徒", "棉花糖", "钢板", "金刚", "野兽", "罪犯", "海盗"], correct: 0 },
+  { word: "gazebo", options: ["凉亭", "观景台", "藤架", "露台", "箭靶", "环绕", "回音壁"], correct: 0 },
+  { word: "generosity", options: ["慷慨", "宽阔", "宽容", "客气", "仁慈", "博爱", "佛祖"], correct: 0 },
+  { word: "genocide", options: ["种族灭绝", "自杀", "自首", "杀虫剂", "谋杀案", "杀人动机", "集中营"], correct: 0 },
+  { word: "genotype", options: ["基因型", "遗传型", "等位基因", "基因组", "常染色体", "性染色体", "基因类型"], correct: 0 },
+  { word: "geometry", options: ["几何", "代数", "代数几何", "平面几何", "立体几何", "线性代数", "抽象代数"], correct: 0 },
+  { word: "gestation", options: ["妊娠", "炸药", "手势", "尸体", "分娩", "胎盘", "托盘"], correct: 0 },
+  { word: "glean", options: ["拾取", "清洗", "清楚", "洗涤", "提炼", "巡逻", "搜罗"], correct: 0 },
+  { word: "gloat", options: ["幸灾乐祸", "得意洋洋", "一鸣惊人", "山羊", "梁贺华", "心满意足", "蜻蜓点水"], correct: 0 },
+  { word: "globalization", options: ["全球化", "国际化", "外交政策", "国际贸易", "环球航行", "地球仪", "国际一体化"], correct: 0 },
+  { word: "gothic", options: ["哥特式", "洛可可", "古典主义", "解构主义", "中世纪", "寰丘", "吸血鬼"], correct: 0 },
+  { word: "graffiti", options: ["涂鸦", "寰丘", "抹除", "梅花鹿", "弹弓", "磨坊", "消磨"], correct: 0 },
+  { word: "grapple", options: ["格斗", "寰丘", "轰炸机", "战斗", "田径", "偷袭", "提子"], correct: 0 },
+  { word: "gratification", options: ["满足", "刻度", "毕业", "欣喜", "感激", "量筒", "寰丘"], correct: 0 },
+  { word: "grouper", options: ["石斑鱼", "组别", "组员", "合作伙伴", "口风琴", "原始人", "分裂"], correct: 0 },
+  { word: "grovel", options: ["匍匐", "沙砾", "谦卑", "下跪", "奴仆", "屈服", "拜见"], correct: 0 },
+  { word: "grumble", options: ["抱怨", "泥沙", "轰隆声", "嗡嗡声", "说话声", "凭借", "闲聊"], correct: 0 },
+  { word: "halibut", options: ["比目鱼", "海湾", "岩柱", "割草机", "圣旨", "控告", "剑柄"], correct: 0 },
+  { word: "hallow", options: ["神圣的", "光环", "凹陷的", "泥潭", "丰富的", "水库", "马陆"], correct: 0 },
+  { word: "halogen", options: ["卤素", "光环", "冠冕", "日冕", "日环食", "惰性气体", "神圣"], correct: 0 },
+  { word: "harmonica", options: ["口琴", "诙谐", "管风琴", "手风琴", "口风琴", "旋律", "节拍器"], correct: 0 },
+  { word: "heredity", options: ["遗传", "人性", "此处", "特征", "信息", "谦虚", "序列"], correct: 0 },
+  { word: "hinder", options: ["妨碍", "文件夹", "干扰", "抓狂", "信徒", "粉丝", "公式"], correct: 0 },
+  { word: "holocaust", options: ["大屠杀", "自杀", "谋杀案", "骷髅", "吸血鬼", "集中营", "种族灭绝"], correct: 0 },
+  { word: "hormone", options: ["激素", "雄性激素", "内分泌", "雌性激素", "雄性", "雌性", "发病"], correct: 0 },
+  { word: "humiliate", options: ["羞辱", "谦虚", "意象", "狠毒", "戾气", "犯罪", "违反"], correct: 0 },
+  { word: "hurtle", options: ["猛冲", "宝藏", "山水画廊", "卢嫩堡旁边的海滩", "剧烈运动", "蹦极", "俯卧撑"], correct: 0 },
+  { word: "hydrocarbon", options: ["碳氢化合物", "烃", "石油", "烷烃", "烯烃", "芳烃", "烃类"], correct: 0 },
+  { word: "hyperbole", options: ["夸张", "双曲线", "抛物线", "耸人听闻", "故意", "谎言", "超现实主义"], correct: 0 },
+  { word: "hypotenuse", options: ["斜边", "低音", "高架桥", "对角线", "低等生物", "高端", "硅基生物"], correct: 0 },
+  { word: "ignite", options: ["点燃", "忽略", "无知", "核弹", "爆炸", "巨响", "火灾"], correct: 0 },
+  { word: "immortal", options: ["不朽", "物质", "无知", "品德", "高尚", "永生", "高端"], correct: 0 },
+  { word: "immunity", options: ["免疫", "疫苗", "抗议", "议会", "样本", "变异", "服役"], correct: 0 },
+  { word: "imperialism", options: ["帝国主义", "殖民主义", "霸权主义", "侵略主义", "社会主义", "共产主义", "资本主义"], correct: 0 },
+  { word: "implement", options: ["工具", "文件", "设备", "器械", "刀叉", "机器", "恶劣"], correct: 0 },
+  { word: "impress", options: ["印象", "表达", "出现", "显示", "刻画", "感动", "印章"], correct: 0 },
+  { word: "impressionism", options: ["印象派", "后印象派", "抽象派", "浪漫派", "野兽派", "写实派", "表现派"], correct: 0 },
+  { word: "improvisation", options: ["即兴创作", "进化", "创新", "发挥", "合成器", "芭蕾舞", "交响乐"], correct: 0 },
+  { word: "incite", options: ["煽动", "朗诵", "寰丘", "言论", "内部", "娱乐", "激怒"], correct: 0 },
+  { word: "incorporate", options: ["合并", "加入", "附加", "产量", "结合", "纳入", "合成"], correct: 0 },
+  { word: "industrialization", options: ["工业化", "产业化", "现代化", "工业", "工业前夕", "工业革命", "现代工业"], correct: 0 },
+  { word: "ineffable", options: ["难以言表", "无法形容", "无语", "没有影响", "付不起", "难以理解", "天马行空"], correct: 0 },
+  { word: "infant", options: ["婴儿", "砚台", "墨水", "寰丘", "疾病", "包裹", "接种"], correct: 0 },
+  { word: "inflame", options: ["激怒", "引发", "膨胀", "点燃", "疏忽", "手术", "煽动"], correct: 0 },
+  { word: "inflation", options: ["通货膨胀", "通货紧缩", "物价下降", "物价上涨", "平原", "盆地", "平台"], correct: 0 },
+  { word: "influenza", options: ["流感", "影响", "影响力", "有影响的", "影视", "变坏", "渐渐"], correct: 0 },
+  { word: "inhibit", options: ["抑制", "传承", "条件", "后继", "栖息", "禁止", "习惯"], correct: 0 },
+  { word: "iniquity", options: ["邪恶", "正义", "不平等", "剥削人权", "初始化", "魔鬼", "蓝莓"], correct: 0 },
+  { word: "initial", options: ["最初", "中等", "原始", "意志", "罪恶", "寰丘", "吸血鬼"], correct: 0 },
+  { word: "innocence", options: ["无辜", "清淡", "好奇", "纯洁", "真诚", "邪恶", "附魔"], correct: 0 },
+  { word: "inquisitive", options: ["好奇", "探究", "调查问卷", "听写", "打听", "转移", "八卦"], correct: 0 },
+  { word: "inscribe", options: ["题写", "座右铭", "盯着", "篆刻", "提名", "关注", "订阅"], correct: 0 },
+  { word: "insect", options: ["昆虫", "危害", "魔鬼", "蓝莓", "寰丘", "八卦", "吸血鬼"], correct: 0 },
+  { word: "insinuate", options: ["暗示", "魔鬼", "影射", "吸血鬼", "酸性的", "谩骂", "诉讼"], correct: 0 },
+  { word: "insolent", options: ["傲慢", "八卦", "肆无忌惮", "粗鲁", "吸血鬼", "溶解度", "礼仪"], correct: 0 },
+  { word: "installation", options: ["安装", "下载", "更新", "装置", "设施", "调配", "星座"], correct: 0 },
+  { word: "instigate", options: ["煽动", "薪水", "报酬", "丑八怪", "吸血鬼", "寰丘", "唆使"], correct: 0 },
+  { word: "institute", options: ["学院", "机构", "团体", "研讨会", "宪法", "构成", "科学技术"], correct: 0 },
+  { word: "insurgent", options: ["叛乱分子", "暴徒", "八卦", "吸血鬼", "异教徒", "邪教", "魔鬼"], correct: 0 },
+  { word: "integrity", options: ["完整性", "坚硬", "廉耻", "争执", "正直", "羞耻心", "廉价的"], correct: 0 },
+  { word: "intercept", options: ["拦截", "截距", "交点", "盗梦空间", "导弹", "聚丙烯", "插入"], correct: 0 },
+  { word: "interlude", options: ["插曲", "插入", "间歇", "截距", "结局", "桥段", "中场休息"], correct: 0 },
+  { word: "interpid", options: ["无畏", "自杀", "诉讼", "勇敢", "献身", "死亡", "暴怒"], correct: 0 },
+  { word: "interpret", options: ["解释", "拦截", "截距", "插入", "聚丙烯", "交点", "盗梦空间"], correct: 0 },
+  { word: "intersection", options: ["交点", "解释", "插入", "拦截", "盗梦空间", "聚丙烯", "截距"], correct: 0 },
+  { word: "intervene", options: ["干预", "相干波", "诉讼", "自杀", "昏迷", "酒精","毒品"], correct: 0 },
+  { word: "intoxicant", options: ["酒精", "毒品", "麻醉", "安眠药", "自杀", "诉讼", "杀虫剂"], correct: 0 },
+  { word: "interfere", options: ["干涉", "插入", "相干波", "诉讼", "自杀", "杀虫剂", "盗梦空间"], correct: 0 },
+  { word: "invective", options: ["谩骂", "八卦", "魔鬼", "放射性", "聚丙烯", "导弹", "中间人"], correct: 0 },
+  { word: "invertebrate", options: ["无脊椎动物", "软体动物", "节肢动物", "环节动物", "脊椎动物", "腔肠动物", "两栖动物"], correct: 0 },
+  { word: "investigate", options: ["调查", "考察", "八卦", "邪教", "蓝莓", "异教徒", "检查"], correct: 0 },
+  { word: "invincible", options: ["无敌", "酸性的", "暴乱", "天才", "绝对", "坚固", "萦绕"], correct: 0 },
+  { word: "iodine", options: ["碘", "酸性的", "导弹", "聚丙烯", "暴乱", "盗梦空间", "灵芝"], correct: 0 },
+  { word: "isomer", options: ["异构体", "灵芝", "竹荪", "魔鬼", "同分异构化合物", "量子超级计算机", "相干波的异构性"], correct: 0 },
+  { word: "isometric", options: ["等距", "八卦", "异教徒", "灵芝", "盗梦空间", "魔鬼", "异构性"], correct: 0 },
+  { word: "isotope", options: ["同位素", "竹荪", "吸血鬼", "寰丘", "聚丙烯", "酸性的", "邪教"], correct: 0 },
+  { word: "itinerary", options: ["行程", "陆游", "路钱图", "安排", "日程表", "导弹", "聚丙烯"], correct: 0 },
+  { "word": "jabber", "options": ["叽叽喳喳", "胡说八道", "鸟鸣声", "滔滔不绝", "说话声", "唠叨", "停止"], "correct": 0 },
+  { "word": "jape", "options": ["嘲弄", "胶布", "监狱", "祈祷", "谴责", "灵芝", "寰丘"], "correct": 0 },
+  { "word": "jaunt", "options": ["短途旅行", "关节", "漫游", "坐骑", "基建", "竹荪", "八卦"], "correct": 0 },
+  { "word": "javelin", "options": ["标枪", "铁饼", "铅球", "撑杆跳", "三级跳远", "跳高", "田径运动"], "correct": 0 },
+  { "word": "jeer", "options": ["嘲笑", "挖苦", "讽刺", "落寞", "悲伤", "欺侮", "冷笑"], "correct": 0 },
+  { "word": "jibe", "options": ["嘲讽", "立方体", "金字塔", "安排", "聚丙烯", "暴乱", "绅士"], "correct": 0 },
+  { "word": "jilt", "options": ["抛弃", "背叛", "代沟", "隔阂", "暴乱", "邪教", "样本"], "correct": 0 },
+  { "word": "jostle", "options": ["推挤", "关节", "水枪", "狡辩", "暴乱", "邪教", "碰撞"], "correct": 0 },
+  { "word": "jovial", "options": ["快乐的", "思乡的", "担忧的", "平缓的", "沉重的", "友好的", "困难的"], "correct": 0 },
+  { "word": "jubilant", "options": ["欢呼的", "交错的", "合适的", "高兴的", "如释重负的", "接轨", "吻合"], "correct": 0 },
+  { "word": "juxtapose", "options": ["并置", "排列", "抽油烟机", "捆绑", "预测", "交际", "对比"], "correct": 0 },
+  { "word": "karate", "options": ["空手道", "番石榴", "木瓜", "斗牛士", "侵略", "虔诚", "活塞"], "correct": 0 },
+  { "word": "karma", "options": ["因果报应", "佛学院", "议案", "虔诚", "理论", "业余", "清真寺"], "correct": 0 },
+  { "word": "kindle", "options": ["点燃", "电子书", "引发", "照明", "船闸", "加工", "苏醒"], "correct": 0 },
+  { "word": "kinetics", "options": ["动力学", "直线", "并列", "线程", "火花", "炸药", "切割磁感线"], "correct": 0 },
+  { "word": "knead", "options": ["揉", "搓", "抓", "捏", "按压", "按摩", "针线"], "correct": 0 },
+  { "word": "lament", "options": ["哀悼", "祈祷", "讣告", "诉讼", "墓碑", "骨灰", "痛哭"], "correct": 0 },
+  { "word": "lampoon", "options": ["讽刺", "潜水艇", "骑士", "趋势", "气势", "启发", "戏谑"], "correct": 0 },
+  { "word": "lamprey", "options": ["七鳃鳗", "文昌鱼", "暴乱", "潜水艇", "吸盘", "吸血鬼", "寄生虫"], "correct": 0 },
+  { "word": "lancelet", "options": ["文昌鱼", "线虫", "七鳃鳗", "项链", "下颌", "柳叶刀", "脑垂体"], "correct": 0 },
+  { "word": "lancet", "options": ["柳叶刀", "线虫", "七鳃鳗", "项链", "骑兵", "文昌鱼", "脑垂体"], "correct": 0 },
+  { "word": "lancer", "options": ["骑兵", "线虫", "七鳃鳗", "项链", "柳叶刀", "文昌鱼", "脑垂体"], "correct": 0 },
+  { "word": "languish", "options": ["衰弱", "语言", "辨别", "昏迷", "预兆", "残疾", "颓废"], "correct": 0 },
+  { "word": "lanthanide", "options": ["镧系元素", "稀土元素", "贫金属", "惰性气体", "碱土金属", "碱金属", "锕系元素"], "correct": 0 },
+  { "word": "lather", "options": ["肥皂泡", "皮革", "连击", "皮夹克", "梯子", "骑兵", "涤纶"], "correct": 0 },
+  { "word": "laud", "options": ["赞美", "诈骗", "大声", "路标", "牛腱", "毽子", "地毯"], "correct": 0 },
+  { "word": "legtimate", "options": ["合法的", "经典的", "漂浮的", "浮躁的", "韧性的", "正当的", "帅气的"], "correct": 0 },
+  { "word": "levitate", "options": ["悬浮", "飘逸", "傲慢", "升空", "自豪", "浮躁", "癫狂"], "correct": 0 },
+  { "word": "ligament", "options": ["韧带", "纤维", "肌腱", "筋膜", "结缔组织", "软组织", "肌肉组织"], "correct": 0 },
+  { "word": "linger", "options": ["徘徊", "语言", "双语", "芦苇", "异教徒", "吸血鬼", "悬浮"], "correct": 0 },
+  { "word": "linguistics", "options": ["语言学", "双语", "语气", "语调", "多语言", "外语", "本土语言"], "correct": 0 },
+  { "word": "lipid", "options": ["脂质", "油脂", "纤维素", "液体", "胭脂", "油腻", "醇香"], "correct": 0 },
+  { "word": "logarithm", "options": ["对数", "算法", "指数", "反函数", "正弦波", "量子加速器", "伽罗瓦定理"], "correct": 0 },
+  { "word": "lucid", "options": ["清晰", "瓶盖", "反光", "羽扇豆", "狼疮", "昏暗的", "灵芝"], "correct": 0 },
+  { "word": "luminous", "options": ["发光", "荧光", "聚丙烯", "异教徒", "八卦", "邪教", "聚乙烯"], "correct": 0 },
+  { "word": "lure", "options": ["鱼饵", "棉花", "吞噬", "强制", "必须", "亡灵", "心灵"], "correct": 0 },
+  { word: "journey", options: ["旅程", "洛杉矶", "迁徙", "平反", "年代", "登山"], correct: 0 },
+  { word: "kayak", options: ["皮划艇", "摩托艇", "桨板", "独木舟", "帆船", "木筏"], correct: 0 },
+  { word: "keen", options: ["敏锐", "热情", "言语", "目光", "王子", "颤抖"], correct: 0 },
+  { word: "kindness", options: ["善良", "种类", "人类", "和蔼", "目光", "宽容"], correct: 0 },
+  { word: "knoll", options: ["小山", "雪山", "土堆", "坟墓", "草坪", "山谷"], correct: 0 },
+  { word: "latte", options: ["拿铁咖啡", "卡布奇诺", "浓咖啡", "意式咖啡", "牛奶咖啡", "摩卡咖啡"], correct: 0 },
+  { word: "lens", options: ["透镜", "楞次定律", "鲍鱼", "眼镜", "烂泥", "放大镜"], correct: 0 },
+  { word: "lethal", options: ["致命", "死亡", "毒性", "危险", "威胁", "遗体"], correct: 0 },
+  { word: "liberty", options: ["自由", "民主", "法律", "图书馆", "独立", "文学"], correct: 0 },
+  { word: "lime", options: ["石灰", "墙纸", "化石", "柠檬", "花岗岩", "孜然"], correct: 0 },
+  { word: "liquid", options: ["液体", "固体", "气体", "流体", "等离子体", "氧化物"], correct: 0 },
+  { word: "liveliness", options: ["活泼", "生动", "热闹", "力量", "兴奋", "生活"], correct: 0 },
+  { word: "lodge", options: ["小屋", "旅馆", "丛林", "住宿", "麦芽糖", "棒棒糖"], correct: 0 },
+  { word: "loyal", options: ["忠诚", "皇家", "无耻", "昏暗", "廉价", "邪恶"], correct: 0 },
+  { word: "luggage", options: ["行李", "语言", "幸运", "三叶草", "二月兰", "一串红"], correct: 0 },
+  { word: "lyrics", options: ["歌词", "歌曲", "曲调", "韵脚", "狂想曲", "抒情诗"], correct: 0 },
+  { "word": "gain", "options": ["获得", "胜利", "赚钱", "增长", "优势", "进步"], "correct": 0 },
+    { "word": "game", "options": ["游戏", "棋盘", "操场", "运动", "娱乐", "竞技"], "correct": 0 },
+    { "word": "garden", "options": ["花园", "植物", "果园", "菜园", "庭院", "公园"], "correct": 0 },
+    { "word": "girl", "options": ["女孩", "女性", "妇女", "少女", "女士", "母亲"], "correct": 0 },
+    { "word": "glass", "options": ["玻璃", "杯子", "窗户", "瓶子", "眼镜", "放大镜"], "correct": 0 },
+    { "word": "goat", "options": ["山羊", "绵羊", "牛羊", "母羊", "公羊", "动物"], "correct": 0 },
+    { "word": "grab", "options": ["抓住", "搏斗", "拉扯", "争夺", "抢夺", "攫取"], "correct": 0 },
+    { "word": "grass", "options": ["草", "墨汁", "麦田", "草地", "草坪", "植物"], "correct": 0 },
+    { "word": "guess", "options": ["猜测", "预测", "揣测", "怀疑", "推测", "估计"], "correct": 0 },
+    { "word": "Hainan", "options": ["海南", "三亚", "海口", "岛屿", "中国", "热带"], "correct": 0 },
+    { "word": "Han", "options": ["汉族", "中国", "民族", "文化", "历史", "朝代"], "correct": 0 },
+    { "word": "hand", "options": ["手", "手指", "掌心", "手掌", "手臂", "手部"], "correct": 0 },
+    { "word": "happen", "options": ["发生", "事件", "事情", "结果", "发生了", "发展"], "correct": 0 },
+    { "word": "hate", "options": ["仇恨", "明白", "预览", "恶人", "火箭", "音乐"], "correct": 0 },
+  { "word": "have", "options": ["有", "无", "持有", "具有", "有的", "有些"], "correct": 0 },
+  { "word": "head", "options": ["头", "腿", "手", "眼睛", "脑袋", "脚"], "correct": 0 },
+  { "word": "hill", "options": ["山", "河", "湖", "海", "坡", "丘陵"], "correct": 0 },
+  { "word": "hit", "options": ["打", "扔", "踢", "拉", "敲击", "碰撞"], "correct": 0 },
+  { "word": "hold", "options": ["持有", "丢弃", "抓住", "扔掉", "落后", "平均"], "correct": 0 },
+  { "word": "home", "options": ["家", "学校", "超市", "医院", "公司", "酒店"], "correct": 0 },
+  { "word": "Hong Kong", "options": ["香港", "澳门", "台湾", "新加坡", "北京", "上海"], "correct": 0 },
+  { "word": "hope", "options": ["希望", "失望", "惊喜", "忧虑", "期待", "梦想"], "correct": 0 },
+  { "word": "horse", "options": ["马", "狗", "猫", "鸟", "猪", "牛"], "correct": 0 },
+  { "word": "house", "options": ["房子", "树屋", "楼房", "别墅", "公寓", "住房"], "correct": 0 },
+  { "word": "hurt", "options": ["受伤", "健康", "疼痛", "快乐", "伤害", "舒适"], "correct": 0 },
+  { "word": "imagine", "options": ["想象", "现实", "幻想", "真实", "虚构", "设想"], "correct": 0 },
+  { "word": "include", "options": ["包括", "排除", "添加", "删除", "取笑", "面容"], "correct": 0 },
+  { "word": "island", "options": ["岛", "湖", "海", "河流", "山", "平原"], "correct": 0 },
+  { "word": "jacket", "options": ["夹克", "外套", "裤子", "衬衫", "裙子", "帽子"], "correct": 0 },
+  { "word": "jam", "options": ["果酱", "果汁", "奶酪", "饼干", "牛奶", "面包"], "correct": 0 },
+  { "word": "join", "options": ["加入", "退出", "关节", "观察", "加盟", "合并"], "correct": 0 },
+  { "word": "judge", "options": ["法官", "医生", "老师", "警察", "工人", "学生"], "correct": 0 },
+  { "word": "jump", "options": ["跳", "走", "跑", "爬", "飞", "游泳"], "correct": 0 },
+  { "word": "just", "options": ["正义", "审判", "正确", "错误", "法治", "平等"], "correct": 0 },
+  { "word": "kick", "options": ["踢", "打", "拳击", "跳", "走", "跑"], "correct": 0 },
+  { "word": "kill", "options": ["杀", "救", "保护", "照顾", "抓", "抱"], "correct": 0 },
+  { "word": "king", "options": ["国王", "皇后", "王子", "公主", "皇帝", "王后"], "correct": 0 },
+  { "word": "kiss", "options": ["吻", "打", "踢", "握手", "拥抱", "摸"], "correct": 0 },
+  { "word": "kite", "options": ["风筝", "飞机", "火车", "汽车", "船", "潜水艇"], "correct": 0 },
+  { "word": "know", "options": ["知道", "不知道", "村落", "城市", "预览", "兰花"], "correct": 0 },
+  { "word": "Kung Fu", "options": ["功夫", "体操", "跆拳道", "拳击", "搏击", "击剑"], "correct": 0 },
+  { "word": "lake", "options": ["湖", "海", "河流", "池塘", "水库", "泉水"], "correct": 0 },
+  { "word": "lamp", "options": ["灯", "电视", "冰箱", "洗衣机", "电脑", "电话"], "correct": 0 },
+  { "word": "land", "options": ["土地", "海洋", "大陆", "洲", "国家", "地球"], "correct": 0 },
+  { "word": "lantern", "options": ["灯笼", "台灯", "吊灯", "手电筒", "路灯", "车灯"], "correct": 0 },
+  { "word": "last", "options": ["持续", "结束", "开始", "第一个", "最后", "第一次"], "correct": 0 },
+  { "word": "laugh", "options": ["笑", "哭", "生气", "害怕", "悲伤", "疼痛"], "correct": 0 },
+  { "word": "leaf", "options": ["叶子", "花", "果实", "枝干", "树皮", "树根"], "correct": 0 },
+  { "word": "learn", "options": ["学习", "教", "玩", "工作", "玩耍", "休息"], "correct": 0 },
+  { "word": "leave", "options": ["离开", "留下", "进入", "出发", "回来", "到达"], "correct": 0 },
+  { "word": "leg", "options": ["腿", "胳膊", "手", "脚", "头", "身体"], "correct": 0 },
+  { "word": "let", "options": ["让", "要求", "请求", "禁止", "阻止", "批准"], "correct": 0 },
+  { "word": "library", "options": ["图书馆", "超市", "商店", "学校", "医院", "公司"], "correct": 0 },
+  { "word": "magnificant", "options": ["壮丽的", "巨大的", "重要的", "宏观的", "微观的", "精致的", "有价值的"], "correct": 0 },
+  { "word": "magnifier", "options": ["放大镜", "显微镜", "近视镜", "投影仪", "幻灯机", "验光机", "扫描仪"], "correct": 0 },
+  { "word": "majestic", "options": ["雄伟的", "壮丽的", "重要的", "庄严的", "威武的", "高大的", "帅气的"], "correct": 0 },
+  { "word": "malevolent", "options": ["恶意", "恶霸", "暴乱", "暴怒", "罪犯", "犯罪", "凶手"], "correct": 0 },
+  { "word": "malicious", "options": ["恶意", "竹荪", "低贱", "猥亵", "恶化", "违法", "彪悍"], "correct": 0 },
+  { "word": "malign", "options": ["诽谤", "排行", "对齐", "受伤", "结合", "瓷器", "消除"], "correct": 0 },
+  { "word": "malleable", "options": ["可塑的", "易弯曲的", "柔软的", "易受影响的", "变形的", "易碎的", "锻造的"], "correct": 0 },
+  { "word": "mandate", "options": ["授权", "命令", "要求", "指令", "批准", "规定", "委托"], "correct": 0 },
+  { "word": "mandolin", "options": ["曼陀林琴", "马兜铃酸", "曼陀罗", "魔鬼", "暴乱", "切割磁感线", "编钟"], "correct": 0 },
+  { "word": "maneuver", "options": ["操纵", "机器", "异教徒", "策略", "切割磁感线", "机械臂", "无线局域网"], "correct": 0 },
+  { "word": "manifest", "options": ["清单", "清白", "虔诚", "晕影", "灵芝", "竹荪", "蓝莓"], "correct": 0 },
+  { "word": "manifest", "options": ["显现", "敌人", "投影", "界定", "骑士", "邪教", "展示"], "correct": 0 },
+  { "word": "manipulate", "options": ["操纵", "复制", "纵容", "毁灭", "手段", "格局", "屏风"], "correct": 0 },
+  { "word": "manufacture", "options": ["制造", "工厂", "锻炼", "锻造", "导弹", "暴乱", "邪教"], "correct": 0 },
+  { "word": "mar", "options": ["玷污", "火星", "边界", "肮脏", "破坏", "污染", "寰丘"], "correct": 0 },
+  { "word": "margin", "options": ["边缘", "余地", "幅度", "利润", "界定", "外围", "空白"], "correct": 0 },
+  { "word": "marimba", "options": ["马林巴", "酸性的", "吸血鬼", "打击乐", "架子鼓", "聚丙烯", "风油精"], "correct": 0 },
+  { "word": "marvelous", "options": ["奇妙", "漫威", "精致", "色彩", "政党", "肃静", "苏醒"], "correct": 0 },
+  { "word": "mashup", "options": ["混搭", "混乱", "拼凑", "大杂烩", "大拌菜", "搅拌", "组合"], "correct": 0 },
+  { "word": "masticate", "options": ["咀嚼", "吸血鬼", "破碎", "吸收", "治疗", "聚丙烯", "异教徒"], "correct": 0 },
+  { "word": "matrix", "options": ["矩阵", "盗梦空间", "黑客", "帝国", "结构", "网络", "微积分"], "correct": 0 },
+  { "word": "matrix", "options": ["黑客帝国", "盗梦空间", "异教徒", "酸性的", "聚丙烯", "切割磁感线", "灵芝"], "correct": 0 },
+  { "word": "meander", "options": ["蜿蜒", "平均", "意义", "麋鹿", "绕道", "迷失", "漫游"], "correct": 0 },
+  { "word": "merriment", "options": ["欢乐", "拘束", "灵芝", "卷积", "律动", "蓝莓", "竹荪"], "correct": 0 },
+  { "word": "mesa", "options": ["台地", "高原", "平顶山", "台阶", "丘陵", "盆地", "海岛"], "correct": 0 },
+  { "word": "metafiction", "options": ["元小说", "后设小说", "后现代小说", "自指小说", "浪漫主义小说", "元宇宙", "科幻小说"], "correct": 0 },
+  { "word": "metaphor", "options": ["隐喻", "明喻", "修辞", "排比", "象征", "借喻", "拟声"], "correct": 0 },
+  { "word": "meteorology", "options": ["气象学", "气候学", "地质学", "地理学", "天文学", "宇宙学", "人类学"], "correct": 0 },
+  { "word": "migration", "options": ["迁徙", "移民", "转动", "故乡", "灵芝", "候鸟", "保留"], "correct": 0 },
+  { "word": "minimalism", "options": ["极简主义", "洛可可主义", "北欧主义", "哥特主义", "解构主义", "最大值", "最小值"], "correct": 0 },
+  { "word": "modification", "options": ["修改", "谦虚", "诚实", "变更", "渐变", "暴乱", "蓝莓"], "correct": 0 },
+  { "word": "modulation", "options": ["调制", "模仿", "蓝莓", "变声", "竹荪", "改变", "调音"], "correct": 0 },
+  { "word": "molecule", "options": ["分子", "原子", "质子", "中子", "电子", "玻色子", "夸克"], "correct": 0 },
+  { "word": "momentuous", "options": ["重要的", "向量", "动量", "动点", "重大事件", "移动的", "动作"], "correct": 0 },
+  { "word": "monarchy", "options": ["君主制", "王权", "民主制", "共和国", "帝国", "暴乱", "民情"], "correct": 0 },
+  { "word": "monatomic", "options": ["单原子", "单原子分子", "多原子", "多原子分子", "单质", "超级单体", "多原子离子"], "correct": 0 },
+  { "word": "monomer", "options": ["单体", "单质", "单元", "单一", "超级单体", "单质元素", "单体单元"], "correct": 0 },
+  { "word": "monotheism", "options": ["一神教", "多神教", "异教徒", "邪教", "暴乱", "蓝莓", "灵芝"], "correct": 0 },
+  { "word": "mosaic", "options": ["马赛克", "镶嵌画", "蓝莓", "酸性的", "灵芝", "吸血鬼", "寰丘"], "correct": 0 },
+  { "word": "motif", "options": ["主题", "格言", "图案", "元素", "题材", "设计", "波纹"], "correct": 0 },
+  { "word": "multiplication", "options": ["乘法", "增加", "繁殖", "竹荪", "蓝莓", "增生", "导弹"], "correct": 0 },
+  { "word": "mumble", "options": ["含糊", "导弹", "魔鬼", "邪教", "导弹", "灵芝", "八卦"], "correct": 1 },
+  { "word": "mutation", "options": ["突变", "八卦", "邪教", "蓝莓", "基因", "种姓", "静音"], "correct": 0 },
+  { "word": "mutiny", "options": ["叛变", "微小", "威胁", "暴乱", "魔鬼", "聚丙烯", "聚乙烯"], "correct": 0 },
+  { "word": "mutualism", "options": ["互利共生", "切割磁感线", "蓝莓", "魔鬼", "晚宴", "利益", "趋向"], "correct": 0 },
+  { word: "mackerel", options: ["鲭鱼", "鲑鱼", "鲷鱼", "金枪鱼", "鳟鱼", "鲤鱼"], correct: 0 },
+  { word: "magnet", options: ["磁铁", "磁力", "磁极", "磁石", "磁性", "磁场"], correct: 0 },
+  { word: "magnetic", options: ["磁性", "磁铁", "磁场", "磁石", "磁极", "磁力"], correct: 0 },
+  { word: "marathon", options: ["马拉松", "跑步", "冲刺", "比赛", "短跑", "短篇小说"], correct: 0 },
+  { word: "martial", options: ["武术", "军事", "战争", "搏击", "格斗", "导弹"], correct: 0 },
+  { word: "meadow", options: ["草地", "牧场", "高地", "泥泞", "盆地", "草坪"], correct: 0 },
+  { word: "medal", options: ["奖牌", "金牌", "银牌", "铜牌", "勋章", "金属"], correct: 0 },
+  { word: "mediate", options: ["调解", "斡旋", "中断", "中介", "中等", "冥想"], correct: 0 },
+  { word: "melody", options: ["旋律", "音调", "投手", "乐曲", "音色", "歌词"], correct: 0 },
+  { word: "mercy", options: ["仁慈", "雅典", "典雅", "恩赐", "祈祷", "同情"], correct: 0 },      
+  { word: "microphone", options: ["话筒", "迈克杰克逊", "录音", "扩音器", "收音机", "录音室"], correct: 0 },
+  { word: "milkshake", options: ["奶昔", "冰淇淋", "奶茶", "果汁", "奶黄", "奶油"], correct: 0 },
+  { word: "miracle", options: ["奇迹", "焦虑", "漫游", "潜水艇", "堕落", "修理工"], correct: 0 },
+  { word: "moderate", options: ["中等", "勤劳", "强烈", "稳健", "台风", "成熟"], correct: 0 },
+  { word: "modest", options: ["谦虚", "适度", "中等", "简朴", "诚实", "奢华"], correct: 0 },
+  { word: "moonlight", options: ["月光", "夜晚", "月食", "月亮", "荧光", "夜光"], correct: 0 },
+  { word: "mop", options: ["拖把", "扫帚", "抹布", "清洁", "擦拭", "泡泡"], correct: 0 },
+  { word: "mosque", options: ["清真寺", "礼拜", "泡沫", "穆斯林", "莫斯科", "传教士"], correct: 0 },
+  { word: "motocross", options: ["摩托越野", "机械臂", "赛艇运动", "越野滑雪", "极限运动", "跨栏"], correct: 0 },
+  { word: "motorcycle", options: ["摩托车", "机车", "轮船", "飞机", "自行车", "机动车"], correct: 0 },
+  { word: "mound", options: ["土墩", "煽情", "崇拜", "田鼠", "羽毛", "迫害"], correct: 0 },
+  { word: "mountaineering", options: ["登山", "电器", "宇宙", "粒子加速器", "对撞机", "脑科学"], correct: 0 },
+  { word: "muffin", options: ["玛芬", "牛角面包", "小蛋糕", "油酥蛋糕", "桃酥", "甜甜圈"], correct: 0 },
+  { word: "mystical", options: ["神秘", "云雾", "然而", "奇异果", "超自然", "国籍"], correct: 0 },
+  { word: "money", options: ["钞票", "金钱", "财富", "货币", "资金", "现金"], correct: 1 },
+  { word: "monkey", options: ["猴子", "蝴蝶", "大象", "老虎", "蚂蚁", "海豚"], correct: 0 },
+  { word: "moon", options: ["月球", "星星", "太阳", "地球", "火星", "水星"], correct: 0 },
+  { word: "mother", options: ["母亲", "父亲", "儿子", "女儿", "祖母", "祖父"], correct: 0 },
+  { word: "mouse", options: ["老鼠", "猫", "狗", "兔子", "乌龟", "蛇"], correct: 0 },
+  { word: "mouth", options: ["嘴巴", "耳朵", "鼻子", "眼睛", "手指", "脚趾"], correct: 0 },
+ 
+      ]
+    };
+
+    const nextBtn = document.getElementById('nextBtn');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+    const correctDiv = document.getElementById('correct');
+    const timerDiv = document.getElementById('timer');
+    const questionNumberDiv = document.getElementById('questionNumber');
+    let score = 0;
+    let correctCount = 0;
+    let totalQuestions = 0;
+    let currentQuestionIndex = 0;
+    let currentDifficulty = 'expert';
+    let shuffledWords = shuffle(words[currentDifficulty].slice());
+    let correctOptionIndex;
+    let animationFrameId;
+    let timer;
+    let options;
+    let cor=0;
+    nextBtn.addEventListener('click', askQuestion);
+
+    function startGame() {
+      backgroundColorLevellvp = localStorage.getItem('backgroundColorLevellvp');
+      document.body.style.backgroundColor = backgroundColorLevellvp;
+      score = parseInt(localStorage.getItem('score')) || 0;
+      correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
+      totalQuestions = parseInt(localStorage.getItem('totalQuestions')) || 0;
+      resultDiv.textContent = '';
+      nextBtn.style.display = 'block';
+      cor = 0;
+      currentDifficulty = 'expert';
+      shuffledWords = shuffle(words[currentDifficulty].slice());
+      askQuestion();
+      nextBtn.style.display = 'none';
+    }
+
+    function checkAnswer(isCorrectOption) {
+      totalQuestions++;
+      clearTimeout(timer);
+      if (isCorrectOption) {
+        const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
+        score += timeLeft;
+        correctCount++;
+        cor++;
+        resultDiv.textContent = 'Correct!';
+        if ((score / (0.2 * totalQuestions)) >= 100) {
+          score = 100 * (0.2 * totalQuestions);
+        }
+        resultDiv.textContent = 'Correct!';
+      } else {
+        resultDiv.textContent = 'Incorrect!';
+        if ((score / (0.2 * totalQuestions)) >= 100) {
+          score = 100 * (0.2 * totalQuestions);
+        }
+
+      }
+      
+      correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
+      scoreDiv.textContent = 'Score: ' + (score / (0.2 * totalQuestions)).toFixed(0);;
+
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.pointerEvents = 'none';
+      });
+      //options.forEach(option => {
+      //  option.removeEventListener('click', handleOptionClick);
+      //  option.style.pointerEvents = 'none';
+      //});
+
+      setScoreBackgroundColor();
+      nextBtn.style.display = 'block';
+      nextBtn.disabled = false;
+      //currentQuestionTndex++;
+      if (cor == 5) {
+        scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
+        //hideButton();
+        nextBtn.style.display='none'
+      }
+    }
+
+    function handleOptionClick(event) {
+      const optionIndex = Array.from(optionsDiv.children).indexOf(event.currentTarget);
+      const isCorrectOption = optionIndex === correctOptionIndex;
+      checkAnswer(isCorrectOption);
+
+      event.currentTarget.classList.add(isCorrectOption ? 'correct' : 'incorrect');
+
+      options.forEach(option => {
+        option.removeEventListener('click', handleOptionClick);
+        option.style.pointerEvents = 'none';
+      });
+    }
+
+    function askQuestion() {
+      if (currentQuestionIndex >= shuffledWords.length) {
+        startGame();
+        return;
+      }
+
+      nextBtn.style.display = 'none';
+      const questionData = shuffledWords[currentQuestionIndex];
+      const currentWord = questionData.word;
+      const currentWordIndex = questionData.correct;
+      questionNumberDiv.textContent = `Question ${totalQuestions + 1}`;
+      questionDiv.textContent = currentWord;
+
+      const shuffledOptions = shuffle(questionData.options.slice());
+      correctOptionIndex = shuffledOptions.indexOf(questionData.options[currentWordIndex]);
+
+      optionsDiv.innerHTML = '';
+      options = shuffledOptions.map(optionText => {
+        const option = document.createElement('div');
+        option.className = 'option';
+        option.textContent = optionText;
+        option.addEventListener('click', handleOptionClick);
+        optionsDiv.appendChild(option);
+        return option;
+      });
+
+      resultDiv.textContent = '';
+      startTimer();
+      moveOptionsContinuously();
+      currentQuestionIndex++;
+    }
+
+    function startTimer() {
+      let timeLeft = 20;
+      timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+        if (timeLeft === 0) {
+          clearTimeout(timer);
+          checkAnswer(false);
+        }
+      }, 1000);
+    }
+
+    function moveOptionsContinuously() {
+      const containerRect = optionsDiv.getBoundingClientRect();
+      const speed = 0.2;
+
+      function move() {
+        options.forEach(option => {
+          let top = parseFloat(option.style.top || 0);
+          let left = parseFloat(option.style.left || 0);
+
+          top += (Math.random() - 0.5) * speed * 30;
+          left += (Math.random() - 0.5) * speed * 40;
+
+          if (top < 0) top = 0;
+          if (top > containerRect.height - option.offsetHeight) top = containerRect.height - option.offsetHeight;
+          if (left < 0) left = 0;
+          if (left > containerRect.width - option.offsetWidth) left = containerRect.width - option.offsetWidth;
+
+          option.style.top = `${top}px`;
+          option.style.left = `${left}px`;
+        });
+
+        animationFrameId = requestAnimationFrame(move);
+      }
+
+      options.forEach(option => {
+        option.style.top = `${Math.random() * (containerRect.height - option.offsetHeight)}px`;
+        option.style.left = `${Math.random() * (containerRect.width - option.offsetWidth)}px`;
+      });
+
+      move();
+    }
+
+    function setScoreBackgroundColor() {
+      const normalizedScore = score / (0.2 * totalQuestions);
+    
+       if (normalizedScore >= 95) {
+            document.body.style.backgroundColor = '#00ccff';
+        } else if (normalizedScore >= 90) {
+            document.body.style.backgroundColor = '#3cf5c7';
+        } else if (normalizedScore >= 85) {
+            document.body.style.backgroundColor = '#70fd8f';
+        } else if (normalizedScore >= 80) {
+            document.body.style.backgroundColor = '#c1f504';
+        } else if (normalizedScore >= 75) {
+            document.body.style.backgroundColor = '#f4f748';
+        } else if (normalizedScore >= 70) {
+            document.body.style.backgroundColor = '#f5c833';
+        } else if (normalizedScore >= 65) {
+            document.body.style.backgroundColor = '#f7a961';
+        } else if (normalizedScore >= 60) {
+            document.body.style.backgroundColor = '#FF5D13';
+        } else if (normalizedScore >= 55) {
+            document.body.style.backgroundColor = '#fd5d5d';
+        } else if (normalizedScore >= 50) {
+            document.body.style.backgroundColor = '#F82E7B';
+        } else if (normalizedScore >= 40) {
+            document.body.style.backgroundColor = 'red';
+        } else if (normalizedScore >= 30) {
+            document.body.style.backgroundColor = '#6e0101';
+        } else if (normalizedScore >= 20) {
+            document.body.style.backgroundColor = '#2a0241';
+        } else {
+            document.body.style.backgroundColor = '#000000';
+        }
+    }
+
+    
+
+    function shuffle(array) {
+      let currentIndex = array.length, temporaryValue, randomIndex;
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    }
+
+    startGame();
+  </script>
+</body>
+</html>

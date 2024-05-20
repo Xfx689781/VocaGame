@@ -124,7 +124,7 @@
   <div class="container">
     <h1>English Word Game</h1>
     <div id="questionNumber"></div>
-    <div id="level">困难模式</div>
+    <div id="level">困难模式D</div>
     <div id="question"></div>
     <div id="options"></div>
     <div id="result"></div>
@@ -1186,10 +1186,31 @@
        updateBackground(score, totalQuestions)
       nextBtn.disabled = false;
       currentQuestionIndex++;
-      if (cor==8) {
-      
+      if (cor==6) {
+        let randomNumber1 = Math.floor(Math.random() * (70 - 54 + 1)) + 54;
+        let randomNumber2 = Math.floor(Math.random() * (74 - 58 + 1)) + 58;
+        if (totalQuestions>randomNumber1&&totalQuestions<randomNumber2){
+          nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', (score));
+          backgroundColorLeveld = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLeveld', backgroundColorLeveld);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '5.2.1x.html';
+        });
+      }
+      if (totalQuestions<=53){
+          nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', (score));
+          backgroundColorLevel = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevel', backgroundColorLevel);
+          localStorage.setItem('correctCount', correctCount);
+          window.location.href = '5.2.1t.html';
+        });
+      }
+      else{
         scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
-  hideButton();
+        hideButton();
+      }
 
       }
     }
@@ -1423,7 +1444,7 @@ function updateBackground(score, totalQuestions) {
     function askQuestion() {
   //getDifficulty();
   nextBtn.style.display = 'none';
-  if (cor<8) {
+  if (cor<6) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;
     const currentWord = questionData.word;

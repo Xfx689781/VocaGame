@@ -114,7 +114,7 @@
   <div class="container">
     <h1>English Word Game</h1>
     <div id="questionNumber"></div>
-    <div id="level">神秘模式</div>
+    <div id="level">神秘模式P</div>
     <div id="question"></div>
     <div id="options"></div>
     <div id="result"></div>
@@ -811,7 +811,7 @@ else if ((score / (0.2 * totalQuestions)) >= 0) {
           window.location.href = '5.2.1q.html';
             });
         }
-       if (cor<(randomNumber1*0.6)){
+       if (cor<(randomNumber1*0.5)){
         nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', (score-(3*cor)));
           backgroundColorLevellvp = document.body.style.backgroundColor;
@@ -822,8 +822,34 @@ else if ((score / (0.2 * totalQuestions)) >= 0) {
         });
        }
        else {
+        let randomNumber2 = Math.floor(Math.random() * (17 - 8 + 1)) + 8;
+        let randomNumber3 = Math.floor(Math.random() * (17 - 8 + 1)) + 8;
+        let randomNumber4 = Math.floor(Math.random() * (17 - 8 + 1)) + 8;
+        let randomNumber5 = Math.floor(Math.random() * (17 - 8 + 1)) + 8;
+        if (cor==randomNumber2||cor==randomNumber3) {
+          nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', (score));
+          backgroundColorLevellvp = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevellvp', backgroundColorLevellvp);
+          localStorage.setItem('correctCount', correctCount);
+          localStorage.setItem('totalQuestions', totalQuestions)
+          window.location.href = '5.2.1w.html';
+        });
+        }
+        else if (cor==randomNumber4||cor==randomNumber5) {
+          nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', (score));
+          backgroundColorLevellvp = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevellvp', backgroundColorLevellvp);
+          localStorage.setItem('correctCount', correctCount);
+          localStorage.setItem('totalQuestions', totalQuestions)
+          window.location.href = '5.2.1z.html';
+        });
+        }
+        else{
         scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
     hideButton();
+        }
        }
       }
     }

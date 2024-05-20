@@ -114,7 +114,7 @@
   <div class="container">
     <h1>English Word Game</h1>
     <div id="questionNumber"></div>
-    <div id="level">神秘模式K</div>
+    <div id="level">神秘模式Z</div>
     <div id="question"></div>
     <div id="options"></div>
     <div id="result"></div>
@@ -185,7 +185,7 @@
     { "word": "forth", "options": ["向前", "力量", "循环", "踱步", "潜力", "茭白"], "correct": 0 },
     { "word": "generate", "options": ["生成", "核聚变", "核裂变", "大概", "大方的", "将军"], "correct": 0 },
     { "word": "general", "options": ["普通", "核聚变", "核裂变", "生成", "大方的", "辈分"], "correct": 0 },
-    { "word": "general", "options": ["将军", "核聚变", "核裂变", "大概", "大方的", "将军"], "correct": 0 },
+    { "word": "general", "options": ["将军", "核聚变", "核裂变", "大概", "大方的", "军队"], "correct": 0 },
     { "word": "generous", "options": ["慷慨", "核聚变", "核裂变", "大概", "辈分", "将军"], "correct": 0 },
     { "word": "generation", "options": ["辈分", "大概", "时代", "核裂变", "核聚变", "生成"], "correct": 0 },
     { "word": "gather", "options": ["聚集", "核裂变", "核聚变", "生成", "拉链", "辈分"], "correct": 0 },
@@ -998,7 +998,8 @@
   { word: "lead", options: ["督率", "领袖", "天花板", "首席", "盖子", "领导人"], correct: 0 },
   { word: "current", options: ["电流", "咖喱", "哥伦布", "加仑", "库仑", "当时"], correct: 0 },
   { "word": "blues", "options": ["蓝色", "悲伤", "抑郁", "前卫摇滚", "节奏布鲁斯", "迷幻摇滚", "布鲁斯"], "correct": 6 },
-    ]
+
+        ]
      
       // Define medium, hard, and expert words similarly
     };
@@ -1011,15 +1012,17 @@
     const timerDiv = document.getElementById('timer');
     const questionNumberDiv = document.getElementById('questionNumber');
     let cor=0;
+    let q=0;
     nextBtn.addEventListener('click', askQuestion);
+    let randomNumber1 = Math.floor(Math.random() * (30 - 3 + 1)) + 3;
     function startGame() {
       //score = 0;
       //correctCount = 0;
-      backgroundColorLevel45 = localStorage.getItem('backgroundColorLevel45');
-      document.body.style.backgroundColor = backgroundColorLevel45;
+      backgroundColorLevellvp = localStorage.getItem('backgroundColorLevellvp');
+      document.body.style.backgroundColor = backgroundColorLevellvp;
       score = parseInt(localStorage.getItem('score')) || 0;
       correctCount = parseInt(localStorage.getItem('correctCount')) || 0;
-      totalQuestions = 45;
+      totalQuestions = parseInt(localStorage.getItem('totalQuestions')) || 0;
       resultDiv.textContent = '';
       nextBtn.style.display = 'block';
       currentQuestionIndex = 0;
@@ -1028,26 +1031,27 @@
       shuffledWords = shuffle(words[currentDifficulty].slice());
       askQuestion();
       nextBtn.style.display = 'none';
+      q=0;
     }
-
+    
     function checkAnswer(isCorrectOption) {
       totalQuestions++;
+      q++;
       clearTimeout(timer);
       nextBtn.style.display = 'block';
       if (isCorrectOption) {
         const timeLeft = parseInt(timerDiv.textContent.split(' ')[2]);
-        score += 20;
+        score += timeLeft;
         correctCount++;
         cor++;
-        resultDiv.textContent = 'Correct!';
-        if ((score/(0.2*totalQuestions))>=80) {
-           score=80*(0.2*totalQuestions)
+        if ((score/(0.2*totalQuestions))>=100) {
+           score=100*(0.2*totalQuestions)
         }
+        resultDiv.textContent = 'Correct!';
       } else {
         resultDiv.textContent = 'Incorrect!';
-        score += 6;
-        if ((score/(0.2*totalQuestions))>=80) {
-           score=80*(0.2*totalQuestions)
+       if ((score/(0.2*totalQuestions))>=100) {
+           score=100*(0.2*totalQuestions)
         }
       }
       correctDiv.textContent = 'Correct: ' + correctCount + "/" + totalQuestions;
@@ -1060,123 +1064,73 @@
       });
        // Set background color based on score
        let body = document.querySelector('body');
-
-
-       if ((score / (0.2 * totalQuestions)) > 108) {
-  document.body.style.backgroundImage = "url('Images/109.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 107) {
-  document.body.style.backgroundImage = "url('Images/108.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 106) {
-  document.body.style.backgroundImage = "url('Images/107.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 105) {
-  document.body.style.backgroundImage = "url('Images/106.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 104) {
-  document.body.style.backgroundImage = "url('Images/105.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 103) {
-  document.body.style.backgroundImage = "url('Images/104.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 102) {
-  document.body.style.backgroundImage = "url('Images/103.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 101) {
-  document.body.style.backgroundImage = "url('Images/102.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) > 100) {
-  document.body.style.backgroundImage = "url('Images/101.jpg')";
-  document.body.style.backgroundSize = "cover"; // Optional: adjust background size to cover the entire page
-}
-else if ((score / (0.2 * totalQuestions)) >= 95) {
-  body.style.backgroundColor = '#00ccff';
-}  else if ((score / (0.2 * totalQuestions)) >= 90) {
-  body.style.backgroundColor = '#3cf5c7';
-} else if ((score / (0.2 * totalQuestions)) >= 85) {
-    body.style.backgroundColor = '#70fd8f';
-} else if ((score / (0.2 * totalQuestions)) >= 80) {
-    body.style.backgroundColor = '#c1f504';
-} else if ((score / (0.2 * totalQuestions)) >= 75) {
-    body.style.backgroundColor = '#f4f748';
-}else if ((score / (0.2 * totalQuestions)) >= 70) {
-    body.style.backgroundColor = '#f5c833';
-} else if ((score / (0.2 * totalQuestions)) >= 65) {
-    body.style.backgroundColor = '#f7a961';
-}else if ((score / (0.2 * totalQuestions)) >= 60) {
-    body.style.backgroundColor = '#FF5D13';
-} else if ((score / (0.2 * totalQuestions)) >= 55) {
-    body.style.backgroundColor = '#fd5d5d';
-} else if ((score / (0.2 * totalQuestions)) >= 50) {
-    body.style.backgroundColor = '#F82E7B';
-} else if ((score / (0.2 * totalQuestions))>=40) {
-    body.style.backgroundColor = 'red';
-}else if ((score / (0.2 * totalQuestions))>=30) {
-    body.style.backgroundColor = '#6e0101';
-}else if ((score / (0.2 * totalQuestions))>=20) {
-    body.style.backgroundColor = '#2a0241';
-}else if ((score / (0.2 * totalQuestions))<20) {
-    body.style.backgroundColor = '#000000';
-}
+ 
+       let normalizedScore=(score)/(0.2*totalQuestions)
+       if (normalizedScore >= 95) {
+            document.body.style.backgroundColor = '#00ccff';
+        } else if (normalizedScore >= 90) {
+            document.body.style.backgroundColor = '#3cf5c7';
+        } else if (normalizedScore >= 85) {
+            document.body.style.backgroundColor = '#70fd8f';
+        } else if (normalizedScore >= 80) {
+            document.body.style.backgroundColor = '#c1f504';
+        } else if (normalizedScore >= 75) {
+            document.body.style.backgroundColor = '#f4f748';
+        } else if (normalizedScore >= 70) {
+            document.body.style.backgroundColor = '#f5c833';
+        } else if (normalizedScore >= 65) {
+            document.body.style.backgroundColor = '#f7a961';
+        } else if (normalizedScore >= 60) {
+            document.body.style.backgroundColor = '#FF5D13';
+        } else if (normalizedScore >= 55) {
+            document.body.style.backgroundColor = '#fd5d5d';
+        } else if (normalizedScore >= 50) {
+            document.body.style.backgroundColor = '#F82E7B';
+        } else if (normalizedScore >= 40) {
+            document.body.style.backgroundColor = 'red';
+        } else if (normalizedScore >= 30) {
+            document.body.style.backgroundColor = '#6e0101';
+        } else if (normalizedScore >= 20) {
+            document.body.style.backgroundColor = '#2a0241';
+        } else {
+            document.body.style.backgroundColor = '#000000';
+        }
 
       nextBtn.disabled = false;
       currentQuestionIndex++;
-      if (totalQuestions==58) {
-        // Redirect to 3.html after question 30
-        let randomNumber1 = Math.floor(Math.random() * (12 - 8 + 1)) + 8;
-        let randomNumber2 = Math.floor(Math.random() * (10 - 6 + 1)) + 6;
-        if (cor==randomNumber1){
-            nextBtn.addEventListener('click', function() {
-          localStorage.setItem('score', (score));
-          backgroundColorLevel58 = document.body.style.backgroundColor;
-          localStorage.setItem('backgroundColorLevel58', backgroundColorLevel58);
-          localStorage.setItem('correctCount', correctCount);
-          window.location.href = '5.2.1l.html';
-        });
+      if (q==randomNumber1) {
+       finalscore=((score-timeLeft*2) / (0.2 * totalQuestions));
+        scoreDiv.textContent = 'Your final score is: ' + finalscore.toFixed(1);
+        if (finalscore >= 95) {
+            document.body.style.backgroundColor = '#00ccff';
+        } else if (finalscore >= 90) {
+            document.body.style.backgroundColor = '#3cf5c7';
+        } else if (finalscore >= 85) {
+            document.body.style.backgroundColor = '#70fd8f';
+        } else if (finalscore >= 80) {
+            document.body.style.backgroundColor = '#c1f504';
+        } else if (finalscore >= 75) {
+            document.body.style.backgroundColor = '#f4f748';
+        } else if (finalscore >= 70) {
+            document.body.style.backgroundColor = '#f5c833';
+        } else if (finalscore >= 65) {
+            document.body.style.backgroundColor = '#f7a961';
+        } else if (finalscore >= 60) {
+            document.body.style.backgroundColor = '#FF5D13';
+        } else if (finalscore >= 55) {
+            document.body.style.backgroundColor = '#fd5d5d';
+        } else if (finalscore >= 50) {
+            document.body.style.backgroundColor = '#F82E7B';
+        } else if (finalscore >= 40) {
+            document.body.style.backgroundColor = 'red';
+        } else if (finalscore >= 30) {
+            document.body.style.backgroundColor = '#6e0101';
+        } else if (finalscore >= 20) {
+            document.body.style.backgroundColor = '#2a0241';
+        } else {
+            document.body.style.backgroundColor = '#000000';
         }
-      
-        else if (cor==13){
-            nextBtn.addEventListener('click', function() {
-          localStorage.setItem('score', score);
-          backgroundColorLevel58 = document.body.style.backgroundColor;
-          localStorage.setItem('backgroundColorLevel58', backgroundColorLevel58);
-          localStorage.setItem('correctCount', correctCount);
-          window.location.href = '5.2.1n.html';
-        });
-        }
-        else if (cor==randomNumber2){
-            nextBtn.addEventListener('click', function() {
-          localStorage.setItem('score', score);
-          backgroundColorLevel58 = document.body.style.backgroundColor;
-          localStorage.setItem('backgroundColorLevel58', backgroundColorLevel58);
-          localStorage.setItem('correctCount', correctCount);
-          window.location.href = '5.2.1m.html';
-        });
-        }
-        else if (cor=>randomNumber1&&cor<=randomNumber2){
-          nextBtn.addEventListener('click', function() {
-          localStorage.setItem('score', (score));
-          backgroundColorLevellvp = document.body.style.backgroundColor;
-          localStorage.setItem('backgroundColorLevellvp', backgroundColorLevellvp);
-          localStorage.setItem('correctCount', correctCount);
-          localStorage.setItem('totalQuestions', totalQuestions)
-          window.location.href = '5.2.1z.html';
-        });
-      
-        }
-        else {
-           scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
-           hideButton();
-        }
+    hideButton();
 
       }
     }
@@ -1214,7 +1168,7 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
     function askQuestion() {
         nextBtn.style.display = 'none';
   //getDifficulty();
-  if (totalQuestions<58) {
+  if (q<randomNumber1) {
     const questionData = shuffledWords[currentQuestionIndex];
     currentWordIndex = questionData.correct;
     const currentWord = questionData.word;
@@ -1237,17 +1191,18 @@ else if ((score / (0.2 * totalQuestions)) >= 95) {
     startTimer();
   } 
 }
+ let timeLeft = 0;
     function startTimer() {
-      let timeLeft = 10;
+     
       timerDiv.textContent = 'Time left: ' + timeLeft + 's';
       timer = setInterval(() => {
-        timeLeft-=0.01;
-        timerDiv.textContent = 'Time left: ' + timeLeft.toFixed(2) + 's';
-        if (timeLeft <= 0.01) {
-          clearTimeout(timer);
-          checkAnswer(false); // Timeout, passing false as the answer is incorrect
-        }
-      }, 10);
+        timeLeft++;
+        timerDiv.textContent = 'Time left: ' + timeLeft + 's';
+       // if (timeLeft === 0) {
+         // clearTimeout(timer);
+         // checkAnswer(false); // Timeout, passing false as the answer is incorrect
+       // }
+      }, 1000);
     }
 
     function shuffle(array) {

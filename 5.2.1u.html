@@ -114,7 +114,7 @@
   <div class="container">
     <h1>English Word Game</h1>
     <div id="questionNumber"></div>
-    <div id="level">神秘模式</div>
+    <div id="level">神秘模式U</div>
     <div id="question"></div>
     <div id="options"></div>
     <div id="result"></div>
@@ -1329,10 +1329,28 @@
 }else if (finalfinishscore < 20) {
     body.style.backgroundColor = '#000000';
 }
+let randomNumber1 = Math.floor(Math.random() * (18 - 1 + 1)) + 1;
+let randomNumber2 = Math.floor(Math.random() * (18 - 1 + 1)) + 1;
+let randomNumber3 = Math.floor(Math.random() * (18 - 1 + 1)) + 1;
+let randomNumber4 = Math.floor(Math.random() * (12 - 2 + 1)) + 2;
+let randomNumber5 = Math.floor(Math.random() * (12 - 2 + 1)) + 2;
+let randomNumber6 = Math.floor(Math.random() * (12 - 2 + 1)) + 2;
+
+if (cor==randomNumber1||cor==randomNumber2||cor==randomNumber3||cor==randomNumber4||cor==randomNumber5||cor==randomNumber6){
+  nextBtn.addEventListener('click', function() {
+          localStorage.setItem('score', (score));
+          backgroundColorLevellvp = document.body.style.backgroundColor;
+          localStorage.setItem('backgroundColorLevellvp', backgroundColorLevellvp);
+          localStorage.setItem('correctCount', correctCount);
+          localStorage.setItem('totalQuestions', totalQuestions)
+          window.location.href = '5.2.1v.html';
+  });
+}
+else {
 scoreDiv.textContent = 'Your final score is: ' + finalfinishscore;
      document.getElementById("nextBtn").style.display = "none";
    
-   
+}
 
 
       }
@@ -1395,7 +1413,7 @@ scoreDiv.textContent = 'Your final score is: ' + finalfinishscore;
     //startTimer();
   } 
 }
-let timeLeft = 10;
+let timeLeft = 40;
     function startTimer() {
       timerDiv.textContent = 'Time left: ' + timeLeft + 's';
       timer = setInterval(() => {
@@ -1406,7 +1424,7 @@ let timeLeft = 10;
         checkAnswer(false);
         nextBtn.style.display = 'block';
     }
-      }, 950);
+      }, 900);
     }
 
     function shuffle(array) {
