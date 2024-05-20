@@ -804,7 +804,7 @@
   { "word": "reggaeton", "options": ["雷鬼音乐", "小型城市", "村落", "救济", "治疗", "痊愈", "迫击炮"], "correct": 1 },
   { "word": "reiterate", "options": ["重申", "反复", "磁悬浮", "活塞", "抛物线", "狙击手", "绅士"], "correct": 0 },
   { "word": "rejoice", "options": ["高兴", "储蓄", "巡逻", "审判", "评论", "恢复", "修补"], "correct": 0 },
-  { "word": "remediate", "options": ["补救", "梦魇", "矫正", "中等", "痊愈", "颤抖", "治亡灵"], "correct": 0 },
+  { "word": "remediate", "options": ["补救", "梦魇", "矫正", "中等", "痊愈", "颤抖", "亡灵"], "correct": 0 },
   { "word": "remix", "options": ["混音", "录制", "改编", "混合", "搅拌", "重制", "编辑"], "correct": 0 },
   { "word": "remonstrate", "options": ["抗议", "解释", "展示", "魔鬼", "梦魇", "质疑", "颤抖"], "correct": 0 },
   { "word": "renaissance", "options": ["文艺复兴", "共振", "磁悬浮", "迫击炮", "羽扇豆", "教皇", "胭脂"], "correct": 0 },
@@ -1204,9 +1204,10 @@
       nextBtn.disabled = false;
       currentQuestionIndex++;
       if (totalQuestions === 45) {
-        let randomNumber1 = Math.floor(Math.random() * (12 - 7 + 1)) + 7;
-        let randomNumber2 = Math.floor(Math.random() * (10 - 5 + 1)) + 5;
-        let randomNumber3 = Math.floor(Math.random() * (8 - 3 + 1)) + 3;
+        let randomNumber1 = Math.floor(Math.random() * (12 - 1 + 1)) + 1;
+        let randomNumber2 = Math.floor(Math.random() * (12 - 1 + 1)) + 1;
+        let randomNumber3 = Math.floor(Math.random() * (12 - 1 + 1)) + 1;
+        let randomNumber4 = Math.floor(Math.random() * (12 - 1 + 1)) + 1;
         // Redirect to 3.html after question 30
         if (cor==13||cor==14||cor==15){
             nextBtn.addEventListener('click', function() {
@@ -1232,7 +1233,7 @@
           backgroundColorLevel45 = document.body.style.backgroundColor;
           localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
           localStorage.setItem('correctCount', correctCount);
-          window.location.href = '5.2.1j.html';
+          window.location.href = '5.2.1p.html';
         });
         }
         else if (cor==randomNumber3){
@@ -1241,8 +1242,11 @@
           backgroundColorLevel45 = document.body.style.backgroundColor;
           localStorage.setItem('backgroundColorLevel45', backgroundColorLevel45);
           localStorage.setItem('correctCount', correctCount);
-          window.location.href = '5.2.1p.html';
+          window.location.href = '5.2.1j.html';
         });
+        }
+        else if (cor==randomNumber4){
+          scoreDiv.textContent = 'Your final score is: ' + (score / (0.2 * totalQuestions)).toFixed(1);
         }
         else if (((score / (0.2 * totalQuestions)))<53){
             nextBtn.addEventListener('click', function() {
