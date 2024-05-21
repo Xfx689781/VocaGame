@@ -1549,16 +1549,16 @@
       currentQuestionIndex++;
 
       if (totalQuestions === 30) {
-      let randomNumber1 = Math.floor(Math.random() * (29 - 12 + 1)) + 12;
-      let randomNumber2 = Math.floor(Math.random() * (29 - 12 + 1)) + 12;
-      let randomNumber3 = Math.floor(Math.random() * (29 - 12 + 1)) + 12;
-      let randomNumber4 = Math.floor(Math.random() * (29 - 12 + 1)) + 12;
-      let randomNumber5 = Math.floor(Math.random() * (29 - 12 + 1)) + 12;
+      let randomNumber1 = Math.floor(Math.random() * (29 - 14 + 1)) + 14;
+      let randomNumber2 = Math.floor(Math.random() * (29 - 14 + 1)) + 14;
+      let randomNumber3 = Math.floor(Math.random() * (22 - 8 + 1)) + 8;
+      let randomNumber4 = Math.floor(Math.random() * (17 - 16 + 1)) + 16;
+      let randomNumber5 = Math.floor(Math.random() * (22 - 8 + 1)) + 8;
       let randomNumber6 = Math.floor(Math.random() * (82 - 61 + 1)) + 61;
       let randomNumber7 = Math.floor(Math.random() * (29 - 12 + 1)) + 12;
 
         // Redirect to 3.html after question 30
-          if (correctCount==randomNumber1||correctCount==randomNumber2||correctCount==randomNumber3){
+          if (correctCount==randomNumber1||correctCount==randomNumber2||correctCount==randomNumber3||correctCount==randomNumber5){
           nextBtn.addEventListener('click', function() {
          localStorage.setItem('score', score);
           backgroundColorLevel30 = document.body.style.backgroundColor;
@@ -1567,7 +1567,7 @@
           window.location.href = '5.2.1h.html';
          });
         }
-        else if (correctCount==randomNumber5||correctCount==randomNumber4){
+        else if (correctCount==randomNumber4){
           nextBtn.addEventListener('click', function() {
           localStorage.setItem('score', score);
           backgroundColorLevel30 = document.body.style.backgroundColor;
